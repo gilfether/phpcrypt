@@ -1,0 +1,42 @@
+phpCrypt 0.3
+Ryan Gilfether
+http://www.gilfether.com/phpcrypt
+
+About
+============
+phpCrypt is an Open Source PHP Encryption library that does not require
+or use the mCrypt or any other PHP extension. It's not as fast
+as PHP's mCrypt extention, however if you are in a situation where you
+can not use the mCrypt library, phpCrypt is a suitable alternative.
+
+This version of phpCrypt requires PHP 5.3 or later.
+
+View the 'examples' directory to see examples of phpCrypt in use.
+
+Please visit phpCrypt's website for a list of options and constants
+used in phpCrypt. phpCrypt's website also lists the required key
+sizes for Ciphers, as well as which Modes work with which Ciphers.
+http://www.gilfether.com/phpcrypt
+
+All Cipher algorithms were implemented using freely available resources
+found online and in books.
+
+
+GPL Stuff
+============
+This file is part of phpCrypt
+
+phpCrypt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Please read the GPL file included in this distribution for the full license.

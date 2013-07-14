@@ -1,0 +1,37 @@
+
+2013-07-12  phpCrypt-0.3  Ryan Gilfether
+
+	* Added the Blowfish Cipher
+
+	* Updated CryptBase::decimal2Hex() with a parameter to force
+	the returned hex to specified byte size
+
+	* Updated RC2.php to use the uInt() function
+
+	* Added phpCrypt::SetIV() function
+
+	* Removed the $iv parameter from phpCrypt::CreateIV(),
+	now to set the IV use the phpCrypt::SetIV() function,
+	or pass the IV in the encrypt() or decrypt() function
+
+	* Renamed CryptBase.php to Base.php. Removed it as a parent
+	class to all other classes except the Cipher class, as it
+	was the only class that really needed it.
+
+	* General performance improvements
+
+2013-06-28  phpCrypt-0.2  Ryan Gilfether
+
+	* Fixed Enigma so that it works on both 64 and 32 bit platforms
+
+	* Renamed & fixed the following functions in CryptBase.php
+	to use native PHP function calls:
+	uInt(), sInt(), uInt32(), sInt32(), uChar(), sChar()
+
+2013-06-24  phpCrypt-0.1  Ryan Gilfether
+
+	* The initial release of phpCrypt 0.1
+
+Copyright 2013 Ryan Gilfether http://www.gilfether.com/phpcrypt
+Copying and distribution of this file, with or without modification, are
+permitted provided the copyright notice and this notice are preserved.
