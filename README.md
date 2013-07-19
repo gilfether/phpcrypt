@@ -50,7 +50,7 @@ Using phpCrypt is not complicated. A simple example of encrypting a string
 using AES-128 with CTR mode is demonstrated below:
 
 	<?php
-	include("/path/to/phpCrypt.php");
+	include("/path/to/phpcrypt/phpCrypt.php");
 	use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 
 	$data = "This is my secret message.";

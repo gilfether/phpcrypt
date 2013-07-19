@@ -28,7 +28,7 @@ the 'examples' directory has demo code of phpCrypt in use. Below is an
 example of encrypting a string.
 
 <?php
-include("/path/to/phpCrypt.php");
+include("/path/to/phpcrypt/phpCrypt.php");
 use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 
 $data = "This is my secret message.";
