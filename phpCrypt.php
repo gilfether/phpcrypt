@@ -35,13 +35,14 @@ class PHP_Crypt
 {
 	// Ciphers
 	const CIPHER_3DES			= "3des";
+	//const CIPHER_3WAY			= "3way";
 	const CIPHER_AES_128		= "aes-128";
 	const CIPHER_AES_192		= "aes-192";
 	const CIPHER_AES_256		= "aes-256";
-	const CIPHER_ARC4			= "arc4"; // an alternative name to RC4, RC4 is trademarked
+	const CIPHER_ARC4			= "arc4"; // Alternative RC4
 	const CIPHER_BLOWFISH		= "blowfish";
 	const CIPHER_DES			= "des";
-	const CIPHER_ENIGMA			= "enigma"; // historical & used for old unix crypt command
+	const CIPHER_ENIGMA			= "enigma";
 	const CIPHER_ONETIMEPAD		= "onetimepad";
 	const CIPHER_RC2			= "rc2";
 	const CIPHER_RIJNDAEL_128	= "rijndael-128";
@@ -53,20 +54,20 @@ class PHP_Crypt
 
 	// Modes
 	const MODE_CBC	= "cbc";
-	const MODE_CFB	= "cfb"; // 8 bit cfb mode
+	const MODE_CFB	= "cfb";  // 8 bit cfb mode
 	const MODE_CTR	= "ctr";
 	const MODE_ECB	= "ecb";
 	const MODE_NCFB	= "ncfb"; // n-bit cfb mode
 	const MODE_NOFB	= "nofb"; // n-bit ofb mode
-	const MODE_OFB	= "ofb"; // 8 bit ofb mode
+	const MODE_OFB	= "ofb";  // 8 bit ofb mode
 	const MODE_PCBC	= "pcbc";
-	const MODE_RAW	= "raw";
-	const MODE_STREAM = "stream";
+	const MODE_RAW	= "raw";  // raw encryption, with no mode
+	const MODE_STREAM = "stream"; // used only for stream ciphers
 
 	// IV sources for Modes
 	const IV_RAND		= "rand"; // uses mt_rand(), windows & unix
-	const IV_DEV_RAND	= "/dev/random";	// unix only
-	const IV_DEV_URAND	= "/dev/urandom";	// unix only
+	const IV_DEV_RAND	= "/dev/random"; // unix only
+	const IV_DEV_URAND	= "/dev/urandom";// unix only
 
 	// Padding types
 	const PAD_ZERO			= 0;
@@ -101,7 +102,11 @@ class PHP_Crypt
 		case self::CIPHER_3DES:
 			$this->cipher = new Cipher_3DES($key);
 			break;
-
+/*
+		case self::CIPHER_3WAY:
+			$this->cipher = new Cipher_3WAY($key);
+			break;
+*/
 		case self::CIPHER_AES_128:
 			$this->cipher = new Cipher_AES_128($key);
 			break;
@@ -242,11 +247,8 @@ class PHP_Crypt
 	 * @param string $text The plain text string
 	 * @return string The encrypted string
 	 */
-	public function encrypt($text, $iv = "")
+	public function encrypt($text)
 	{
-		if($iv != "")
-			$this->setIV($iv);
-
 		// check that an iv is set, if required by the mode
 		$this->mode->checkIV();
 
@@ -265,11 +267,8 @@ class PHP_Crypt
 	 * @param string $text The encrypted string
 	 * @return string The decrypted string
 	 */
-	public function decrypt($text, $iv = "")
+	public function decrypt($text)
 	{
-		if($iv != "")
-			$this->setIV($iv);
-
 		// check that an iv is set, if required by the mode
 		$this->mode->checkIV();
 
@@ -363,7 +362,7 @@ class PHP_Crypt
 	 */
 	public function createIV($src = self::IV_RAND)
 	{
-		return $this->mode->createIV("", $src);
+		return $this->mode->createIV($src);
 	}
 
 
@@ -380,7 +379,7 @@ class PHP_Crypt
 	 */
 	public function setIV($iv)
 	{
-		$this->mode->createIV($iv);
+		$this->mode->setIV($iv);
 	}
 
 

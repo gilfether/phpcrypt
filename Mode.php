@@ -145,9 +145,7 @@ abstract class Mode
 	 **********************************************************************/
 
 	/**
-	 * Create an IV if the Mode used requires an IV, if $iv is
-	 * passed in, it will use the given $iv, otherwise if $iv
-	 * is blank it will be created and return by this function,
+	 * Create an IV if the Mode used requires an IV.
 	 * The IV should be saved and used for Encryption/Decryption
 	 * of the same blocks of data.
 	 * There are 3 ways to auto generate an IV by setting $src parameter
@@ -155,40 +153,53 @@ abstract class Mode
 	 * PHP_Crypt::IV_DEV_RAND - uses /dev/random
 	 * PHP_Crypt::IV_DEV_URAND - uses /dev/urandom
 	 *
-	 * @param string $iv Optional, the IV to use, if blank one is auto generated
 	 * @param string $src Optional, how the IV is generated, can be one of
 	 *		PHP_Crypt::IV_RAND, PHP_Crypt::IV_DEV_RAND, PHP_Crypt::IV_DEV_URAND
 	 * @return string The IV that is being used by the mode
 	 */
-	public function createIV($iv = "", $src = "")
+	public function createIV($src = "")
 	{
 		// if the mode does not use an IV, lets not waste time
 		if(!$this->requiresIV())
 			return false;
 
-		if($iv == "" || strlen($iv) < 1)
+		$iv = "";
+
+		if($src == PHP_Crypt::IV_DEV_RAND)
 		{
-			if($src == PHP_Crypt::IV_DEV_RAND)
-			{
-				if(file_exists(PHP_Crypt::IV_DEV_RAND))
-					$iv = file_get_contents(PHP_CRYPT::IV_DEV_RAND, false, null, 0, $this->block_size);
-				else
-					trigger_error(PHP_Crypt::IV_DEV_RAND." not found. Try using PHP_CRYPT::IV_RAND", E_USER_WARNING);
-			}
-			else if($src == PHP_Crypt::IV_DEV_URAND)
-			{
-				if(file_exists(PHP_Crypt::IV_DEV_URAND))
-					$iv = file_get_contents(PHP_CRYPT::IV_DEV_URAND, false, null, 0, $this->block_size);
-				else
-					trigger_error(PHP_Crypt::IV_DEV_URAND." not found. Try using PHP_CRYPT::IV_RAND", E_USER_WARNING);
-			}
-			else // $src == PHP_Crypt::IV_RAND
-			{
-				for($i = 0; $i < $this->block_size; ++$i)
-					$iv .= chr(mt_rand(0, 255));
-			}
+			if(file_exists(PHP_Crypt::IV_DEV_RAND))
+				$iv = file_get_contents(PHP_CRYPT::IV_DEV_RAND, false, null, 0, $this->block_size);
+			else
+				trigger_error(PHP_Crypt::IV_DEV_RAND." not found. Try using PHP_CRYPT::IV_RAND", E_USER_WARNING);
+		}
+		else if($src == PHP_Crypt::IV_DEV_URAND)
+		{
+			if(file_exists(PHP_Crypt::IV_DEV_URAND))
+				$iv = file_get_contents(PHP_CRYPT::IV_DEV_URAND, false, null, 0, $this->block_size);
+			else
+				trigger_error(PHP_Crypt::IV_DEV_URAND." not found. Try using PHP_CRYPT::IV_RAND", E_USER_WARNING);
+		}
+		else // $src == PHP_Crypt::IV_RAND
+		{
+			for($i = 0; $i < $this->block_size; ++$i)
+				$iv .= chr(mt_rand(0, 255));
 		}
 
+		// now store the IV we created
+		$this->setIV($iv);
+
+		return $iv;
+	}
+
+
+	/**
+	 * Sets an IV for the mode to use
+	 *
+	 * @param string $iv An IV to use for the mode and cipher selected
+	 * @return void
+	 */
+	public function setIV($iv)
+	{
 		// check that the iv is the correct length,
 		$len = strlen($iv);
 		if($len != $this->block_size)
@@ -200,8 +211,6 @@ abstract class Mode
 		$this->clearRegisters();
 		$this->register = $iv;
 		$this->iv = $iv;
-
-		return $iv;
 	}
 
 
