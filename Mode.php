@@ -84,10 +84,10 @@ abstract class Mode
 	 * @param string $mode_name The name of phpCrypt's modes, as defined in the mode
 	 * @return void
 	 */
-	protected function __construct($cipher, $mode_name)
+	protected function __construct($mode_name, $cipher)
 	{
-		$this->cipher = $cipher;
-		$this->mode_name = $mode_name;
+		$this->name($mode_name);
+		$this->cipher($cipher);
 	}
 
 
@@ -157,7 +157,7 @@ abstract class Mode
 	 *		PHP_Crypt::IV_RAND, PHP_Crypt::IV_DEV_RAND, PHP_Crypt::IV_DEV_URAND
 	 * @return string The IV that is being used by the mode
 	 */
-	public function createIV($src = "")
+	public function createIV($src = null)
 	{
 		// if the mode does not use an IV, lets not waste time
 		if(!$this->requiresIV())
@@ -186,31 +186,34 @@ abstract class Mode
 		}
 
 		// now store the IV we created
-		$this->setIV($iv);
-
-		return $iv;
+		return $this->IV($iv);
 	}
 
 
 	/**
-	 * Sets an IV for the mode to use
+	 * Sets or Returns an IV for the mode to use
 	 *
-	 * @param string $iv An IV to use for the mode and cipher selected
+	 * @param string $iv Optional, An IV to use for the mode and cipher selected
 	 * @return void
 	 */
-	public function setIV($iv)
+	public function IV($iv = null)
 	{
-		// check that the iv is the correct length,
-		$len = strlen($iv);
-		if($len != $this->block_size)
+		if($iv != null)
 		{
-			$msg = "Incorrect IV size. Supplied length: $len bytes, Required: {$this->block_size} bytes";
-			trigger_error($msg, E_USER_WARNING);
+			// check that the iv is the correct length,
+			$len = strlen($iv);
+			if($len != $this->block_size)
+			{
+				$msg = "Incorrect IV size. Supplied length: $len bytes, Required: {$this->block_size} bytes";
+				trigger_error($msg, E_USER_WARNING);
+			}
+
+			$this->clearRegisters();
+			$this->register = $iv;
+			$this->iv = $iv;
 		}
 
-		$this->clearRegisters();
-		$this->register = $iv;
-		$this->iv = $iv;
+		return $this->iv;
 	}
 
 
@@ -231,25 +234,57 @@ abstract class Mode
 
 
 	/**
-	 * Returns the Type of Mode in use
+	 * Sets and returns the name of the mode being used
+	 * If $name parameter is set, sets the mode. If
+	 * $name is not set, returns the current mode in use
 	 *
-	 * @return string The name of the mode
+	 * @param string $name Optional, One of the predefined
+	 * 	phpCrypt mode constant names
+	 * @return string One of the predefined phpCrypt mode
+	 * 	constant mode names
 	 */
-	public function name()
+	public function name($name = "")
 	{
+		if($name != "")
+			$this->mode_name = $name;
+
 		return $this->mode_name;
 	}
 
 
 	/**
-	 * Sets the type of padding to be used within the specified Mode
+	 * Sets or Returns the padding type used with the mode
+	 * If the $type parameter is not given, this function
+	 * returns the the padding type only.
 	 *
 	 * @param string $type One of the predefined padding types
 	 * @return void
 	 */
-	public function setPadding($type = PHP_Crypt::ZERO)
+	public function padding($type = "")
 	{
-		$this->padding = $type;
+		if($type != "")
+			$this->padding = $type;
+
+		return $this->padding;
+	}
+
+
+	/**
+	 * Returns or Sets the cipher object being used
+	 * If the $cipher parameter is set with a cipher object,
+	 * the cipher current cipher will be set to this cipher.
+	 * If the $cipher parameter is not set, returns the
+	 * current cipher object being used.
+	 *
+	 * @param object $cipher Optional, An object of type Cipher
+	 * @return object An object of type Cipher
+	 */
+	public function cipher($cipher = null)
+	{
+		if(is_object($cipher))
+			$this->cipher = $cipher;
+
+		return $this->cipher;
 	}
 
 

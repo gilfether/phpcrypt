@@ -73,14 +73,14 @@ abstract class Cipher extends Base
 	/**
 	 * Constructor
 	 *
-	 * @param string $cipher_name one of the predefined ciphers
+	 * @param string $name one of the predefined ciphers
 	 * @param string $key The key used for encryption
 	 * @param int Optional, the required size of a key for the cipher
 	 * @return void
 	 */
-	protected function __construct($cipher_name, $key = "", $required_key_sz = 0)
+	protected function __construct($name, $key = "", $required_key_sz = 0)
 	{
-		$this->cipher_name = $cipher_name;
+		$this->name($name);
 		$this->setKey($key, $required_key_sz);
 	}
 
@@ -164,8 +164,11 @@ abstract class Cipher extends Base
 	 *
 	 * @return string The cipher name
 	 */
-	public function name()
+	public function name($name = "")
 	{
+		if($name != "")
+			$this->cipher_name = $name;
+
 		return $this->cipher_name;
 	}
 
@@ -216,7 +219,7 @@ abstract class Cipher extends Base
 	 *	byte of the key string
 	 * @return string The next substring of the key
 	 */
-	protected function keyNextSubstr($size = 1, $reset = false)
+	protected function keyChunk($size = 1, $reset = false)
 	{
 		if($reset || $this->key_pos >= strlen($this->key))
 			$this->key_pos = 0;

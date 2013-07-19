@@ -223,7 +223,7 @@ class PHP_Crypt
 		}
 
 		// set the default padding
-		$this->setPadding($padding);
+		$this->padding($padding);
 	}
 
 
@@ -301,9 +301,10 @@ class PHP_Crypt
 
 
 	/**
-	 * Return the Cipher Type used
+	 * Returns the name of the cipher being used
 	 *
-	 * @return string The name of the cipher
+	 * @return string The name of the cipher currently in use,
+	 *	it will be one of the predefined phpCrypt cipher constants
 	 */
 	public function cipherName()
 	{
@@ -312,9 +313,10 @@ class PHP_Crypt
 
 
 	/**
-	 * Return the Mode Type used
+	 * Return the name of the mode being used
 	 *
-	 * @return string The name of the mode
+	 * @return string The name of the mode in use, it will
+	 * be one of the predefined phpCrypt mode constants
 	 */
 	public function modeName()
 	{
@@ -345,6 +347,27 @@ class PHP_Crypt
 
 
 	/**
+	 * Sets the IV to use. Note that you do not need to call
+	 * this function if creating an IV using createIV(). This
+	 * function is used when an IV has already been created
+	 * outside of phpCrypt and needs to be set. Alternatively
+	 * you can just pass the $iv parameter to the encrypt()
+	 * or decrypt() functions
+	 *
+	 * When the $iv parameter is not given, the function will
+	 * return the current IV being used. See createIV() if you
+	 * need to create an IV.
+	 *
+	 * @param string $iv Optional, The IV to use during Encryption/Decryption
+	 * @return void
+	 */
+	public function IV($iv = "")
+	{
+		return $this->mode->IV($iv);
+	}
+
+
+	/**
 	 * Creates an IV for the the Cipher selected, if one is required.
 	 * If you already have an IV to use, this function does not need
 	 * to be called, instead set it with setIV(). If you create an
@@ -367,31 +390,14 @@ class PHP_Crypt
 
 
 	/**
-	 * Sets the IV to use. Note that you do not need to call
-	 * this function if creating an IV using createIV(). This
-	 * function is used when an IV has already been created
-	 * outside of phpCrypt and needs to be set. Alternatively
-	 * you can just pass the $iv parameter to the encrypt()
-	 * or decrypt() functions
-	 *
-	 * @param string $iv The IV to use during Encryption/Decryption
-	 * @return void
-	 */
-	public function setIV($iv)
-	{
-		$this->mode->setIV($iv);
-	}
-
-
-	/**
 	 * Sets the type of padding to be used within the specified Mode
 	 *
 	 * @param string $type One of the predefined padding types
 	 * @return void
 	 */
-	public function setPadding($type)
+	public function padding($type = "")
 	{
-		$this->mode->setPadding($type);
+		return $this->mode->padding($type);
 	}
 }
 ?>
