@@ -17,9 +17,18 @@ $encrypt = "";
 $decrypt = "";
 $result = "";
 
-// ENCRYPT file.txt
+
+print "Encrypting file.txt using:\n";
+print "CIPHER: ".$crypt->cipherName()."\n";
+print "MODE: ".$crypt->modeName()."\n";
+
+
+/*
+ * DO THE ENCRYPTION
+ */
 $rhandle = fopen("file.txt", "r");
 $whandle = fopen("file.encrypted.txt", "w+b");
+print "Creating file.encrypted.txt\n";
 
 // CFB mode requires an IV, create it
 $iv = $crypt->createIV();
@@ -33,9 +42,13 @@ while (!feof($rhandle))
 fclose($rhandle);
 fclose($whandle);
 
-// DECRYPT file.txt
+
+/*
+ * DO THE DECRYPTION
+ */
 $rhandle = fopen("file.encrypted.txt", "rb");
 $whandle = fopen("file.decrypted.txt", "w+");
+print "Creating file.decrypted.txt\n";
 
 // we need to set the IV to the same IV used for encryption
 $crypt->setIV($iv);
@@ -49,7 +62,5 @@ while (!feof($rhandle))
 fclose($rhandle);
 fclose($whandle);
 
-print "CIPHER: ".$crypt->cipherName()."\n";
-print "MODE: ".$crypt->modeName()."\n";
-
+print "Finished.\n";
 ?>
