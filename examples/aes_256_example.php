@@ -21,10 +21,12 @@ $key = "^mY@TEst~Key_0123456789abcefghij"; // the key will be truncated if it's 
  */
 
 $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CTR);
-$iv = $crypt->createIV();
 
-$encrypt = $crypt->encrypt($text, $iv);
-$decrypt = $crypt->decrypt($encrypt, $iv);
+$iv = $crypt->createIV();
+$encrypt = $crypt->encrypt($text);
+
+$crypt->setIV($iv);
+$decrypt = $crypt->decrypt($encrypt);
 
 print "CIPHER: ".$crypt->cipherName()."\n";
 print "MODE: ".$crypt->modeName()."\n";

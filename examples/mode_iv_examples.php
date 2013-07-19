@@ -45,15 +45,14 @@ $iv = $crypt->createIV();
  *
  * In the case where you are given an encrypted string, along with the key, and IV
  * to decrypt the string, you don't need to call createIV() since the IV has already
- * been created for you. Simply pass it into the $crypt->encrypt() or $crypt->decrypt()
- * function, as demonstrated below.
- *
- * After creating the IV, we must pass it into the encryption or
- * decryption function call
+ * been created for you. Set the IV by calling $crypt->setIV($iv) as shown below.
  */
 
-$encrypt = $crypt->encrypt($text, $iv);
-$decrypt = $crypt->decrypt($encrypt, $iv);
+$encrypt = $crypt->encrypt($text);
+
+// we need to use the same IV for decryption as used during encryption
+$crypt->setIV($iv);
+$decrypt = $crypt->decrypt($encrypt);
 
 print "CIPHER: ".$crypt->cipherName()."\n";
 print "MODE: ".$crypt->modeName()."\n";

@@ -22,8 +22,8 @@ WHAT DOES IT WORK ON?
 phpCrypt version 0.x works with PHP 5.3 or later. It will run on any
 32 or 64 bit operating system that has PHP available for it.
 
-SUPPORTED ENCRYPTION CIPHERS and MODES
---------------------------------------
+SUPPORTED ENCRYPTION CIPHERS & MODES
+------------------------------------
 The list of supported encryption ciphers and modes is constantly growing, each
 new version of phpCrypt will add new ciphers or modes. The current list of
 supported ciphers and modes are listed below:
@@ -55,12 +55,13 @@ using AES-128 with CTR mode is demonstrated below:
 
 	$data = "This is my secret message.";
 	$key  = "MySecretKey01234";
-
 	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
-	$iv = $crypt->createIV();
 
-	$encrypt = $crypt->encrypt($data, $iv);
-	$decrypt = $crypt->decrypt($encrypt, $iv);
+	$iv = $crypt->createIV();
+	$encrypt = $crypt->encrypt($data);
+
+	$crypt->setIV($iv);
+	$decrypt = $crypt->decrypt($encrypt);
 	?>
 
 GPL STUFF
