@@ -1,4 +1,4 @@
-phpCrypt 0.3.1
+phpCrypt 0.3.2
 Ryan Gilfether
 http://www.gilfether.com/phpcrypt
 
@@ -23,7 +23,8 @@ found online and in books.
 
 Documentation
 =============
-The 'examples' directory has demo code of phpCrypt in use. Below is an
+Visit the phpCrypt website at http://www.gilfether.com/phpcrypt. Also,
+the 'examples' directory has demo code of phpCrypt in use. Below is an
 example of encrypting a string.
 
 <?php
@@ -37,7 +38,7 @@ $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
 $iv = $crypt->createIV();
 $encrypt = $crypt->encrypt($data);
 
-$crypt->setIV($iv);
+$crypt->IV($iv);
 $decrypt = $crypt->decrypt($encrypt);
 ?>
 

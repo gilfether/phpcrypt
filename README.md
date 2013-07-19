@@ -35,7 +35,7 @@ Ciphers:
 
 Modes:
 
-	CBC, CFB, CTR, ECB, NCFB, NOFB, OFB, PCBC, Stream (used for Stream Ciphers).
+	CBC, CFB, CTR, ECB, NCFB, NOFB, OFB, PCBC, Stream (used for Stream Ciphers)
 
 DOCUMENTATION
 -------------
@@ -60,7 +60,7 @@ using AES-128 with CTR mode is demonstrated below:
 	$iv = $crypt->createIV();
 	$encrypt = $crypt->encrypt($data);
 
-	$crypt->setIV($iv);
+	$crypt->IV($iv);
 	$decrypt = $crypt->decrypt($encrypt);
 	?>
 
