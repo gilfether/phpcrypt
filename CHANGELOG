@@ -1,3 +1,14 @@
+2013-07-19  phpCrypt-0.3.2  Ryan Gilfether
+
+	* Version 0.3.1 contained some incomplete files and bugs
+	which were not fixed before the release. This version
+	addresses those issues.
+
+	* Fixes in the examples code
+
+	* Removed the phpCrypt::setIV() function and renamed to
+	phpCrypt::IV()
+
 2013-07-18  phpCrypt-0.3.1  Ryan Gilfether
 
 	* Found a major bug in the way IV's are used in Encryption
