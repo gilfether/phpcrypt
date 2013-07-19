@@ -45,7 +45,7 @@ class Mode_OFB extends Mode
 	 */
 	public function __construct($cipher)
 	{
-		parent::__construct($cipher, PHP_Crypt::MODE_OFB);
+		parent::__construct(PHP_Crypt::MODE_OFB, $cipher);
 
 		// our block size will be the size required by the cipher
 		$this->blockSize($cipher->bitSize() / 8);

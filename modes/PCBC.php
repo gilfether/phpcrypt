@@ -45,7 +45,7 @@ class Mode_PCBC extends Mode
 	 */
 	function __construct($cipher)
 	{
-		parent::__construct($cipher, PHP_Crypt::MODE_PCBC);
+		parent::__construct(PHP_Crypt::MODE_PCBC, $cipher);
 
 		$this->blockSize($cipher->bitSize() / 8);
 

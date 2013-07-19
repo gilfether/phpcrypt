@@ -46,7 +46,7 @@ class Mode_NOFB extends Mode
 	 */
 	public function __construct($cipher)
 	{
-		parent::__construct($cipher, PHP_Crypt::MODE_NOFB);
+		parent::__construct(PHP_Crypt::MODE_NOFB, $cipher);
 
 		// our block size will be the size required by the cipher
 		$this->blockSize($cipher->bitSize() / 8);

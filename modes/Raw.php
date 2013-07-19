@@ -48,7 +48,7 @@ class Mode_Raw extends Mode
 	 */
 	public function __construct($cipher)
 	{
-		parent::__construct($cipher, PHP_Crypt::MODE_RAW);
+		parent::__construct(PHP_Crypt::MODE_RAW, $cipher);
 
 		// get the bit size the Cipher requires
 		if($cipher->type() == Cipher::BLOCK)
@@ -66,9 +66,9 @@ class Mode_Raw extends Mode
 	 * @param integer $mode The mode constant identifier
 	 * @return void
 	 */
-	protected function __construct1($cipher, $mode)
+	protected function __construct1($mode, $cipher)
 	{
-		parent::__construct($cipher, $mode);
+		parent::__construct($mode, $cipher);
 	}
 
 

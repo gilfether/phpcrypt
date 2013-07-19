@@ -45,7 +45,7 @@ class Mode_CBC extends Mode
 	 */
 	function __construct($cipher)
 	{
-		parent::__construct($cipher, PHP_Crypt::MODE_CBC);
+		parent::__construct(PHP_Crypt::MODE_CBC, $cipher);
 
 		// get the bit size the Cipher requires
 		$this->blockSize($cipher->bitSize() / 8);

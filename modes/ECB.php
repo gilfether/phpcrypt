@@ -46,7 +46,7 @@ class Mode_ECB extends Mode
 	 */
 	public function __construct($cipher)
 	{
-		parent::__construct($cipher, PHP_Crypt::MODE_ECB);
+		parent::__construct(PHP_Crypt::MODE_ECB, $cipher);
 
 		// get the bit size the Cipher requires, divide by 8
 		// to set the number of bytes each block of data will be

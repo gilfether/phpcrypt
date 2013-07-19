@@ -48,7 +48,7 @@ class Mode_Stream extends Mode_Raw
 	public function __construct($cipher)
 	{
 		// call the secondary 'constructor' from the parent
-		parent::__construct1($cipher, PHP_Crypt::MODE_STREAM);
+		parent::__construct1(PHP_Crypt::MODE_STREAM, $cipher);
 
 		// Stream ciphers don't use block sizes, set to 0
 		$this->blockSize(0);

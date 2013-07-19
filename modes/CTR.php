@@ -47,7 +47,7 @@ class Mode_CTR extends Mode
 	 */
 	function __construct($cipher)
 	{
-		parent::__construct($cipher, PHP_CRYPT::MODE_CTR);
+		parent::__construct(PHP_CRYPT::MODE_CTR, $cipher);
 
 		// set the block size, in bits
 		$this->blockSize($cipher->bitSize() / 8);
