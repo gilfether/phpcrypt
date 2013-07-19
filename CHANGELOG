@@ -1,3 +1,15 @@
+2013-07-12  phpCrypt-0.3.1  Ryan Gilfether
+
+	* Found a major bug in the way IV's are used in Encryption
+	and Decryption. The $iv parameter has been removed from
+	phpCrypt::Encrypt() and phpCrypt::Decrypt() function, and
+	instead the IV should be set with phpCrypt::setIV()
+
+	* Updated the code in the 'examples' directory to reflect
+	the changes made to correct the IV bug
+
+	* Updated README and README.md to reflect the changes made
+	for the IV bug
 
 2013-07-12  phpCrypt-0.3  Ryan Gilfether
 
@@ -33,5 +45,6 @@
 	* The initial release of phpCrypt 0.1
 
 Copyright 2013 Ryan Gilfether http://www.gilfether.com/phpcrypt
-Copying and distribution of this file, with or without modification, are
-permitted provided the copyright notice and this notice are preserved.
+Copying and distribution of this file, with or without modification,
+are permitted provided the copyright notice and this notice are
+preserved.
