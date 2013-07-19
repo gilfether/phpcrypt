@@ -12,7 +12,7 @@ use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 $key = "^mY@TEst~Key_012";
 
 $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_NCFB);
-$cipher_block_sz = $crypt->cipherBlockSize();
+$cipher_block_sz = $crypt->cipherBlockSize() / 8;
 $encrypt = "";
 $decrypt = "";
 $result = "";
