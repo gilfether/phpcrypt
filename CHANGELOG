@@ -1,4 +1,4 @@
-2013-07-12  phpCrypt-0.3.1  Ryan Gilfether
+2013-07-18  phpCrypt-0.3.1  Ryan Gilfether
 
 	* Found a major bug in the way IV's are used in Encryption
 	and Decryption. The $iv parameter has been removed from
