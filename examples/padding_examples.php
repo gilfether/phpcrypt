@@ -71,7 +71,7 @@ $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_DES, PHP_Crypt::MODE_ECB, PHP_Cry
  * $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_DES, PHP_Crypt::MODE_ECB, PHP_Crypt::PAD_ISO_7816_4);
  *
  * // ALTERNATIVLEY YOU CAN ALSO SET THE PADDING AFTER CALLING THE CONSTRUCTOR:
- * $crypt->setPadding(PHP_Crypt::PAD_ANSI_X923);
+ * $crypt->padding(PHP_Crypt::PAD_ANSI_X923);
  */
 
 

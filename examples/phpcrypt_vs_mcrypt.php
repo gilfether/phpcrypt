@@ -37,7 +37,6 @@ $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
 $phpcrypt = new PHP_Crypt($key, $phpcrypt_cipher, $phpcrypt_mode);
 
 
-
 print "MCRYPT: $mcrypt_cipher - $mcrypt_mode\n";
 print "PHPCRYPT: ".$phpcrypt->cipherName()." - ".$phpcrypt->modeName()."\n\n";
 
@@ -56,7 +55,7 @@ mcrypt_generic_deinit($td);
 
 // PHPCRYPT: DECRYPT
 $ts_start = microtime(true);
-$phpcrypt->setIV($iv);
+$phpcrypt->IV($iv);
 $decrypt = $phpcrypt->decrypt($encrypt);
 $p_time = number_format((microtime(true) - $ts_start), 5);
 
@@ -76,7 +75,7 @@ print "\n\n";
 
 // PHPCRYPT: ENCRYPT
 $ts_start = microtime(true);
-$phpcrypt->setIV($iv);
+$phpcrypt->IV($iv);
 $encrypt = $phpcrypt->encrypt($text);
 $p_time = number_format((microtime(true) - $ts_start), 5);
 

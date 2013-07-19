@@ -11,8 +11,8 @@ use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 
 $key = "^mY@TEst~Key_012";
 
-$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_NCFB);
-$cipher_block_sz = $crypt->cipherBlockSize() / 8;
+$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_BLOWFISH, PHP_Crypt::MODE_NCFB);
+$cipher_block_sz = $crypt->cipherBlockSize() / 8; // convert from bits to bytes
 $encrypt = "";
 $decrypt = "";
 $result = "";
@@ -35,8 +35,8 @@ $iv = $crypt->createIV();
 
 while (!feof($rhandle))
 {
-	$byte = fread($rhandle, $cipher_block_sz);
-	$result = $crypt->encrypt($byte);
+	$bytes = fread($rhandle, $cipher_block_sz);
+	$result = $crypt->encrypt($bytes);
 	fwrite($whandle, $result);
 }
 fclose($rhandle);
@@ -51,12 +51,12 @@ $whandle = fopen("file.decrypted.txt", "w+");
 print "Creating file.decrypted.txt\n";
 
 // we need to set the IV to the same IV used for encryption
-$crypt->setIV($iv);
+$crypt->IV($iv);
 
 while (!feof($rhandle))
 {
-	$byte = fread($rhandle, $cipher_block_sz);
-	$result = $crypt->decrypt($byte);
+	$bytes = fread($rhandle, $cipher_block_sz);
+	$result = $crypt->decrypt($bytes);
 	fwrite($whandle, $result);
 }
 fclose($rhandle);

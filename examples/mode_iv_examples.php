@@ -51,7 +51,7 @@ $iv = $crypt->createIV();
 $encrypt = $crypt->encrypt($text);
 
 // we need to use the same IV for decryption as used during encryption
-$crypt->setIV($iv);
+$crypt->IV($iv);
 $decrypt = $crypt->decrypt($encrypt);
 
 print "CIPHER: ".$crypt->cipherName()."\n";
