@@ -8,7 +8,7 @@ About
 phpCrypt is an encryption library written in PHP from scratch. It aims to
 implement all major encryption ciphers, modes, and other tools used for
 encryption and decryption. phpCrypt does not rely on mCrypt, other PHP
-extenions, or PEAR libraries.
+extentions, or PEAR libraries.
 
 It currently support many popular encryption ciphers. In addition it
 supports many popular modes of encryption. There are also tools to implement
