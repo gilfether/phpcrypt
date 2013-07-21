@@ -388,22 +388,6 @@ abstract class Mode
 	}
 
 
-
-	/**
-	 * Returns the size of block (in bytes) the Mode should use
-	 * for the Cipher's Encryption
-	 *
-	 * @return int The currently set block size, in bytes
-	 */
-	/*
-	protected function blockSize()
-	{
-		return $this->cipher->blockSize();
-	}
-	*/
-
-
-
 	/**********************************************************************
 	 * PRIVATE METHODS
 	 *
