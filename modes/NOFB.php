@@ -88,7 +88,7 @@ class Mode_NOFB extends Mode
 			// make sure we don't extend past the length of $text
 			$byte_len = $blocksz;
 			if(($pos + $blocksz) > $len)
-				$byte_len = ($pos + $blocksz) - $len;
+				$byte_len -= ($pos + $blocksz) - $len;
 
 			// encrypt the register
 			$this->enc_register = $this->register;
@@ -132,7 +132,7 @@ class Mode_NOFB extends Mode
 			// make sure we don't extend past the length of $text
 			$byte_len = $blocksz;
 			if(($pos + $byte_len) > $len)
-				$byte_len = ($pos + $byte_len) - $len;
+				$byte_len -= ($pos + $byte_len) - $len;
 
 			// encrypt the register
 			$this->enc_register = $this->register;
