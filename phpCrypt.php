@@ -34,40 +34,41 @@ include_once(dirname(__FILE__)."/Includes.inc.php");
 class PHP_Crypt
 {
 	// Ciphers
-	const CIPHER_3DES			= "3des";
-	//const CIPHER_3WAY			= "3way";
-	const CIPHER_AES_128		= "aes-128";
-	const CIPHER_AES_192		= "aes-192";
-	const CIPHER_AES_256		= "aes-256";
-	const CIPHER_ARC4			= "arc4"; // Alternative RC4
-	const CIPHER_BLOWFISH		= "blowfish";
-	const CIPHER_DES			= "des";
-	const CIPHER_ENIGMA			= "enigma";
-	const CIPHER_ONETIMEPAD		= "onetimepad";
-	const CIPHER_RC2			= "rc2";
-	const CIPHER_RIJNDAEL_128	= "rijndael-128";
-	const CIPHER_RIJNDAEL_192	= "rijndael-192";
-	const CIPHER_RIJNDAEL_256	= "rijndael-256";
-	const CIPHER_SKIPJACK		= "skipjack";
-	const CIPHER_SIMPLEXOR		= "simplexor";
-	const CIPHER_VIGENERE		= "vigenere"; // historical
+	const CIPHER_3DES			= "3DES";
+	const CIPHER_3WAY			= "3-Way";
+	const CIPHER_AES_128		= "AES-128";
+	const CIPHER_AES_192		= "AES-192";
+	const CIPHER_AES_256		= "AES-256";
+	const CIPHER_ARC4			= "ARC4"; // Alternative RC4
+	const CIPHER_BLOWFISH		= "Blowfish";
+	const CIPHER_DES			= "DES";
+	const CIPHER_ENIGMA			= "Enigma";
+	const CIPHER_ONETIMEPAD		= "One Time Pad";
+	const CIPHER_RC2			= "RC2";
+	const CIPHER_RIJNDAEL_128	= "Rijndael-128";
+	const CIPHER_RIJNDAEL_192	= "Rijndael-192";
+	const CIPHER_RIJNDAEL_256	= "Rijndael-256";
+	const CIPHER_SKIPJACK		= "Skipjack";
+	const CIPHER_SIMPLEXOR		= "SimpleXOR";
+	const CIPHER_VIGENERE		= "Vigenere"; // historical
 
 	// Modes
-	const MODE_CBC	= "cbc";
-	const MODE_CFB	= "cfb";  // 8 bit cfb mode
-	const MODE_CTR	= "ctr";
-	const MODE_ECB	= "ecb";
-	const MODE_NCFB	= "ncfb"; // n-bit cfb mode
-	const MODE_NOFB	= "nofb"; // n-bit ofb mode
-	const MODE_OFB	= "ofb";  // 8 bit ofb mode
-	const MODE_PCBC	= "pcbc";
-	const MODE_RAW	= "raw";  // raw encryption, with no mode
-	const MODE_STREAM = "stream"; // used only for stream ciphers
+	const MODE_CBC	= "CBC";
+	const MODE_CFB	= "CFB";  // 8 bit cfb mode
+	const MODE_CTR	= "CTR";
+	const MODE_ECB	= "ECB";
+	const MODE_NCFB	= "NCFB"; // n-bit cfb mode
+	const MODE_NOFB	= "NOFB"; // n-bit ofb mode
+	const MODE_OFB	= "OFB";  // 8 bit ofb mode
+	const MODE_PCBC	= "PCBC";
+	const MODE_RAW	= "Raw";  // raw encryption, with no mode
+	const MODE_STREAM = "Stream"; // used only for stream ciphers
 
 	// IV sources for Modes
 	const IV_RAND		= "rand"; // uses mt_rand(), windows & unix
 	const IV_DEV_RAND	= "/dev/random"; // unix only
 	const IV_DEV_URAND	= "/dev/urandom";// unix only
+	const IV_WIN_COM	= "wincom";		 // windows only, COM extension
 
 	// Padding types
 	const PAD_ZERO			= 0;
@@ -102,11 +103,11 @@ class PHP_Crypt
 		case self::CIPHER_3DES:
 			$this->cipher = new Cipher_3DES($key);
 			break;
-/*
+
 		case self::CIPHER_3WAY:
 			$this->cipher = new Cipher_3WAY($key);
 			break;
-*/
+
 		case self::CIPHER_AES_128:
 			$this->cipher = new Cipher_AES_128($key);
 			break;
@@ -217,7 +218,6 @@ class PHP_Crypt
 			$this->mode = new Mode_Stream($this->cipher);
 			break;
 
-		//case self::MODE_CTS:
 		default:
 			trigger_error("$mode is not a valid mode", E_USER_WARNING);
 		}
