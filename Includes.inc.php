@@ -4,7 +4,7 @@
 #
 
 include_once(dirname(__FILE__)."/ciphers/3DES.php");
-//include_once(dirname(__FILE__)."/ciphers/3Way.php");
+include_once(dirname(__FILE__)."/ciphers/3Way.php");
 include_once(dirname(__FILE__)."/ciphers/AES128.php");
 include_once(dirname(__FILE__)."/ciphers/AES192.php");
 include_once(dirname(__FILE__)."/ciphers/AES256.php");
