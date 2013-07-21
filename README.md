@@ -24,13 +24,13 @@ phpCrypt version 0.x works with PHP 5.3 or later. It will run on any
 
 SUPPORTED ENCRYPTION CIPHERS & MODES
 ------------------------------------
-The list of supported encryption ciphers and modes is continually growing, each
-new version of phpCrypt will add new ciphers or modes. The current list of
-supported ciphers and modes are listed below:
+The list of supported encryption ciphers and modes is continually growing,
+each new version of phpCrypt will add new ciphers or modes. The current list
+of supported ciphers and modes are listed below:
 
 Ciphers:
 
-  	AES, ARC4 (an RC4 alternative), Blowfish, DES, Triple DES, Enigma,
+  	3Way, AES, ARC4 (an RC4 alternative), Blowfish, DES, Triple DES, Enigma,
 	One Time Pad, RC2, Rijndael, SimpleXOR, Skipjack, Vignere
 
 Modes:
