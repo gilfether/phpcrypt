@@ -89,7 +89,7 @@ class Mode_CTR extends Mode
 			// make sure we don't extend past the length of $text
 			$byte_len = $blocksz;
 			if(($pos + $byte_len) > $len)
-				$byte_len = ($pos + $byte_len) - $len;
+				$byte_len -= ($pos + $byte_len) - $len;
 
 			// encrypt the register
 			$this->enc_register = $this->register;
@@ -99,8 +99,8 @@ class Mode_CTR extends Mode
 			$block = substr($text, $pos, $byte_len);
 
 			// xor the block
-			$max2 = strlen($block);
-			for($j = 0; $j < $max2; ++$j)
+			//$max2 = strlen($block);
+			for($j = 0; $j < $byte_len; ++$j)
 				$block[$j] = $block[$j] ^ $this->enc_register[$j];
 
 			// replace the plain text block with the encrypted block
@@ -134,7 +134,7 @@ class Mode_CTR extends Mode
 			// make sure we don't extend past the length of $text
 			$byte_len = $blocksz;
 			if(($pos + $byte_len) > $len)
-				$byte_len = ($pos + $byte_len) - $len;
+				$byte_len -= ($pos + $byte_len) - $len;
 
 			// encrypt the register
 			$this->enc_register = $this->register;
@@ -144,8 +144,8 @@ class Mode_CTR extends Mode
 			$block = substr($text, $pos, $byte_len);
 
 			// xor the block with the register (which contains the IV)
-			$max2 = strlen($block);
-			for($j = 0; $j < $max2; ++$j)
+			//$max2 = strlen($block);
+			for($j = 0; $j < $byte_len; ++$j)
 				$block[$j] = $block[$j] ^ $this->enc_register[$j];
 
 			// replace the encrypted block with the plain text
@@ -171,10 +171,10 @@ class Mode_CTR extends Mode
 
 
 	/**
-	 * We initialization of the counter each time the IV is set
-	 * so this function over rides Mode::createIV() to do this
+	 * Override Mode::createIV(). Each time an IV is created the counter
+	 * needs to initialized. This function calls Mode::createIV() and
+	 * then initializes the counter.
 	 *
-	 * @param string $iv The IV to use if given, otherwise we create one
 	 * @param string $src The source to create the IV from,
 	 * 		see Mode::createIV() for options
 	 * @return string The new IV
@@ -187,6 +187,29 @@ class Mode_CTR extends Mode
 		$this->counter_pos = strlen($this->register) - 1;
 
 		return $iv;
+	}
+
+
+	/**
+	 * Override Mode::IV(). Initializes the counter's position every time
+	 * the the IV is set. Calls Mode::IV() before initializing the counter.
+	 * If the $iv parameter is not given, this function mimics Mode::IV()
+	 * behavoir by just returning the current IV being used.
+	 *
+	 * @param string $iv Optional, An IV to use for the mode and cipher selected
+	 * @return string The current IV being used
+	 */
+	public function IV($iv = null)
+	{
+		if($iv != null)
+		{
+			parent::IV($iv);
+
+			// initialize the counter position to the right most byte
+			$this->counter_pos = strlen($this->register) - 1;
+		}
+
+		return $this->iv;
 	}
 
 
