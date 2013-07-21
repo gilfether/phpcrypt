@@ -54,8 +54,8 @@ $m_time = number_format((microtime(true) - $ts_start), 5);
 mcrypt_generic_deinit($td);
 
 // PHPCRYPT: DECRYPT
-$ts_start = microtime(true);
 $phpcrypt->IV($iv);
+$ts_start = microtime(true);
 $decrypt = $phpcrypt->decrypt($encrypt);
 $p_time = number_format((microtime(true) - $ts_start), 5);
 
@@ -74,8 +74,8 @@ print "\n\n";
  */
 
 // PHPCRYPT: ENCRYPT
-$ts_start = microtime(true);
 $phpcrypt->IV($iv);
+$ts_start = microtime(true);
 $encrypt = $phpcrypt->encrypt($text);
 $p_time = number_format((microtime(true) - $ts_start), 5);
 
