@@ -36,6 +36,9 @@ include_once(dirname(__FILE__)."/phpCrypt.php");
  */
 abstract class Mode
 {
+	/** @type integer HASH_LEN The length of md5() hash string */
+	const HASH_LEN = 16;
+
 	/**
 	 * @type object $cipher The cipher object used within the mode
 	 */
@@ -88,6 +91,7 @@ abstract class Mode
 	{
 		$this->name($mode_name);
 		$this->cipher($cipher);
+		$this->block_size = $this->cipher->blockSize();
 	}
 
 
@@ -189,21 +193,19 @@ abstract class Mode
 				// http://msdn.microsoft.com/en-us/library/aa388176(VS.85).aspx
 				try
 				{
+					// request a random number in $this->block_size bytes, returned
+					// as base_64 encoded string. This is because PHP munges the
+					// binary data on Windows
 					$com = @new \COM("CAPICOM.Utilities.1");
 					$iv = $com->GetRandom($this->block_size, 0);
-
-					// if we ask for binary data PHP munges it, so we
-					// request base64 return value.  We squeeze out the
-					// redundancy and useless ==CRLF by hashing...
-					if($iv)
-						$iv = md5($iv, true);
-					else
-						$err_msg  = "Windows COM failed to create an IV";
 				}
-				catch(Exception $ex)
+				catch(Exception $e)
 				{
-					$err_msg  = "Windows COM exception: ".$ex->getMessage();
+					$err_msg  = "Windows COM exception: ".$e->getMessage();
 				}
+
+				if(!$iv)
+					$err_msg  = "Windows COM failed to create an IV";
 			}
 			else
 				$err_msg = "The COM_DOTNET extension is not loaded";
@@ -213,15 +215,29 @@ abstract class Mode
 		if($err_msg != "")
 			trigger_error("$err_msg. Defaulting to PHP_CRYPT::IV_RAND", E_USER_WARNING);
 
-		// if for some reason the iv was not created properly, or PHP_Crypt::IV_RAND
-		// was given for the $src param, create the IV using mt_rand(). It's not secure
-		// but we have no other choice
+		// if the iv was not created properly or PHP_Crypt::IV_RAND was passed
+		// as the $src param, create the IV using mt_rand(). It's not the most
+		// secure option but we have no other choice
 		if(strlen($iv) < $this->block_size)
 		{
 			$iv = "";
-			for($i = 0; $i < $this->block_size; ++$i)
-				$iv .= chr(mt_rand(0, 255));
+
+			// md5() hash a random number to get a 16 byte string, keep looping
+			// until we have a string as long or longer than the ciphers block size
+			for($i = 0; ($i * self::HASH_LEN) < $this->block_size; ++$i)
+				$iv .= md5(mt_rand(), true);
 		}
+
+		// md5() the $iv to add extra randomness. Since md5() only returns
+		// 16 bytes, we may need to loop to generate a an $iv big enough for
+		// some ciphers which have a block size larger than 16 bytes
+		$tmp = "";
+		$loop = ceil(strlen($iv) / self::HASH_LEN);
+		for($i = 0; $i < $loop; ++$i)
+			$tmp .= md5(substr($iv, ($i * self::HASH_LEN), self::HASH_LEN), true);
+
+		// grab the number of bytes equal to the blocksize of the cipher
+		$iv = substr($tmp, 0, $this->block_size);
 
 		// now store the IV we created
 		return $this->IV($iv);
@@ -229,10 +245,11 @@ abstract class Mode
 
 
 	/**
-	 * Sets or Returns an IV for the mode to use
+	 * Sets or Returns an IV for the mode to use. If the $iv parameter
+	 * is not given, this function only returns the current IV in use.
 	 *
 	 * @param string $iv Optional, An IV to use for the mode and cipher selected
-	 * @return void
+	 * @return string The current IV being used
 	 */
 	public function IV($iv = null)
 	{
@@ -344,7 +361,7 @@ abstract class Mode
 	protected function pad(&$str)
 	{
 		$len = strlen($str);
-		$bytes = $this->blockSize(); // returns bytes
+		$bytes = $this->cipher->blockSize(); // returns bytes
 
 		// now determine the next multiple of blockSize(), then find
 		// the difference between that and the length of $str,
@@ -373,21 +390,17 @@ abstract class Mode
 
 
 	/**
-	 * Sets or Returns the size of block (in bytes) the Mode should use
-	 * for the Cipher's Encryption, for example DES uses 64bit data, which
-	 * means our BlockSize will be 8 bytes
+	 * Returns the size of block (in bytes) the Mode should use
+	 * for the Cipher's Encryption
 	 *
-	 * @param int $bytes Options, The size of the block in bytes
 	 * @return int The currently set block size, in bytes
 	 */
-	protected function blockSize($bytes = 0)
+	/*
+	protected function blockSize()
 	{
-		if($bytes > 0)
-			$this->block_size = $bytes;
-
-		return $this->block_size;
+		return $this->cipher->blockSize();
 	}
-
+	*/
 
 
 

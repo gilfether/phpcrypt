@@ -48,9 +48,6 @@ class Mode_NOFB extends Mode
 	{
 		parent::__construct(PHP_Crypt::MODE_NOFB, $cipher);
 
-		// our block size will be the size required by the cipher
-		$this->blockSize($cipher->bitSize() / 8);
-
 		// this works with only block Ciphers
 		if($cipher->type() != Cipher::BLOCK)
 			trigger_error("NOFB mode requires a block cipher", E_USER_WARNING);
@@ -77,7 +74,7 @@ class Mode_NOFB extends Mode
 	public function encrypt(&$text)
 	{
 		$len = strlen($text);
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 
 		$max = $len / $blocksz;
 		for($i = 0; $i < $max; ++$i)
@@ -120,7 +117,7 @@ class Mode_NOFB extends Mode
 	public function decrypt(&$text)
 	{
 		$len = strlen($text);
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 
 		$max = $len / $blocksz;
 		for($i = 0; $i < $max; ++$i)

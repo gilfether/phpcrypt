@@ -49,12 +49,6 @@ class Mode_Raw extends Mode
 	public function __construct($cipher)
 	{
 		parent::__construct(PHP_Crypt::MODE_RAW, $cipher);
-
-		// get the bit size the Cipher requires
-		if($cipher->type() == Cipher::BLOCK)
-			$this->blockSize($cipher->bitSize() / 8);
-		else
-			$this->blockSize(0);
 	}
 
 

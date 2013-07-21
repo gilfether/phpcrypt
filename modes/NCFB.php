@@ -47,9 +47,6 @@ class Mode_NCFB extends Mode
 	{
 		parent::__construct(PHP_Crypt::MODE_NCFB, $cipher);
 
-		// our block size will be the size required by the cipher
-		$this->blockSize($cipher->bitSize() / 8);
-
 		// this works with only block Ciphers
 		if($cipher->type() != Cipher::BLOCK)
 			trigger_error("NCFB mode requires a block cipher", E_USER_WARNING);
@@ -75,7 +72,7 @@ class Mode_NCFB extends Mode
 	 */
 	public function encrypt(&$text)
 	{
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 
 		// first we need to pad the string so its the correct length for the cipher
 		$len = strlen($text);
@@ -125,7 +122,7 @@ class Mode_NCFB extends Mode
 	 */
 	public function decrypt(&$text)
 	{
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 		$len = strlen($text);
 
 		// if $len is less than blockSize() this will still work, as even

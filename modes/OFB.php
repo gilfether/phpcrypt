@@ -47,9 +47,6 @@ class Mode_OFB extends Mode
 	{
 		parent::__construct(PHP_Crypt::MODE_OFB, $cipher);
 
-		// our block size will be the size required by the cipher
-		$this->blockSize($cipher->bitSize() / 8);
-
 		// this works with only block Ciphers
 		if($cipher->type() != Cipher::BLOCK)
 			trigger_error("OFB mode requires a block cipher", E_USER_WARNING);

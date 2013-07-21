@@ -48,10 +48,6 @@ class Mode_ECB extends Mode
 	{
 		parent::__construct(PHP_Crypt::MODE_ECB, $cipher);
 
-		// get the bit size the Cipher requires, divide by 8
-		// to set the number of bytes each block of data will be
-		$this->blockSize($cipher->bitSize() / 8);
-
 		// this works with only block Ciphers
 		if($cipher->type() != Cipher::BLOCK)
 			trigger_error("ECB mode requires a block cipher", E_USER_WARNING);
@@ -79,7 +75,7 @@ class Mode_ECB extends Mode
 	public function encrypt(&$text)
 	{
 		$this->pad($text);
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 
 		$max = strlen($text) / $blocksz;
 		for($i = 0; $i < $max; ++$i)
@@ -110,7 +106,7 @@ class Mode_ECB extends Mode
 	 */
 	public function decrypt(&$text)
 	{
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 
 		$max = strlen($text) / $blocksz;
 		for($i = 0; $i < $max; ++$i)

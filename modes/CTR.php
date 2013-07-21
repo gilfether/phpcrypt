@@ -49,9 +49,6 @@ class Mode_CTR extends Mode
 	{
 		parent::__construct(PHP_CRYPT::MODE_CTR, $cipher);
 
-		// set the block size, in bits
-		$this->blockSize($cipher->bitSize() / 8);
-
 		// this works with only block Ciphers
 		if($cipher->type() != Cipher::BLOCK)
 			trigger_error("CTR mode requires a block cipher", E_USER_WARNING);
@@ -78,7 +75,7 @@ class Mode_CTR extends Mode
 	public function encrypt(&$text)
 	{
 		$len = strlen($text);
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 
 		$max = $len / $blocksz;
 		for($i = 0; $i < $max; ++$i)
@@ -122,7 +119,7 @@ class Mode_CTR extends Mode
 	public function decrypt(&$text)
 	{
 		$len = strlen($text);
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 
 		$max = $len / $blocksz;
 		for($i = 0; $i < $max; ++$i)

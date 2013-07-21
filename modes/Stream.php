@@ -50,9 +50,6 @@ class Mode_Stream extends Mode_Raw
 		// call the secondary 'constructor' from the parent
 		parent::__construct1(PHP_Crypt::MODE_STREAM, $cipher);
 
-		// Stream ciphers don't use block sizes, set to 0
-		$this->blockSize(0);
-
 		// this works with only stream Ciphers
 		if($cipher->type() != Cipher::STREAM)
 			trigger_error("Stream mode requires a stream cipher", E_USER_WARNING);

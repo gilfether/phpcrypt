@@ -47,9 +47,6 @@ class Mode_CBC extends Mode
 	{
 		parent::__construct(PHP_Crypt::MODE_CBC, $cipher);
 
-		// get the bit size the Cipher requires
-		$this->blockSize($cipher->bitSize() / 8);
-
 		// this works with only block Ciphers
 		if($cipher->type() != Cipher::BLOCK)
 			trigger_error("CBC mode requires a block cipher", E_USER_WARNING);
@@ -83,7 +80,7 @@ class Mode_CBC extends Mode
 	public function encrypt(&$text)
 	{
 		$this->pad($text);
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 
 		$max = strlen($text) / $blocksz;
 		for($i = 0; $i < $max; ++$i)
@@ -121,12 +118,12 @@ class Mode_CBC extends Mode
 	 * 4) the result from the XOR will be a plain text block, save it
 	 * 5) assign the encrypted block from step 1 to use in the next round
 	 *
-	 * @param string $text the string to be decrypted in ECB mode
+	 * @param string $text the string to be decrypted in CBC mode
 	 * @return boolean Returns true
 	 */
 	public function decrypt(&$text)
 	{
-		$blocksz = $this->blockSize();
+		$blocksz = $this->cipher->blockSize();
 
 		$max = strlen($text) / $blocksz;
 		for($i = 0; $i < $max; ++$i)
