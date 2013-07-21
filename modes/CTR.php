@@ -179,9 +179,9 @@ class Mode_CTR extends Mode
 	 * 		see Mode::createIV() for options
 	 * @return string The new IV
 	 */
-	public function createIV($iv = "", $src = "")
+	public function createIV($src = null)
 	{
-		$iv = parent::createIV($iv, $src);
+		$iv = parent::createIV($src);
 
 		// initialize the counter position to the right most byte
 		$this->counter_pos = strlen($this->register) - 1;
