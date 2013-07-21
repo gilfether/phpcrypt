@@ -108,7 +108,7 @@ class Cipher_Blowfish extends Cipher
 	/**
 	 * Encrypt plain text data
 	 *
-	 * @param string $text A 64 bit (8 byte) plain text string
+	 * @param string $data A 64 bit (8 byte) plain text string
 	 * @return boolean Returns true
 	 */
 	public function encrypt(&$data)
@@ -121,7 +121,7 @@ class Cipher_Blowfish extends Cipher
 	/**
 	 * Decrypt an encrypted string
 	 *
-	 * @param string $text A 64 bit block of Blowfish encrypted data
+	 * @param string $data A 64 bit block of Blowfish encrypted data
 	 * @return boolean Returns true
 	 */
 	public function decrypt(&$data)
@@ -134,7 +134,7 @@ class Cipher_Blowfish extends Cipher
 	/**
 	 * The same alorigthm is used for both Encryption, and Decryption
 	 *
-	 * @param string $text A 64 bit block of data
+	 * @param string $data A 64 bit block of data
 	 * @return boolean Returns true
 	 */
 	private function blowfish(&$data)
