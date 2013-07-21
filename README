@@ -1,46 +1,76 @@
-phpCrypt 0.3.2
+phpCrypt 0.4
 Ryan Gilfether
 http://www.gilfether.com/phpcrypt
 
 
 About
 =============
-phpCrypt is an Open Source PHP Encryption library that does not require
-or use the mCrypt or any other PHP extension. It's not as fast
-as PHP's mCrypt extention, however if you are in a situation where you
-can not use the mCrypt library, phpCrypt is a suitable alternative.
+phpCrypt is an encryption library written in PHP from scratch. It aims to
+implement all major encryption ciphers, modes, and other tools used for
+encryption and decryption. phpCrypt does not rely on mCrypt, other PHP
+extenions, or PEAR libraries.
 
-This version of phpCrypt requires PHP 5.3 or later.
+It currently support many popular encryption ciphers. In addition it
+supports many popular modes of encryption. There are also tools to implement
+the different padding schemes, as well as multiple methods of creating an
+Initialization Vecotor (IV) for modes that require one.
 
-Please visit phpCrypt's website for a list of options and constants
-used in phpCrypt. phpCrypt's website also lists the required key
-sizes for Ciphers, as well as which Modes work with which Ciphers.
-http://www.gilfether.com/phpcrypt
-
-All Cipher algorithms were implemented using freely available resources
-found online and in books.
+phpCrypt is developed by Ryan Gilfether <http://www.gilfether.com/phpcrypt>
 
 
 Documentation
 =============
-Visit the phpCrypt website at http://www.gilfether.com/phpcrypt. Also,
-the 'examples' directory has demo code of phpCrypt in use. Below is an
-example of encrypting a string.
+The phpCrypt website at http://www.gilfether.com/phpcrypt lists much of the
+information you need to begin. The phpCrypt website lists all the constants
+you need to select ciphers,	modes, padding, and IV methods. In addition,
+phpCrypt comes with an `examples` directory which has sample code to help get
+you started.
 
-<?php
-include("/path/to/phpcrypt/phpCrypt.php");
-use PHP_Crypt\PHP_Crypt as PHP_Crypt;
+Using phpCrypt is easy to use. An example of encrypting a string using AES-128
+with CTR mode is demonstrated below:
 
-$data = "This is my secret message.";
-$key  = "MySecretKey01234";
-$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
+	<?php
+	include("/path/to/phpcrypt/phpCrypt.php");
+	use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 
-$iv = $crypt->createIV();
-$encrypt = $crypt->encrypt($data);
+	$data = "This is my secret message.";
+	$key  = "MySecretKey01234";
+	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
 
-$crypt->IV($iv);
-$decrypt = $crypt->decrypt($encrypt);
-?>
+	$iv = $crypt->createIV();
+	$encrypt = $crypt->encrypt($data);
+
+	$crypt->IV($iv);
+	$decrypt = $crypt->decrypt($encrypt);
+	?>
+
+
+Generating Random Numbers on Windows
+====================================
+
+By default phpCrypt will use the PHP mt_rand() random number generator on
+Windows to create an IV. You have the option to use the random number generator
+found in the Microsoft CAPICOM SDK which is more secure.
+
+Before this will work you must install the Microsoft CAPICOM SDK and enable the
+PHP com_dotnet extension:
+
+	* Download CAPICOM from Microsoft at
+	http://www.microsoft.com/en-us/download/details.aspx?id=25281
+
+	* Double click the MSI file you downloaded, and follow the install directions
+
+	* Open a command prompt and register the DLL:
+	regsvr32 C:\Program Files\PATH TO\CAPICOM SDK\Lib\X86\capicom.dll
+
+	* Now edit php.ini to enable the com_dotnet extension:
+	extension=php_com_dotnet.dll
+
+	* If you are running PHP as an Apache module, restart Apache.
+
+To use the Windows random number generator in CAPICOM you would call creatIV() like so:
+
+	$iv = $crypt->createIV(PHP_Crypt::IV_WIN_COM);
 
 
 GPL Stuff

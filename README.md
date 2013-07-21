@@ -4,15 +4,15 @@ phpCrypt - A PHP Encryption Library
 WHAT IS PHPCRYPT?
 -----------------
 
-phpCrypt is an encryption library written in PHP from scratch by
-Ryan Gilfether. It aims to implement all major encryption ciphers, modes,
-and other tools used for encryption and decryption. phpCrypt does not rely
-on mCrypt or any other PHP extenions or PEAR libraries.
+phpCrypt is an encryption library written in PHP from scratch. It aims to
+implement all major encryption ciphers, modes, and other tools used for
+encryption and decryption. phpCrypt does not rely on mCrypt, other PHP
+extenions, or PEAR libraries.
 
 It currently support many popular encryption ciphers. In addition it
-supports many popular encryption modes. There are also tools to implement
-the different padding schemes, as well as methods of creating an
-Initialization Vecotor (IV) for modes that require an IV.
+supports many popular modes of encryption. There are also tools to implement
+the different padding schemes, as well as multiple methods of creating an
+Initialization Vecotor (IV) for modes that require one.
 
 phpCrypt is developed by Ryan Gilfether <http://www.gilfether.com/phpcrypt>
 
@@ -24,7 +24,7 @@ phpCrypt version 0.x works with PHP 5.3 or later. It will run on any
 
 SUPPORTED ENCRYPTION CIPHERS & MODES
 ------------------------------------
-The list of supported encryption ciphers and modes is constantly growing, each
+The list of supported encryption ciphers and modes is continually growing, each
 new version of phpCrypt will add new ciphers or modes. The current list of
 supported ciphers and modes are listed below:
 
@@ -42,12 +42,12 @@ DOCUMENTATION
 
 The phpCrypt website at http://www.gilfether.com/phpcrypt lists much of the
 information you need to begin. The phpCrypt website lists all the constants
-you need to select ciphers,	modes, padding type, and IV creation methods.
-In addition, phpCrypt comes with an `examples` directory which has sample code
-to help get you started.
+you need to select ciphers,	modes, padding, and IV methods. In addition,
+phpCrypt comes with an `examples` directory which has sample code to help get
+you started.
 
-Using phpCrypt is not complicated. A simple example of encrypting a string
-using AES-128 with CTR mode is demonstrated below:
+Using phpCrypt is easy to use. An example of encrypting a string using AES-128
+with CTR mode is demonstrated below:
 
 	<?php
 	include("/path/to/phpcrypt/phpCrypt.php");
@@ -63,6 +63,26 @@ using AES-128 with CTR mode is demonstrated below:
 	$crypt->IV($iv);
 	$decrypt = $crypt->decrypt($encrypt);
 	?>
+
+GENERATING RANDOM NUMBERS ON WINDOWS
+------------------------------------
+
+By default phpCrypt will use the PHP mt_rand() random number function on Windows
+to create an IV. You have the option to use the random number generator found in the
+Microsoft CAPICOM SDK which is more secure.
+
+Before this will work you must install the Microsoft CAPICOM SDK and enable the PHP
+com_dotnet extension:
+
+* Download CAPICOM from Microsoft at http://www.microsoft.com/en-us/download/details.aspx?id=25281
+* Double click the MSI file you downloaded and follow the install directions
+* Open a command prompt and register the DLL: `regsvr32 C:\Program Files\PATH TO\CAPICOM SDK\Lib\X86\capicom.dll`
+* Now edit php.ini to enable the com_dotnet extension: `extension=php_com_dotnet.dll`
+* If you are running PHP as an Apache module, restart Apache.
+
+To use the Windows random number generator in CAPICOM you would call createIV() like so:
+
+	$iv = $crypt->createIV(PHP_Crypt::IV_WIN_COM);
 
 GPL STUFF
 ---------
