@@ -38,11 +38,11 @@ require_once(dirname(__FILE__)."/Rijndael128.php");
  */
 class Cipher_AES_256 extends Cipher_Rijndael_128
 {
-	/** @type integer BITS_BLOCK The size of the block, in bits */
-	const BITS_BLOCK = 128;
+	/** @type integer BYTES_BLOCK The size of the block, in bytes */
+	const BYTES_BLOCK = 16; // 128 bits;
 
-	/** @type integer BITS_KEY The size of the key, in bits */
-	const BITS_KEY = 256;
+	/** @type integer BITS_KEY The size of the key, in bytes */
+	const BYTES_KEY = 32; // 256 bits;
 
 	/**
 	 * Constructor
@@ -55,7 +55,7 @@ class Cipher_AES_256 extends Cipher_Rijndael_128
 	{
 		// Setup AES by calling the second constructor in Rijndael_128
 		// The block size is set here too, since all AES implementations use 128 bit blocks
-		parent::__construct1(PHP_Crypt::CIPHER_AES_256, $key, self::BITS_KEY);
+		parent::__construct1(PHP_Crypt::CIPHER_AES_256, $key, self::BYTES_KEY);
 	}
 
 

@@ -38,8 +38,8 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
  */
 class Cipher_Rijndael_192 extends Cipher_Rijndael
 {
-	/** @type integer BITS_BLOCK The size of the block, in bits */
-	const BITS_BLOCK = 192;
+	/** @type integer BYTES_BLOCK The size of the block, in bytes */
+	const BYTES_BLOCK = 24; // 192 bits
 
 	//const BITS_KEY = 0;
 
@@ -57,7 +57,7 @@ class Cipher_Rijndael_192 extends Cipher_Rijndael
 		parent::__construct(PHP_CRYPT::CIPHER_RIJNDAEL_192, $key);
 
 		// required block size in bits
-		$this->bitSize(self::BITS_BLOCK);
+		$this->blockSize(self::BYTES_BLOCK);
 
 		// expand the key now that we know the key size, and the bit size
 		$this->expandKey();

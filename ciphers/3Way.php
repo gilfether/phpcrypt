@@ -37,11 +37,11 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
  */
 class Cipher_3Way extends Cipher
 {
-	/** @type integer BITS_BLOCK The size of the block, in bits */
-	const BITS_BLOCK = 96;
+	/** @type integer BYTES_BLOCK The size of the block, in bytes */
+	const BYTES_BLOCK = 12; // 96 bits;
 
-	/** @type integer BITS_KEY The size of the key, in bits */
-	const BITS_KEY = 96;
+	/** @type integer BYTES_KEY The size of the key, in bytes */
+	const BYTES_KEY = 12; // 96 bits;
 
 	/** @type integer ROUNDS The number of rounds to implement */
 	const ROUNDS = 11;
@@ -61,11 +61,11 @@ class Cipher_3Way extends Cipher
 	 */
 	public function __construct($key)
 	{
-		// set the key, make sure the required length is set in bits
-		parent::__construct(PHP_Crypt::CIPHER_3WAY, $key, self::BITS_KEY);
+		// set the key, make sure the required length is set in bytes
+		parent::__construct(PHP_Crypt::CIPHER_3WAY, $key, self::BYTES_KEY);
 
 		// set the block size
-		$this->bitSize(self::BITS_BLOCK);
+		$this->blockSize(self::BYTES_BLOCK);
 
 		// initialize the round constants
 		$this->initTables();

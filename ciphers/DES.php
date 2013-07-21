@@ -38,11 +38,11 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
  */
 class Cipher_DES extends Cipher
 {
-	/** @type integer BITS_BLOCK The block size, in bits */
-	const BITS_BLOCK = 64;
+	/** @type integer BYTES_BLOCK The block size, in bytes */
+	const BYTES_BLOCK = 8; // 64 bits
 
-	/** @type integer BITS_KEY The key size, in bits */
-	const BITS_KEY = 64;
+	/** @type integer BYTES_KEY The key size, in bytes */
+	const BYTES_KEY = 8; // 64 bits
 
 	/** @type array $sub_keys The permutated subkeys */
 	protected $sub_keys = array();
@@ -50,7 +50,7 @@ class Cipher_DES extends Cipher
 	/*
 	 * Tables initialized in the initTables()
 	 */
-	 
+
 	/**
 	 * @type array $_pc1 Permutated choice 1 (PC1),
 	 * This should be considered a constant
@@ -110,13 +110,13 @@ class Cipher_DES extends Cipher
 	public function __construct($key)
 	{
 		// set the DES key
-		parent::__construct(PHP_Crypt::CIPHER_DES, $key, self::BITS_KEY);
+		parent::__construct(PHP_Crypt::CIPHER_DES, $key, self::BYTES_KEY);
 
 		// initialize variables
 		$this->initTables();
 
 		// DES requires that data is 64 bits
-		$this->bitSize(self::BITS_BLOCK);
+		$this->blockSize(self::BYTES_BLOCK);
 
 		// create the 16 rounds of 56 bit keys
 		$this->keyPermutation();
@@ -126,13 +126,15 @@ class Cipher_DES extends Cipher
 	/**
 	 * Second Constructor, used only by child classes that extend this class
 	 *
+	 * @param string $cipher The name of the cipher extending this class
 	 * @param string $key The key used for Encryption/Decryption
+	 * @param integer $key_byte_sz The required byte size of the extending cipher
 	 * @return void
 	 */
-	protected function __construct1($cipher, $key, $key_bit_sz)
+	protected function __construct1($cipher, $key, $key_byte_sz)
 	{
 		// set the key and key size
-		parent::__construct($cipher, $key, $key_bit_sz);
+		parent::__construct($cipher, $key, $key_byte_sz);
 
 		// initialize variables
 		$this->initTables();

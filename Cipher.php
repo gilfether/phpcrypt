@@ -54,8 +54,8 @@ abstract class Cipher extends Base
 	/** @type string $cipher_name Stores the name of the cipher */
 	protected $cipher_name = "";
 
-	/** @type integer $bit_size The block size of the cipher in bits */
-	protected $bit_size = 0;
+	/** @type integer $block_size The block size of the cipher in bytes */
+	protected $block_size = 0;
 
 	/**
 	 * @type integer $operation Indicates if a cipher is Encrypting or Decrypting
@@ -176,22 +176,27 @@ abstract class Cipher extends Base
 	/**
 	 * Size of the data in Bits that get used during encryption
 	 *
-	 * @param integer $bits Number of bits each block of data is required by the cipher
-	 * @return integer The number of bits each block of data required by the cipher
+	 * @param integer $bytes Number of bytes each block of data is required by the cipher
+	 * @return integer The number of bytes each block of data required by the cipher
 	 */
-	public function bitSize($bits = 0)
+	public function blockSize($bytes = 0)
 	{
-		if($bits > 0)
-			$this->bit_size = $bits;
+		if($bytes > 0)
+			$this->block_size = $bytes;
 
-		return $this->bit_size;
+		// in some cases a blockSize is not set, such as stream ciphers.
+		// so just return 0 for the block size
+		if(!isset($this->block_size))
+			return 0;
+
+		return $this->block_size;
 	}
 
 
 	/**
-	 * Returns the size (in bits) required by the cipher.
+	 * Returns the size (in bytes) required by the cipher.
 	 *
-	 * @return integer The number of bits the cipher requires the key to be
+	 * @return integer The number of bytes the cipher requires the key to be
 	 */
 	public function keySize()
 	{
@@ -250,24 +255,23 @@ abstract class Cipher extends Base
 	 * the cipher.
 	 *
 	 * @param string $key A key for the cipher
-	 * @param integer $required_bit_size The byte size required for the key
+	 * @param integer $req_sz The byte size required for the key
 	 * @return string They key, which made have been modified to fit size
 	 *	requirements
 	 */
-	private function setKey($key, $required_bit_size = 0)
+	private function setKey($key, $req_sz = 0)
 	{
-		$this->req_key_sz = $required_bit_size;
+		$this->req_key_sz = $req_sz;
 
-		if($required_bit_size > 0)
+		if($this->req_key_sz > 0)
 		{
 			$keylen = strlen($key);
-			$req_bytes = $required_bit_size / 8;
 
-			if($keylen > $req_bytes)
-				$key = substr($key, 0, $req_bytes);
-			else if($keylen < $req_bytes)
+			if($keylen > $this->req_key_sz)
+				$key = substr($key, 0, $this->req_key_sz);
+			else if($keylen < $this->req_key_sz)
 			{
-				$msg = strtoupper($this->name())." requires a $req_bytes byte key, $keylen bytes received.";
+				$msg = strtoupper($this->name())." requires a {$this->req_key_sz} byte key, $keylen bytes received.";
 				trigger_error($msg, E_USER_WARNING);
 			}
 		}

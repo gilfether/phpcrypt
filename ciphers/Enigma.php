@@ -80,12 +80,7 @@ class Cipher_Enigma extends Cipher
 	 */
 	public function __construct($key)
 	{
-		// set the key
-		$key_bit_sz = strlen($key) * 8;
-		parent::__construct(PHP_Crypt::CIPHER_ENIGMA, $key, $key_bit_sz);
-
-		// set the block size
-		$this->bitSize(0);
+		parent::__construct(PHP_Crypt::CIPHER_ENIGMA, $key, strlen($key));
 
 		$this->createKey();
 	}

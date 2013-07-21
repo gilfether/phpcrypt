@@ -43,8 +43,8 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
  */
 class Cipher_Simple_XOR extends Cipher
 {
-	/** @type integer BITS_BLOCK The size of the block, in bits */
-	const BITS_BLOCK = 8;
+	/** @type integer BYTES_BLOCK The size of the block, in bytes */
+	const BYTES_BLOCK = 1; // 8 bits
 
 
 	/**
@@ -60,7 +60,7 @@ class Cipher_Simple_XOR extends Cipher
 		parent::__construct(PHP_Crypt::CIPHER_SIMPLEXOR, $key);
 
 		// required block size in bits
-		$this->bitSize(self::BITS_BLOCK);
+		$this->blockSize(self::BYTES_BLOCK);
 	}
 
 
@@ -83,6 +83,7 @@ class Cipher_Simple_XOR extends Cipher
 	 */
 	public function encrypt(&$text)
 	{
+		$this->operation(parent::ENCRYPT);
 		return $this->simpleXOR($text);
 	}
 
@@ -95,6 +96,7 @@ class Cipher_Simple_XOR extends Cipher
 	 */
 	public function decrypt(&$text)
 	{
+		$this->operation(parent::DECRYPT);
 		return $this->simpleXOR($text);
 	}
 

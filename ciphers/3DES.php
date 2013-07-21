@@ -38,11 +38,11 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
  */
 class Cipher_3DES extends Cipher_DES
 {
-	/** @type integer BITS_BLOCK The size of the block, in bits */
-	const BITS_BLOCK = 64;
+	/** @type integer BYTES_BLOCK The size of the block, in bytes */
+	const BYTES_BLOCK = 8; // 64 bits
 
-	/** @type integer BITS_KEY The size of the key, in bits */
-	const BITS_KEY = 192;
+	/** @type integer BYTES_KEY The size of the key, in bytes */
+	const BYTES_KEY = 24; // 192  bits
 
 
 	/**
@@ -55,10 +55,10 @@ class Cipher_3DES extends Cipher_DES
 	{
 		// set the 3DES key, note that we call __construct1() not __construct()
 		// this is a second contructor we created for classes that extend the DES class
-		parent::__construct1(PHP_Crypt::CIPHER_3DES, $key, self::BITS_KEY);
+		parent::__construct1(PHP_Crypt::CIPHER_3DES, $key, self::BYTES_KEY);
 
 		// 3DES requires that data is 64 bits
-		$this->bitSize(self::BITS_BLOCK);
+		$this->blockSize(self::BYTES_BLOCK);
 	}
 
 
@@ -84,11 +84,11 @@ class Cipher_3DES extends Cipher_DES
 	 */
 	public function encrypt(&$text)
 	{
-		$bitsz = $this->bitSize();
+		$blocksz = $this->blockSize();
 
 		for($i = 0; $i < 3; ++$i)
 		{
-			$key = substr($this->key, ($i * 8), ($bitsz / 8));
+			$key = substr($this->key, ($i * 8), $blocksz);
 			$this->keyPermutation($key);
 
 			if($i % 2) // round 1
@@ -114,11 +114,11 @@ class Cipher_3DES extends Cipher_DES
 	 */
 	public function decrypt(&$text)
 	{
-		$bitsz = $this->bitSize();
+		$bitsz = $this->blockSize();
 
 		for($i = 2; $i >= 0; --$i)
 		{
-			$key = substr($this->key, ($i * 8), ($bitsz / 8));
+			$key = substr($this->key, ($i * 8), $blocksz);
 			$this->keyPermutation($key);
 
 			if($i % 2) // round 1

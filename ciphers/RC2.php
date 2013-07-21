@@ -44,11 +44,11 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
  */
 class Cipher_RC2 extends Cipher
 {
-	/** @type integer BITS_BLOCK The size of the block, in bits */
-	const BITS_BLOCK = 64;
+	/** @type integer BYTES_BLOCK The size of the block, in bytes */
+	const BYTES_BLOCK = 8; // 64 bits
 
-	// rc2 has a variable length key, between 8-1024 bits
-	//const BITS_KEY = 0;
+	// rc2 has a variable length key, between 1 - 128 bytes (8-1024 bits)
+	//const BYTES_KEY = 0;
 
 	/** @type array $_sbox RC2's sBox, initialized in initTables() */
 	private static $_sbox = array();
@@ -67,10 +67,10 @@ class Cipher_RC2 extends Cipher
 	{
 		// the key must be between 1 and 128 bytes, keys larger than
 		// 128 bytes are truncated in expandedKey()
-		$keylen = strlen($key) * 8;
-		if($keylen < 8)
+		$keylen = strlen($key);
+		if($keylen < 1)
 		{
-			$err = "Key size is $keylen bits, Key size must be between 8 and 1024 bits";
+			$err = "Key size is $keylen bits, Key size must be between 1 and 128 bytes";
 			trigger_error($err, E_USER_WARNING);
 		}
 
@@ -78,7 +78,7 @@ class Cipher_RC2 extends Cipher
 		parent::__construct(PHP_Crypt::CIPHER_RC2, $key, $keylen);
 
 		// set the block size
-		$this->bitSize(self::BITS_BLOCK);
+		$this->blockSize(self::BYTES_BLOCK);
 
 		// initialize the tables
 		$this->initTables();

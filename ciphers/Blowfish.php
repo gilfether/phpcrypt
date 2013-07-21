@@ -40,11 +40,11 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
  */
 class Cipher_Blowfish extends Cipher
 {
-	/** @type integer BITS_BLOCK The size of the block, in bits */
-	const BITS_BLOCK = 64;
+	/** @type integer BYTES_BLOCK The size of the block, in bytes */
+	const BYTES_BLOCK = 8; // 64 bits;
 
 	// a variable length key, between 8 - 448 bits
-	//const BITS_KEY = 0;
+	//const BYTES_KEY = 0;
 
 	/** @type array $_sbox1 S-Box 1 */
 	private static $_sbox1 = array();
@@ -79,15 +79,15 @@ class Cipher_Blowfish extends Cipher
 		}
 		else if($keylen < 1)
 		{
-			$msg  = "No key given. The key must be between 8 - 448 bits.";
+			$msg  = "No key given. The key must be between 1 - 56 bytes.";
 			trigger_error($msg, E_USER_WARNING);
 		}
 
 		// set the key, make sure the required length is set in bits
-		parent::__construct(PHP_Crypt::CIPHER_BLOWFISH, $key, ($keylen * 8));
+		parent::__construct(PHP_Crypt::CIPHER_BLOWFISH, $key, $keylen);
 
 		// set the block size
-		$this->bitSize(self::BITS_BLOCK);
+		$this->blockSize(self::BYTES_BLOCK);
 
 		$this->initTables();
 		$this->subKeys();

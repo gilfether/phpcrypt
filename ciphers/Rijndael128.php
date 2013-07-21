@@ -27,8 +27,8 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
 
 
 /**
- * Implement Rijndael with a 128 bit data block
- * Key sizes can be 128, 192, or 256
+ * Implement Rijndael with a 16 bytes (128 bits) data block
+ * Key sizes can be 16, 24, 32 bytes (128, 192, 256 bits)
  * References used to implement this cipher:
  * http://www.net-security.org/dl/articles/AESbyExample.pdf
  *
@@ -39,7 +39,7 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
 class Cipher_Rijndael_128 extends Cipher_Rijndael
 {
 	/** @type integer BITS_BLOCK The size of the block, in bits */
-	const BITS_BLOCK = 128;
+	const BYTES_BLOCK = 16;
 
 	//const BITS_KEY = 0;
 
@@ -59,9 +59,9 @@ class Cipher_Rijndael_128 extends Cipher_Rijndael
 		parent::__construct(PHP_Crypt::CIPHER_RIJNDAEL_128, $key);
 
 		// required block size in bits
-		$this->bitSize(self::BITS_BLOCK);
+		$this->blockSizeSize(self::BYTES_BLOCK);
 
-		// expand the key now that we know the key size, and the bit size
+		// expand the key
 		$this->expandKey();
 	}
 
@@ -79,9 +79,9 @@ class Cipher_Rijndael_128 extends Cipher_Rijndael
 		parent::__construct($cipher_name, $key, $req_key_len);
 
 		// required block size in bits
-		$this->bitSize(self::BITS_BLOCK);
+		$this->blockSize(self::BYTES_BLOCK);
 
-		// expand the key now that we know the key size, and the bit size
+		// expand the key
 		$this->expandKey();
 	}
 

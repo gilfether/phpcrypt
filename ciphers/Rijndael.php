@@ -46,10 +46,10 @@ abstract class Cipher_Rijndael extends Cipher
 	private $xkey = "";
 
 	/**
-	 * @type array $_key_sizes The accepted key sizes,
+	 * @type array $_key_sizes The accepted key sizes in bytes,
 	 * this should be considered a constant
 	 */
-	private static $_key_sizes = array(128,192,256);
+	private static $_key_sizes = array(16, 24, 32);
 
 
 	// THE FOLLOWING TABLES ARE INITIALIZED IN initTables()
@@ -140,8 +140,8 @@ abstract class Cipher_Rijndael extends Cipher
 		// sizes are stored in self::$_key_sizes
 		if($len == 0)
 		{
-			// the key must be one of the following lengths: 128, 192, 256
-			$len = strlen($key) * 8;
+			// the key must be one of the following lengths: 16, 24, 32 bytes
+			$len = strlen($key);
 			if(!in_array($len, self::$_key_sizes))
 			{
 				$msg  = "Incorrect key length for ".strtoupper($cipher_name).". ";
@@ -185,16 +185,16 @@ abstract class Cipher_Rijndael extends Cipher
 
 		$loops = 0;
 		$key_sz = $this->keySize();
-		$blk_sz = $this->bitSize();
+		$blk_sz = $this->blockSize();
 
-		// if the key and block size is 128, do 10 rounds
-		// if the key or block size is 192, and neither is longer than 192, do 12 rounds
-		// if either key or block size is 256, do 14 rounds
-		if($key_sz == 128 && $blk_sz == 128)
+		// if the key and block size is 16, do 10 rounds
+		// if the key or block size is 24, and neither is longer than 24, do 12 rounds
+		// if either key or block size is 32, do 14 rounds
+		if($key_sz == 16 && $blk_sz == 16)
 			$loops = 10;
-		else if(($key_sz == 192 || $blk_sz == 192) && $key_sz <= 192 && $blk_sz <= 192)
+		else if(($key_sz == 24 || $blk_sz == 24) && $key_sz <= 24 && $blk_sz <= 24)
 			$loops = 12;
-		else if($key_sz == 256 || $blk_sz == 256)
+		else if($key_sz == 32 || $blk_sz == 32)
 			$loops = 14;
 
 		// now begin the encryption
@@ -229,16 +229,16 @@ abstract class Cipher_Rijndael extends Cipher
 
 		$loops = 0;
 		$key_sz = $this->keySize();
-		$blk_sz = $this->bitSize();
+		$blk_sz = $this->blockSize();
 
-		// if the key and block size is 128, do 10 rounds
-		// if the key or block size is 192, and neither is longer than 192, do 12 rounds
-		// if either key or block size is 256, do 14 rounds
-		if($key_sz == 128 && $blk_sz == 128)
+		// if the key and block size is 16, do 10 rounds
+		// if the key or block size is 24, and neither is longer than 24, do 12 rounds
+		// if either key or block size is 32, do 14 rounds
+		if($key_sz == 16 && $blk_sz == 16)
 			$loops = 10;
-		else if(($key_sz == 192 || $blk_sz == 192) && $key_sz <= 192 && $blk_sz <= 192)
+		else if(($key_sz == 24 || $blk_sz == 24) && $key_sz <= 24 && $blk_sz <= 24)
 			$loops = 12;
-		else if($key_sz == 256 || $blk_sz == 256)
+		else if($key_sz == 32 || $blk_sz == 32)
 			$loops = 14;
 
 		// now begin the decryption
@@ -331,7 +331,7 @@ abstract class Cipher_Rijndael extends Cipher
 	{
 		// length of the xkey
 		$ek_len = strlen($this->xkey);
-		$len = $this->bitSize() / 8;
+		$len = $this->blockSize();
 
 		if($this->operation() == parent::ENCRYPT)
 			$offset = $round * $len;
@@ -393,7 +393,7 @@ abstract class Cipher_Rijndael extends Cipher
 		// 128 has a 4x4 matrix, loop 4 times
 		// 192 has a 4x6 matrix, loop 6 times
 		// 256 has a 4x8 matrix, loop 8 times
-		$max_col = $this->bitSize() / 32;
+		$max_col = ($this->blockSize() * 8) / 32;
 
 		// loop through each column of the matrix
 		for($col = 0; $col < $max_col; ++$col)
@@ -443,7 +443,7 @@ abstract class Cipher_Rijndael extends Cipher
 		/*
 		 * Rijndael-128 / AES
 		 */
-		if($this->bitSize() == 128)
+		if($this->blockSize() == 16)
 		{
 			if($this->operation() == parent::ENCRYPT)
 			{
@@ -472,7 +472,7 @@ abstract class Cipher_Rijndael extends Cipher
 		/*
 		 * Rijndael-192
 		 */
-		if($this->bitSize() == 192)
+		if($this->blockSize() == 24)
 		{
 			if($this->operation() == parent::ENCRYPT)
 			{
@@ -504,7 +504,7 @@ abstract class Cipher_Rijndael extends Cipher
 		/*
 		 * Rijndael-256
 		 */
-		if($this->bitSize() == 256)
+		if($this->blockSize() == 32)
 		{
 			if($this->operation() == parent::ENCRYPT)
 			{
@@ -624,11 +624,11 @@ abstract class Cipher_Rijndael extends Cipher
 	 */
 	protected function expandKey()
 	{
-		if($this->keySize() == 128)
+		if($this->keySize() == 16)
 			return $this->expandKey128();
-		else if($this->keySize() == 192)
+		else if($this->keySize() == 24)
 			return $this->expandKey192();
-		else if($this->keySize() == 256)
+		else if($this->keySize() == 32)
 			return $this->expandKey256();
 	}
 
@@ -647,11 +647,11 @@ abstract class Cipher_Rijndael extends Cipher
 
 		// the number of rounds we make depends on the block size of the text
 		// used during encryption/decryption
-		if($this->bitSize() == 128)
+		if($this->blockSize() == 16)
 			$max = 44;
-		if($this->bitSize() == 192)
+		if($this->blockSize() == 24)
 			$max = 78;
-		if($this->bitSize() == 256)
+		if($this->blockSize() == 32)
 			$max = 120;
 
 		// 16 byte key expands to 176 bytes
@@ -707,11 +707,11 @@ abstract class Cipher_Rijndael extends Cipher
 
 		// the number of rounds we make depends on the block size of the text
 		// used during encryption/decryption
-		if($this->bitSize() == 128)
+		if($this->blockSize() == 16)
 			$max = 52;
-		if($this->bitSize() == 192)
+		if($this->blockSize() == 24)
 			$max = 78;
-		if($this->bitSize() == 256)
+		if($this->blockSize() == 32)
 			$max = 120;
 
 		// 24 byte key expands to 208 bytes
@@ -767,11 +767,11 @@ abstract class Cipher_Rijndael extends Cipher
 
 		// the number of rounds we make depends on the block size of the text
 		// used during encryption/decryption
-		if($this->bitSize() == 128)
+		if($this->blockSize() == 16)
 			$max = 60;
-		if($this->bitSize() == 192)
+		if($this->blockSize() == 24)
 			$max = 90;
-		if($this->bitSize() == 256)
+		if($this->blockSize() == 32)
 			$max = 120;
 
 		// 32 byte key expands to 240 bytes
