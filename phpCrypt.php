@@ -325,20 +325,20 @@ class PHP_Crypt
 
 
 	/**
-	 * Returns Ciphers required block size in bits
+	 * Returns Ciphers required block size in bytes
 	 *
-	 * @return integer The cipher data block size, in bits
+	 * @return integer The cipher data block size, in bytes
 	 */
 	public function cipherBlockSize()
 	{
-		return $this->cipher->bitSize();
+		return $this->cipher->blockSize();
 	}
 
 
 	/**
-	 * Returns the cipher's required key size, in bits
+	 * Returns the cipher's required key size, in bytes
 	 *
-	 * @return integer The cipher's key size requirement, in bits
+	 * @return integer The cipher's key size requirement, in bytes
 	 */
 	public function cipherKeySize()
 	{
