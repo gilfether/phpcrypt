@@ -1,3 +1,33 @@
+2013-07-21  phpCrypt-0.4  Ryan Gilfether
+
+	* Added the 3-Way cipher. phpCrypt's implementation is
+	compatible with mCrypts implementation, though there may
+	be a bug in mCrypt's 3-Way gamma() function. phpCrypt
+	mimics the bug to make it compatible, if it is a bug.
+	Unfortunately I do no know enough about 3-Way nor could
+	I find much information on it to know if the gamma() function
+	is suppose to behave the way it does. Please read phpCrypt's
+	3Way::gamma() function comment for further information.
+
+	* Windows users now have the option to create an IV using
+	the secure random number generator found in the Microsoft
+	CAPICOM SDK. The new constant is PHP_Crypt::IV_WIN_COM.
+	View the README file for more information.
+
+	* Fixed a bug in CTR mode where the last few bytes may
+	not get passed to the cipher in some cases
+
+	* Mode::CreateIV() now hashes the random string of bytes
+	before returning it as the IV. This helps in the adding
+	additional 'randomness' to the IV
+
+	* Bug fixes and minor speed improvements in some of the
+	modes.
+
+	* Updated all functions and calculations to handle block
+	size in bytes instead of bits. This makes the API less
+	confusing and fewer conversions from bits to bytes.
+
 2013-07-19  phpCrypt-0.3.2  Ryan Gilfether
 
 	* Version 0.3.1 contained some incomplete files and bugs
