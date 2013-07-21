@@ -79,8 +79,8 @@ class Mode_NOFB extends Mode
 		$len = strlen($text);
 		$blocksz = $this->blockSize();
 
-		$max1 = $len / $blocksz;
-		for($i = 0; $i < $max1; ++$i)
+		$max = $len / $blocksz;
+		for($i = 0; $i < $max; ++$i)
 		{
 			// current position in the text
 			$pos = $i * $blocksz;
@@ -96,8 +96,7 @@ class Mode_NOFB extends Mode
 
 			// now grab a block of text and a block of from the register, and XOR them
 			$block = substr($text, $pos, $byte_len);
-			$max2 = strlen($block);
-			for($j = 0; $j < $max2; ++$j)
+			for($j = 0; $j < $byte_len; ++$j)
 				$block[$j] = $block[$j] ^ $this->enc_register[$j];
 
 			// replace the plain text block with encrypted text
@@ -123,8 +122,8 @@ class Mode_NOFB extends Mode
 		$len = strlen($text);
 		$blocksz = $this->blockSize();
 
-		$max1 = $len / $blocksz;
-		for($i = 0; $i < $max1; ++$i)
+		$max = $len / $blocksz;
+		for($i = 0; $i < $max; ++$i)
 		{
 			// current position within $text
 			$pos = $i * $blocksz;
@@ -144,8 +143,7 @@ class Mode_NOFB extends Mode
 
 			// now grab a block of text and xor with the register
 			$block = substr($text, $pos, $byte_len);
-			$max2 = strlen($block);
-			for($j = 0; $j < $max2; ++$j)
+			for($j = 0; $j < $byte_len; ++$j)
 				$block[$j] = $block[$j] ^ $this->enc_register[$j];
 
 			// replace the encrypted block with plain text

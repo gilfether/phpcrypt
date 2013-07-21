@@ -80,8 +80,8 @@ class Mode_CTR extends Mode
 		$len = strlen($text);
 		$blocksz = $this->blockSize();
 
-		$max1 = $len / $blocksz;
-		for($i = 0; $i < $max1; ++$i)
+		$max = $len / $blocksz;
+		for($i = 0; $i < $max; ++$i)
 		{
 			// get the current position in $text
 			$pos = $i * $blocksz;
@@ -99,7 +99,6 @@ class Mode_CTR extends Mode
 			$block = substr($text, $pos, $byte_len);
 
 			// xor the block
-			//$max2 = strlen($block);
 			for($j = 0; $j < $byte_len; ++$j)
 				$block[$j] = $block[$j] ^ $this->enc_register[$j];
 
@@ -125,8 +124,8 @@ class Mode_CTR extends Mode
 		$len = strlen($text);
 		$blocksz = $this->blockSize();
 
-		$max1 = $len / $blocksz;
-		for($i = 0; $i < $max1; ++$i)
+		$max = $len / $blocksz;
+		for($i = 0; $i < $max; ++$i)
 		{
 			// get the current position in $text
 			$pos = $i * $blocksz;
@@ -144,7 +143,6 @@ class Mode_CTR extends Mode
 			$block = substr($text, $pos, $byte_len);
 
 			// xor the block with the register (which contains the IV)
-			//$max2 = strlen($block);
 			for($j = 0; $j < $byte_len; ++$j)
 				$block[$j] = $block[$j] ^ $this->enc_register[$j];
 

@@ -82,8 +82,8 @@ class Mode_NCFB extends Mode
 
 		// if $len is less than blockSize() this will still work, as even
 		// a fraction is greater than 0
-		$max1 = $len / $blocksz;
-		for($i = 0; $i < $max1; ++$i)
+		$max = $len / $blocksz;
+		for($i = 0; $i < $max; ++$i)
 		{
 			// current position in the text
 			$pos = $i * $blocksz;
@@ -102,8 +102,7 @@ class Mode_NCFB extends Mode
 			$block = substr($text, $pos, $byte_len);
 
 			// xor the block
-			$max2 = strlen($block);
-			for($j = 0; $j < $max2; ++$j)
+			for($j = 0; $j < $byte_len; ++$j)
 				$block[$j] = $block[$j] ^ $this->enc_register[$j];
 
 			// replace the plain text block with the encrypted block
@@ -131,8 +130,8 @@ class Mode_NCFB extends Mode
 
 		// if $len is less than blockSize() this will still work, as even
 		// a fraction is greater than 0
-		$max1 = $len / $blocksz;
-		for($i = 0; $i < $max1; ++$i)
+		$max = $len / $blocksz;
+		for($i = 0; $i < $max; ++$i)
 		{
 			// get the current position in text
 			$pos = $i * $blocksz;
@@ -151,8 +150,7 @@ class Mode_NCFB extends Mode
 			$this->register = $block;
 
 			// xor the block
-			$max2 = strlen($block);
-			for($j = 0; $j < $max2; ++$j)
+			for($j = 0; $j < $byte_len; ++$j)
 				$block[$j] = $block[$j] ^ $this->enc_register[$j];
 
 			// replace the encrypted block with the plain text block

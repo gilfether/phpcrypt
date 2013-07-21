@@ -85,8 +85,8 @@ class Mode_CBC extends Mode
 		$this->pad($text);
 		$blocksz = $this->blockSize();
 
-		$max1 = strlen($text) / $blocksz;
-		for($i = 0; $i < $max1; ++$i)
+		$max = strlen($text) / $blocksz;
+		for($i = 0; $i < $max; ++$i)
 		{
 			// get the current position in $text
 			$pos = $i * $blocksz;
@@ -128,8 +128,8 @@ class Mode_CBC extends Mode
 	{
 		$blocksz = $this->blockSize();
 
-		$max1 = strlen($text) / $blocksz;
-		for($i = 0; $i < $max1; ++$i)
+		$max = strlen($text) / $blocksz;
+		for($i = 0; $i < $max; ++$i)
 		{
 			// get the current position in $text
 			$pos = $i * $blocksz;
