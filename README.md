@@ -145,7 +145,7 @@ set the IV using phpCrypt::IV() method:
 
 Not all modes require an IV. In the event the IV method is set for a mode that
 does not require an IV, the IV is ignored. You can get a full list of IV constants
-modes that require an IV at http://www.gilfether.com/phpcrypt
+and a list of modes that require an IV at http://www.gilfether.com/phpcrypt
 
 FULL LIST OF CONSTANTS
 ----------------------
