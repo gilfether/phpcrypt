@@ -28,8 +28,22 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
 
 /**
  * Implements The 3Way Cipher
+ * There may be a bug with this implementation of 3-Way. Due
+ * to lack of information on this cipher, the mCrypt
+ * implementation of 3-Way was used to help develop phpCrypt's
+ * version. The gamma() function in mCrypt's 3-way.c does
+ * not modifiy the values passed into it. I am not sure
+ * if this is a bug, or if it is by design though I suspect
+ * it may not be intended to work that way. For compatibility
+ * with mCrypt's 3-Way implementation, phpCrypts 3-Way gamma()
+ * function does nothing, and leaves the value passed into it
+ * unmodified as well. If this is found to be incorrect I
+ * will make the necessary changes to correct it. Please view
+ * the gamma() function in this class for more information.
  *
  * Resources used to implement this algorithm:
+ * mCrypt's 3-way.c
+ * http://www.quadibloc.com/crypto/co040307.htm
  *
  * @author Ryan Gilfether
  * @link http://www.gilfether.com/phpcrypt
