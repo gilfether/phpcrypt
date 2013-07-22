@@ -93,7 +93,7 @@ On Unix based systems, phpCrypt supports reading from /dev/random and
 /dev/urandom. This can be done by passing one of the following constants
 to phpCrypt::createIV():
 
-	$iv = $crypt->createIVPHP_Crypt::IV_DEV_RAND);
+	$iv = $crypt->createIV(PHP_Crypt::IV_DEV_RAND);
 	or
 	$iv = $crypt->createIV(PHP_Crypt::IV_DEV_URAND);
 
