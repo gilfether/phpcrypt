@@ -61,6 +61,9 @@ class Cipher_Blowfish extends Cipher
 	/** @type array $_p The P-Array, 18 elements long */
 	private static $_p = array();
 
+	/** @type integer $key_pos Used for keyChunk(), to determine the current
+	position in the key */
+	private $key_pos = 0;
 
 	/**
 	 * Constructor
@@ -262,6 +265,39 @@ class Cipher_Blowfish extends Cipher
 				self::$_sbox4[$i - 786 + 1] = $z1;
 			}
 		}
+	}
+
+
+	/**
+	 * Returns a substring of $this->key. The size of the substring is set in the
+	 * parameter $size. Each call to this function returns a substring starting
+	 * in the position where the last substring ended. Effectively it rotates
+	 * through the key, when it reaches the end, it starts over at the
+	 * beginning of the key and continues on. You can reset the current position
+	 * by setting the parameter $reset=true, which will start the key back at the
+	 * first byte of the $this->key string.
+	 *
+	 * @param integer $size The size of the substring to return, in bytes
+	 * @param bool $reset If set to true, sets the position back to 0, the first
+	 *	byte of the key string
+	 * @return string The next substring of the key
+	 */
+	private function keyChunk($size = 1, $reset = false)
+	{
+		if($reset || $this->key_pos >= strlen($this->key))
+			$this->key_pos = 0;
+
+		$bytes = substr($this->key, $this->key_pos, $size);
+		$len = strlen($bytes);
+		if($len < $size)
+		{
+			$bytes .= substr($this->key, 0, $size - $len);
+			$this->key_pos = $size - $len;
+		}
+		else
+			$this->key_pos += $size;
+
+		return $bytes;
 	}
 
 
