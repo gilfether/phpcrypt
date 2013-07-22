@@ -24,6 +24,7 @@ phpCrypt version 0.x works with PHP 5.3 or later. It will run on any
 
 SUPPORTED ENCRYPTION CIPHERS & MODES
 ------------------------------------
+
 The list of supported encryption ciphers and modes is continually growing,
 each new version of phpCrypt will add new ciphers or modes. The current list
 of supported ciphers and modes are listed below:
@@ -46,11 +47,11 @@ you need to select ciphers,	modes, padding, and IV methods. In addition,
 phpCrypt comes with an `examples` directory which has sample code to help get
 you started.
 
-Using phpCrypt is easy to use. An example of encrypting a string using AES-128
+phpCrypt is easy to use. An example of encrypting a string using AES-128
 with CTR mode is demonstrated below:
 
 	<?php
-	include("/path/to/phpcrypt/phpCrypt.php");
+	include_once("/path/to/phpcrypt/phpCrypt.php");
 	use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 
 	$data = "This is my secret message.";
@@ -64,15 +65,65 @@ with CTR mode is demonstrated below:
 	$decrypt = $crypt->decrypt($encrypt);
 	?>
 
-GENERATING RANDOM NUMBERS ON WINDOWS
-------------------------------------
+METHODS OF BYTE PADDING
+-----------------------
 
-By default phpCrypt will use the PHP mt_rand() random number function on Windows
-to create an IV. You have the option to use the random number generator found in the
-Microsoft CAPICOM SDK which is more secure.
+Some modes require a block of data to be padded if it's shorter than than
+required block size of the cipher. For example DES encryption works on
+8 byte blocks of data. If you a have a block of 6 bytes, then it
+may need to be padded 2 bytes before it can be encrypted. Some modes don't
+require the data to be padded.
 
-Before this will work you must install the Microsoft CAPICOM SDK and enable the PHP
-com_dotnet extension:
+By default phpCrypt uses NULL byte padding when necessary, keeping it
+compatible with mCrypt.
+
+phpCrypt has other padding methods available as well. You can specify
+the padding you wish to use in two ways. The easiest method is to declare it
+in the constructor like so:
+
+	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR, PHP_Crypt::PAD_PKCS7);
+
+Optionally, you can also call the phpCrypt::padding() method to set the padding:
+
+	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
+	$crypt->padding(PHP_Crypt::PAD_PKCS7);
+
+In the event the padding is set for a mode that does not require padding, the
+padding method is ignored. You can get a full list of padding methods available
+at http://www.gilfether.com/phpcrypt.
+
+You always have the option of padding the data yourself before sending it
+through phpCrypt. In this case you do not need to worry about the phpCrypt
+padding methods.
+
+NOTE: NULL byte padding is not stripped off during decryption. This is left for
+you to do. phpCrypt can not determine whether a null byte is part of the
+original data or was added as padding.
+
+GENERATING INITIALIZATION VECTORS
+---------------------------------
+
+By default phpCrypt will use the PHP mt_rand() to generate random data used
+to create the IV. This method is supported on all operating systems, however
+there are more secure ways to generate random data depending on your
+operating system
+
+LINUX & UNIX
+
+On Unix based systems, phpCrypt supports reading from `/dev/random` and
+`/dev/urandom`. This can be done by passing one of the following constants
+to phpCrypt::createIV():
+
+	$iv = $crypt->createIVPHP_Crypt::IV_DEV_RAND);
+	or
+	$iv = $crypt->createIV(PHP_Crypt::IV_DEV_URAND);
+
+MICROSOFT WINDOWS
+
+On Windows systems, you have the option to use the random number generator
+found in the Microsoft CAPICOM SDK which is more secure. Before this will
+work you must install the Microsoft CAPICOM SDK and enable the PHP `com_dotnet`
+extension:
 
 * Download CAPICOM from Microsoft at http://www.microsoft.com/en-us/download/details.aspx?id=25281
 * Double click the MSI file you downloaded and follow the install directions
@@ -83,6 +134,24 @@ com_dotnet extension:
 To use the Windows random number generator in CAPICOM you would call createIV() like so:
 
 	$iv = $crypt->createIV(PHP_Crypt::IV_WIN_COM);
+
+SUPPLYING YOUR OWN IV
+
+You have the option of creating an IV yourself without using phpCrypt::createIV().
+If you wish to create your own IV or use one that was given to you for decryption,
+set the IV using phpCrypt::IV() method:
+
+	$crypt->IV($your_custom_iv);
+
+Not all modes require an IV. In the event the IV method is set for a mode that
+does not require an IV, the IV is ignored. You can get a full list of IV constants
+modes that require an IV at http://www.gilfether.com/phpcrypt
+
+FULL LIST OF CONSTANTS
+----------------------
+
+For the full list of constants available for Ciphers, Modes, Padding, and IV creation,
+visit the phpCrypt website: http://www.gilfether.com/phpcrypt
 
 GPL STUFF
 ---------
