@@ -28,14 +28,16 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
 
 /**
  * An example class that implements a simple Exclusive OR (XOR) encryption
- * scheme using the user supplied key. Requires the data be sent in 64 bit
- * blocks. While technically this is not necessary, it was done to provide
- * an example on using the different modes (ECB, CFB, CBC, etc) ... plus
- * doing so helps to mask the true length of the data being encrypted.
+ * cipher using the user supplied key.
+ *
+ * A SimpleXOR cipher is the same as a One Time Pad when the key length
+ * is the same as the data length, and the key is changed after every round
+ * of encryption.
  *
  * XOR encryption is very difficult to break, however it can be susceptible
- * to patterns. Thus it is not recommended to use this Cipher for very sensitive data,
- * instead use one of the more popular ciphers (3DES, Blowfish, etc)
+ * to patterns. Thus it is not recommended to use this Cipher for very
+ * sensitive data, instead use one of the more secure ciphers (AES, 3DES,
+ * Blowfish, etc)
  *
  * @author Ryan Gilfether
  * @link http://www.gilfether.com/phpcrypt
@@ -111,15 +113,14 @@ class Cipher_Simple_XOR extends Cipher
 	 */
 	private function simpleXOR(&$text)
 	{
-		$keylen = strlen($this->key);
 		$pos = 0;
-
 		$max = strlen($text);
+
 		for($i = 0; $i < $max; ++$i)
 		{
 			// if the current position in the key reaches the end of the key,
 			// start over at position 0 of the key
-			if($pos >= $keylen)
+			if($pos >= $this->key_len)
 				$pos = 0;
 
 			$text[$i] = $text[$i] ^ $this->key[$pos];
@@ -131,13 +132,13 @@ class Cipher_Simple_XOR extends Cipher
 
 
 	/**
-	 * Indicates that this is block cipher
+	 * Indicates that this is stream cipher
 	 *
-	 * @return integer Returns Cipher::BLOCK
+	 * @return integer Returns Cipher::STREAM
 	 */
 	public function type()
 	{
-		return parent::BLOCK;
+		return parent::STREAM;
 	}
 }
 ?>
