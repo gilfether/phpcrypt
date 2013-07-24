@@ -41,6 +41,7 @@ class PHP_Crypt
 	const CIPHER_AES_256		= "AES-256";
 	const CIPHER_ARC4			= "ARC4"; // Alternative RC4
 	const CIPHER_BLOWFISH		= "Blowfish";
+	const CIPHER_CAST_128		= "CAST-128";
 	const CIPHER_DES			= "DES";
 	const CIPHER_ENIGMA			= "Enigma";
 	const CIPHER_ONETIMEPAD		= "One Time Pad";
@@ -128,16 +129,16 @@ class PHP_Crypt
 			$this->cipher = new Cipher_Blowfish($key);
 			break;
 
+		case self::CIPHER_CAST_128:
+			$this->cipher = new Cipher_CAST_128($key);
+			break;
+
 		case self::CIPHER_DES:
 			$this->cipher = new Cipher_DES($key);
 			break;
 
 		case self::CIPHER_ENIGMA:
 			$this->cipher = new Cipher_Enigma($key);
-			break;
-
-		case self::CIPHER_ONETIMEPAD:
-			$this->cipher = new Cipher_One_Time_Pad($key);
 			break;
 
 		case self::CIPHER_RC2:
@@ -343,6 +344,12 @@ class PHP_Crypt
 	public function cipherKeySize()
 	{
 		return $this->cipher->keySize();
+	}
+
+
+	public function cipherSetKey($key)
+	{
+		$this->cipher->setKey($key);
 	}
 
 
