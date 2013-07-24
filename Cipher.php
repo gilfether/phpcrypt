@@ -51,6 +51,10 @@ abstract class Cipher extends Base
 	/** @type string $key Stores the key for the Cipher */
 	protected $key = "";
 
+	/** @type integer $key_len Keep track of the key length, so we don't
+	have to make repeated calls to strlen() to find the length */
+	protected $key_len = 0;
+
 	/** @type string $cipher_name Stores the name of the cipher */
 	protected $cipher_name = "";
 
@@ -63,7 +67,7 @@ abstract class Cipher extends Base
 	 */
 	protected $operation = self::ENCRYPT; // can be either Cipher::ENCRYPT | Cipher::DECRYPT;
 
-	/** @type integer $req_key_sz The required key size for a cipehr, in bits */
+	/** @type integer $req_key_sz The required key size for a cipehr, in bytes */
 	private $req_key_sz = 0;
 
 
@@ -197,7 +201,7 @@ abstract class Cipher extends Base
 	 */
 	public function keySize()
 	{
-		return $this->req_key_sz;
+		return $this->key_len;
 	}
 
 
@@ -216,7 +220,7 @@ abstract class Cipher extends Base
 	 * @return string They key, which made have been modified to fit size
 	 *	requirements
 	 */
-	private function setKey($key, $req_sz = 0)
+	public function setKey($key, $req_sz = 0)
 	{
 		$this->req_key_sz = $req_sz;
 
@@ -233,6 +237,7 @@ abstract class Cipher extends Base
 			}
 		}
 
+		$this->key_len = strlen($key);
 		$this->key = $key;
 		return $this->key;
 	}
