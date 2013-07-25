@@ -60,9 +60,9 @@ $decrypt = $phpcrypt->decrypt($encrypt);
 $p_time = number_format((microtime(true) - $ts_start), 5);
 
 // OUTPUT
-print "MCRYPT ENCRYPTED (HEX):   ".Cipher::string2Hex($encrypt)." (length=".strlen($encrypt).", time=$m_time)\n";
+print "MCRYPT ENCRYPTED (HEX):   ".bin2hex($encrypt)." (length=".strlen($encrypt).", time=$m_time)\n";
 print "PHPCRYPT DECRYPTED:       $decrypt (length=".strlen($decrypt).", time=$p_time)\n";
-print "PHPCRYPT DECRYPTED (HEX): ".Cipher::string2Hex($decrypt)."\n";
+print "PHPCRYPT DECRYPTED (HEX): ".bin2hex($decrypt)."\n";
 
 
 print "\n\n";
@@ -88,9 +88,9 @@ $m_time = number_format((microtime(true) - $ts_start), 5);
 mcrypt_generic_deinit($td);
 
 // OUTPUT
-print "PHPCRYPT ENCRYPTED (HEX): ".Cipher::string2Hex($encrypt)." (length=".strlen($encrypt).", time=$p_time)\n";
+print "PHPCRYPT ENCRYPTED (HEX): ".bin2hex($encrypt)." (length=".strlen($encrypt).", time=$p_time)\n";
 print "MCRYPT DECRYPTED:         $decrypt (length=".strlen($decrypt).", time=$m_time)\n";
-print "MCRYPT DECRYPTED (HEX):   ".Cipher::string2Hex($decrypt)."\n";
+print "MCRYPT DECRYPTED (HEX):   ".bin2hex($decrypt)."\n";
 
 // close mcrypt
 mcrypt_module_close($td);

@@ -26,7 +26,6 @@ error_reporting (E_ALL | E_STRICT);
 
 include(dirname(__FILE__)."/../phpCrypt.php");
 use PHP_Crypt\PHP_Crypt as PHP_Crypt;
-use PHP_Crypt\Cipher as Cipher;
 
 $text = "This is my secret message.";
 $key = "^mY@TEst";
@@ -56,8 +55,8 @@ $decrypt = $crypt->decrypt($encrypt);
 print "CIPHER: ".$crypt->cipherName()."\n";
 print "MODE: ".$crypt->modeName()."\n";
 print "PLAIN TEXT: $text\n";
-print "PLAIN TEXT HEX: ".Cipher::string2Hex($text)."\n";
-print "ENCRYPTED HEX: ".Cipher::string2Hex($encrypt)."\n";
+print "PLAIN TEXT HEX: ".bin2hex($text)."\n";
+print "ENCRYPTED HEX: ".bin2hex($encrypt)."\n";
 print "DECRYPTED: $decrypt\n";
-print "DECRYPTED HEX: ".Cipher::string2Hex($decrypt)."\n";
+print "DECRYPTED HEX: ".bin2hex($decrypt)."\n";
 ?>
