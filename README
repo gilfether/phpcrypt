@@ -45,8 +45,8 @@ with CTR mode is demonstrated below:
 	?>
 
 
-METHODS OF BYTE PADDING
-=======================
+BYTE PADDING
+============
 Some modes require a block of data to be padded if it's shorter than than
 required block size of the cipher. For example DES encryption works on
 8 byte blocks of data. If you a have a block of 6 bytes, then it
@@ -80,8 +80,8 @@ you to do. phpCrypt can not determine whether a null byte is part of the
 original data or was added as padding.
 
 
-GENERATING INITIALIZATION VECTORS
-=================================
+CREATING INITIALIZATION VECTORS
+===============================
 By default phpCrypt will use the PHP mt_rand() to generate random data used
 to create the IV. This method is supported on all operating systems, however
 there are more secure ways to generate random data depending on your
@@ -130,9 +130,9 @@ set the IV using phpCrypt::IV() method:
 
 	$crypt->IV($your_custom_iv);
 
-Not all modes require an IV. In the event the IV method is set for a mode that
-does not require an IV, the IV is ignored. You can get a full list of IV constants
-and a list of modes that require an IV at http://www.gilfether.com/phpcrypt
+Not all modes require an IV. In the event the IV is set for a mode that does not
+require an IV, the IV is ignored. You can get a full list of IV constants and a
+list of modes that require an IV at http://www.gilfether.com/phpcrypt
 
 
 FULL LIST OF CONSTANTS

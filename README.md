@@ -31,8 +31,8 @@ of supported ciphers and modes are listed below:
 
 Ciphers:
 
-  	3Way, AES, ARC4 (an RC4 alternative), Blowfish, DES, Triple DES, Enigma,
-	One Time Pad, RC2, Rijndael, SimpleXOR, Skipjack, Vignere
+	3Way, AES, ARC4 (an RC4 alternative), Blowfish, CAST-128, DES, Triple DES,
+	Enigma, RC2, Rijndael, SimpleXOR, Skipjack, Vignere
 
 Modes:
 
@@ -65,8 +65,8 @@ with CTR mode is demonstrated below:
 	$decrypt = $crypt->decrypt($encrypt);
 	?>
 
-METHODS OF BYTE PADDING
------------------------
+BYTE PADDING
+------------
 
 Some modes require a block of data to be padded if it's shorter than than
 required block size of the cipher. For example DES encryption works on
@@ -100,15 +100,15 @@ NOTE: NULL byte padding is not stripped off during decryption. This is left for
 you to do. phpCrypt can not determine whether a null byte is part of the
 original data or was added as padding.
 
-GENERATING INITIALIZATION VECTORS
----------------------------------
+CREATING INITIALIZATION VECTORS
+-------------------------------
 
 By default phpCrypt will use the PHP mt_rand() to generate random data used
 to create the IV. This method is supported on all operating systems, however
 there are more secure ways to generate random data depending on your
 operating system
 
-LINUX & UNIX
+**LINUX & UNIX**
 
 On Unix based systems, phpCrypt supports reading from `/dev/random` and
 `/dev/urandom`. This can be done by passing one of the following constants
@@ -118,7 +118,7 @@ to phpCrypt::createIV():
 	or
 	$iv = $crypt->createIV(PHP_Crypt::IV_DEV_URAND);
 
-MICROSOFT WINDOWS
+**MICROSOFT WINDOWS**
 
 On Windows systems, you have the option to use the random number generator
 found in the Microsoft CAPICOM SDK which is more secure. Before this will
@@ -135,7 +135,7 @@ To use the Windows random number generator in CAPICOM you would call createIV() 
 
 	$iv = $crypt->createIV(PHP_Crypt::IV_WIN_COM);
 
-SUPPLYING YOUR OWN IV
+**SUPPLYING YOUR OWN IV**
 
 You have the option of creating an IV yourself without using phpCrypt::createIV().
 If you wish to create your own IV or use one that was given to you for decryption,
@@ -143,9 +143,9 @@ set the IV using phpCrypt::IV() method:
 
 	$crypt->IV($your_custom_iv);
 
-Not all modes require an IV. In the event the IV method is set for a mode that
-does not require an IV, the IV is ignored. You can get a full list of IV constants
-and a list of modes that require an IV at http://www.gilfether.com/phpcrypt
+Not all modes require an IV. In the event the IV is set for a mode that does not
+require an IV, the IV is ignored. You can get a full list of IV constants and a
+list of modes that require an IV at http://www.gilfether.com/phpcrypt
 
 FULL LIST OF CONSTANTS
 ----------------------
