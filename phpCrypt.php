@@ -44,7 +44,6 @@ class PHP_Crypt
 	const CIPHER_CAST_128		= "CAST-128";
 	const CIPHER_DES			= "DES";
 	const CIPHER_ENIGMA			= "Enigma";
-	const CIPHER_ONETIMEPAD		= "One Time Pad"; // same as SimpleXOR
 	const CIPHER_RC2			= "RC2";
 	const CIPHER_RIJNDAEL_128	= "Rijndael-128";
 	const CIPHER_RIJNDAEL_192	= "Rijndael-192";
@@ -157,11 +156,7 @@ class PHP_Crypt
 			$this->cipher = new Cipher_Rijndael_256($key);
 			break;
 
-		// SimpleXOR are basically the same depending on how it's used
-		// so now we direct ONETIMEPAD to SimpleXOR and let the programmer
-		// implement the one time pad correctly
 		case self::CIPHER_SIMPLEXOR:
-		case self::CIPHER_ONETIMEPAD:
 			$this->cipher = new Cipher_Simple_XOR($key);
 			break;
 
