@@ -169,12 +169,12 @@ class Cipher_Skipjack extends Cipher
 			{
 				if($i == 0 || $i == 2)
 				{
-					$pos = $right ^ $this->string2Decimal($key[$i]);
+					$pos = $right ^ $this->str2Dec($key[$i]);
 					$left = $left ^ self::$_f[$pos];
 				}
 				else
 				{
-					$pos = $left ^ $this->string2Decimal($key[$i]);
+					$pos = $left ^ $this->str2Dec($key[$i]);
 					$right = $right ^ self::$_f[$pos];
 				}
 			}
@@ -187,18 +187,18 @@ class Cipher_Skipjack extends Cipher
 			{
 				if($i == 0 || $i == 2)
 				{
-					$pos = $right ^ $this->string2Decimal($key[$i]);
+					$pos = $right ^ $this->str2Dec($key[$i]);
 					$left = $left ^ self::$_f[$pos];
 				}
 				else
 				{
-					$pos = $left ^ $this->string2Decimal($key[$i]);
+					$pos = $left ^ $this->str2Dec($key[$i]);
 					$right = $right ^ self::$_f[$pos];
 				}
 			}
 		}
 
-		return $this->decimal2String($left).$this->decimal2String($right);
+		return $this->dec2Str($left).$this->dec2Str($right);
 	}
 
 
@@ -229,11 +229,11 @@ class Cipher_Skipjack extends Cipher
 			$w[2] = $w[1];
 			$w[1] = $this->gPermutation($w[0], $key);
 
-			$hex1 = $this->string2Hex($w[1]);
-			$hex4 = $this->string2Hex($w[4]);
-			$hexi = $this->decimal2Hex($i);
+			$hex1 = $this->str2Hex($w[1]);
+			$hex4 = $this->str2Hex($w[4]);
+			$hexi = $this->dec2Hex($i);
 			$w[0] = $this->xorHex($hex1, $hex4, $hexi);
-			$w[0] = $this->hex2String($w[0]);
+			$w[0] = $this->hex2Str($w[0]);
 		}
 		else // parent::DECRYPT
 		{
@@ -245,11 +245,11 @@ class Cipher_Skipjack extends Cipher
 			 * Set W3 as W4
 			 */
 
-			$hex0 = $this->string2Hex($w[0]);
-			$hex1 = $this->string2Hex($w[1]);
-			$hexi = $this->decimal2Hex($i);
+			$hex0 = $this->str2Hex($w[0]);
+			$hex1 = $this->str2Hex($w[1]);
+			$hexi = $this->dec2Hex($i);
 			$w[4] = $this->xorHex($hex0, $hex1, $hexi);
-			$w[4] = $this->hex2String($w[4]);
+			$w[4] = $this->hex2Str($w[4]);
 
 			$w[0] = $this->gPermutation($w[1], $key);
 			$w[1] = $w[2];
@@ -287,11 +287,11 @@ class Cipher_Skipjack extends Cipher
 			$w[4] = $w[3];
 			$w[3] = $w[2];
 
-			$hex0 = $this->string2Hex($w[0]);
-			$hex1 = $this->string2Hex($w[1]);
-			$hexi = $this->decimal2Hex($i);
+			$hex0 = $this->str2Hex($w[0]);
+			$hex1 = $this->str2Hex($w[1]);
+			$hexi = $this->dec2Hex($i);
 			$w[2] = $this->xorHex($hex0, $hex1, $hexi);
-			$w[2] = $this->hex2String($w[2]);
+			$w[2] = $this->hex2Str($w[2]);
 
 			$w[1] = $this->gPermutation($w[0], $key);
 			$w[0] = $w[4];
@@ -309,11 +309,11 @@ class Cipher_Skipjack extends Cipher
 			$w[4] = $w[0];
 			$w[0] = $this->gPermutation($w[1], $key);
 
-			$hex0 = $this->string2Hex($w[0]);
-			$hex2 = $this->string2Hex($w[2]);
-			$hexi = $this->decimal2Hex($i);
+			$hex0 = $this->str2Hex($w[0]);
+			$hex2 = $this->str2Hex($w[2]);
+			$hexi = $this->dec2Hex($i);
 			$w[1] = $this->xorHex($hex0, $hex2, $hexi);
-			$w[1] = $this->hex2String($w[1]);
+			$w[1] = $this->hex2Str($w[1]);
 
 			$w[2] = $w[3];
 			$w[3] = $w[4];

@@ -133,11 +133,11 @@ class Cipher_3Way extends Cipher
 	{
 		// first split $data into three 32 bit parts
 		$data = str_split($data, 4);
-		$data = array_map("parent::string2Decimal", $data);
+		$data = array_map("parent::str2Dec", $data);
 
 		// split the key into three 32 bit parts
 		$key = str_split($this->key, 4);
-		$key = array_map("parent::string2Decimal", $key);
+		$key = array_map("parent::str2Dec", $key);
 
 		// determine which round constant to use
 		if($this->operation() == parent::ENCRYPT)
@@ -172,8 +172,8 @@ class Cipher_3Way extends Cipher
 			$this->invertBits($data);
 
 		// assemble the three 32 bit parts back to a 96 bit string
-		$data = parent::decimal2String($data[0], 4).parent::decimal2String($data[1], 4).
-				parent::decimal2String($data[2], 4);
+		$data = parent::dec2Str($data[0], 4).parent::dec2Str($data[1], 4).
+				parent::dec2Str($data[2], 4);
 
 		return true;
 	}
@@ -297,9 +297,9 @@ class Cipher_3Way extends Cipher
 	 */
 	private function invertBits(&$d)
 	{
-		$d = array_map("parent::decimal2Binary", $d);
+		$d = array_map("parent::dec2Bin", $d);
 		$d = array_map("strrev", $d);
-		$d = array_map("parent::binary2Decimal", $d);
+		$d = array_map("parent::bin2Dec", $d);
 		$d = array_reverse($d);
 	}
 

@@ -285,9 +285,9 @@ abstract class Cipher_Rijndael extends Cipher
 		if($m == 0x01)
 			return $byte;
 
-		$hex = parent::decimal2Hex($byte);
-		$row = parent::hex2Decimal($hex[0]);
-		$col = parent::hex2Decimal($hex[1]);
+		$hex = parent::dec2Hex($byte);
+		$row = parent::hex2Dec($hex[0]);
+		$col = parent::hex2Dec($hex[1]);
 		$pos = ($row * 16) + $col;
 
 		// multiply by 2 (comes from self::$_matrix_mult during encryption)
@@ -357,9 +357,9 @@ abstract class Cipher_Rijndael extends Cipher
 		{
 			// the sbox is arrange in a 16 x 16 grid, where each row
 			// and column is numbered in hex (from 0 - f)
-			$hex = parent::string2Hex($text[$i]);
-			$row = parent::hex2Decimal($hex[0]);
-			$col = parent::hex2Decimal($hex[1]);
+			$hex = parent::str2Hex($text[$i]);
+			$row = parent::hex2Dec($hex[0]);
+			$col = parent::hex2Dec($hex[1]);
 			$pos = ($row * 16) + $col;
 
 			// return the corresponding value from the sbox
@@ -552,9 +552,9 @@ abstract class Cipher_Rijndael extends Cipher
 		{
 			// the sbox is arrange in a 16 x 16 grid, where each row
 			// and column is numbered in hex (from 0 - f)
-			$hex = parent::string2Hex($text[$i]);
-			$row = parent::hex2Decimal($hex[0]);
-			$col = parent::hex2Decimal($hex[1]);
+			$hex = parent::str2Hex($text[$i]);
+			$row = parent::hex2Dec($hex[0]);
+			$col = parent::hex2Dec($hex[1]);
 			$pos = ($row * 16) + $col;
 
 			$text[$i] = chr(self::$_s[$pos]);
@@ -674,18 +674,18 @@ abstract class Cipher_Rijndael extends Cipher
 				// grab 4 bytes from $this->extended_key
 				$ek = $this->ek(($i - 4) * 4);
 
-				$h1 = parent::string2Hex($subword);
-				$h2 = parent::decimal2Hex($rcon);
-				$h3 = parent::string2Hex($ek);
+				$h1 = parent::str2Hex($subword);
+				$h2 = parent::dec2Hex($rcon);
+				$h3 = parent::str2Hex($ek);
 				$res = parent::xorHex($h1, $h2, $h3);
-				$this->xkey .= parent::hex2String($res);
+				$this->xkey .= parent::hex2Str($res);
 			}
 			else
 			{
-				$h1 = parent::string2Hex($this->ek(($i - 1) * 4));
-				$h2 = parent::string2Hex($this->ek(($i - 4) * 4));
+				$h1 = parent::str2Hex($this->ek(($i - 1) * 4));
+				$h2 = parent::str2Hex($this->ek(($i - 4) * 4));
 				$res = parent::xorHex($h1, $h2);
-				$this->xkey .= parent::hex2String($res);
+				$this->xkey .= parent::hex2Str($res);
 			}
 		}
 
@@ -734,18 +734,18 @@ abstract class Cipher_Rijndael extends Cipher
 				// grab 4 bytes from $this->extended_key
 				$ek = $this->ek(($i - 6) * 4);
 
-				$h1 = parent::string2Hex($subword);
-				$h2 = parent::decimal2Hex($rcon);
-				$h3 = parent::string2Hex($ek);
+				$h1 = parent::str2Hex($subword);
+				$h2 = parent::dec2Hex($rcon);
+				$h3 = parent::str2Hex($ek);
 				$res = parent::xorHex($h1, $h2, $h3);
-				$this->xkey .= parent::hex2String($res);
+				$this->xkey .= parent::hex2Str($res);
 			}
 			else
 			{
-				$h1 = parent::string2Hex($this->ek(($i - 1) * 4));
-				$h2 = parent::string2Hex($this->ek(($i - 6) * 4));
+				$h1 = parent::str2Hex($this->ek(($i - 1) * 4));
+				$h2 = parent::str2Hex($this->ek(($i - 6) * 4));
 				$res = parent::xorHex($h1, $h2);
-				$this->xkey .= parent::hex2String($res);
+				$this->xkey .= parent::hex2Str($res);
 			}
 		}
 
@@ -793,11 +793,11 @@ abstract class Cipher_Rijndael extends Cipher
 				// grab 4 bytes from $this->extended_key
 				$ek = $this->ek(($i - 8) * 4);
 
-				$h1 = parent::string2Hex($subword);
-				$h2 = parent::decimal2Hex($rcon);
-				$h3 = parent::string2Hex($ek);
+				$h1 = parent::str2Hex($subword);
+				$h2 = parent::dec2Hex($rcon);
+				$h3 = parent::str2Hex($ek);
 				$res = parent::xorHex($h1, $h2, $h3);
-				$this->xkey .= parent::hex2String($res);
+				$this->xkey .= parent::hex2Str($res);
 			}
 			else if($i % 4 == 0)
 			{
@@ -809,17 +809,17 @@ abstract class Cipher_Rijndael extends Cipher
 				$ek = $this->ek(($i - 8) * 4);
 
 				// xor the two parts
-				$h1 = parent::string2Hex($subword);
-				$h2 = parent::string2Hex($ek);
+				$h1 = parent::str2Hex($subword);
+				$h2 = parent::str2Hex($ek);
 				$res = parent::xorHex($h1, $h2);
-				$this->xkey .= parent::hex2String($res);
+				$this->xkey .= parent::hex2Str($res);
 			}
 			else
 			{
-				$h1 = parent::string2Hex($this->ek(($i - 1) * 4));
-				$h2 = parent::string2Hex($this->ek(($i - 8) * 4));
+				$h1 = parent::str2Hex($this->ek(($i - 1) * 4));
+				$h2 = parent::str2Hex($this->ek(($i - 8) * 4));
 				$res = parent::xorHex($h1, $h2);
-				$this->xkey .= parent::hex2String($res);
+				$this->xkey .= parent::hex2Str($res);
 			}
 		}
 

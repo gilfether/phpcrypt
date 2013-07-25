@@ -209,7 +209,7 @@ class Cipher_DES extends Cipher
 				$f = $this->F($r[$n-1], $this->sub_keys[$n-1]);
 
 			// XOR F with Ln
-			$r[$n] = $this->binaryXOR($l[$n-1], $f);
+			$r[$n] = $this->binXOR($l[$n-1], $f);
 		}
 
 		// now we combine L[16] and R[16] back into a 64-bit string, but we reverse
@@ -218,7 +218,7 @@ class Cipher_DES extends Cipher
 
 		// now do the final permutation
 		$data = $this->fp($data);
-		$data = parent::binary2String($data);
+		$data = parent::bin2Str($data);
 
 		return true;
 	}
@@ -239,7 +239,7 @@ class Cipher_DES extends Cipher
 		$d = array();
 
 		// convert the key to binary
-		$binkey = parent::string2Binary($this->key);
+		$binkey = parent::str2Bin($this->key);
 
 		// reduce the key down to 56bits based on table $_pc1
 		for($i = 0; $i < 56; ++$i)
@@ -301,7 +301,7 @@ class Cipher_DES extends Cipher
 	 */
 	private function ip($text)
 	{
-		$text = parent::string2Binary($text);
+		$text = parent::str2Bin($text);
 		$ip = "";
 
 		// loop through the 64 bit block, ordering it occording to $_ip
@@ -324,7 +324,7 @@ class Cipher_DES extends Cipher
 	 */
 	private function f($r, $k)
 	{
-		$bin = parent::binaryXOR($k, $this->E($r));
+		$bin = parent::binXOR($k, $this->E($r));
 
 		// create a 32-bit string from $bits by passing it through the S-Boxes
 		$bin = $this->s($bin);

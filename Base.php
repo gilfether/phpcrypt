@@ -59,7 +59,7 @@ class Base
 	 * @param string $hex A string containing a hexidecimal number
 	 * @return string A string representation of a binary
 	 */
-	public static function hex2Binary($hex)
+	public static function hex2Bin($hex)
 	{
 		$parts = str_split($hex, 2);
 
@@ -81,13 +81,13 @@ class Base
 	 * @param integer $bytes Force the string to be a minimum of $bytes long
 	 * @return string a string
 	 */
-	public static function hex2String($hex)
+	public static function hex2Str($hex)
 	{
 		$parts = str_split($hex, 2);
 
 		$res = "";
 		foreach($parts as $k => $v)
-			$res .= chr(self::hex2Decimal($v));
+			$res .= chr(self::hex2Dec($v));
 
 		return $res;
 	}
@@ -103,7 +103,7 @@ class Base
 	 * @param string $hex A hex number to convert to decimal
 	 * @return integer A decimal number
 	 */
-	public static function hex2Decimal($hex)
+	public static function hex2Dec($hex)
 	{
 		return hexdec($hex);
 	}
@@ -115,7 +115,7 @@ class Base
 	 * @param string $bin A binary string
 	 * @return string A string representation of hexidecimal number
 	 */
-	public static function binary2Hex($bin)
+	public static function bin2Hex($bin)
 	{
 		$parts = str_split($bin, 8);
 		$hex = "";
@@ -138,10 +138,10 @@ class Base
 	 * @param string $bin a binary representation string
 	 * @return string A string of characters representing the binary
 	 */
-	public static function binary2String($bin)
+	public static function bin2Str($bin)
 	{
-		$hex = self::binary2Hex($bin);
-		return self::hex2String($hex);
+		$hex = self::bin2Hex($bin);
+		return self::hex2Str($hex);
 	}
 
 
@@ -151,7 +151,7 @@ class Base
 	 * @param string A string representation of a binary number
 	 * @return integer The number converted from the binary string
 	 */
-	public static function binary2Decimal($bin)
+	public static function bin2Dec($bin)
 	{
 		return bindec($bin);
 	}
@@ -159,12 +159,16 @@ class Base
 
 	/**
 	 * Convert a string to hex
+	 * This function calls the PHP bin2hex(), and is here
+	 * for consistency with the other string functions
 	 *
 	 * @param string $str A string
 	 * @return string A string representation of hexidecimal number
 	 */
-	public static function string2Hex($str)
+	public static function str2Hex($str)
 	{
+		return bin2hex($str);
+		/*
 		$res = "";
 
 		if(is_string($str) && $str != "")
@@ -179,6 +183,7 @@ class Base
 		}
 
 		return $res;
+		*/
 	}
 
 
@@ -188,10 +193,10 @@ class Base
 	 * @param string $str The string to convert to decimal
 	 * @return integer The integer converted from the string
 	 */
-	public static function string2Decimal($str)
+	public static function str2Dec($str)
 	{
-		$hex = self::string2Hex($str);
-		return self::hex2Decimal($hex);
+		$hex = self::str2Hex($str);
+		return self::hex2Dec($hex);
 	}
 
 
@@ -201,14 +206,14 @@ class Base
 	 * @param string $str A string
 	 * @return string A binary representation of the the string
 	 */
-	public static function string2Binary($str)
+	public static function str2Bin($str)
 	{
-		$hex = self::string2Hex($str);
+		$hex = self::str2Hex($str);
 		$parts = str_split($hex, 2);
 
 		$res = "";
 		foreach($parts as $k=>$v)
-			$res .= self::hex2Binary($v);
+			$res .= self::hex2Bin($v);
 
 		return $res;
 	}
@@ -233,7 +238,7 @@ class Base
 	 *	size than the initial integer.
 	 * @return string A hexidecimal representation of the decimal number
 	 */
-	public static function decimal2Hex($dec, $req_bytes = 0)
+	public static function dec2Hex($dec, $req_bytes = 0)
 	{
 		$hex = dechex($dec);
 
@@ -266,10 +271,10 @@ class Base
 	 *	size than the initial integer.
 	 * @return string A binary representation of the decimal number
 	 */
-	public static function decimal2Binary($dec, $req_bytes = 0)
+	public static function dec2Bin($dec, $req_bytes = 0)
 	{
-		$hex = self::decimal2Hex($dec, $req_bytes);
-		return self::hex2Binary($hex);
+		$hex = self::dec2Hex($dec, $req_bytes);
+		return self::hex2Bin($hex);
 	}
 
 
@@ -283,10 +288,10 @@ class Base
 	 *	size than the initial integer.
 	 * @return string A string with the number of bytes equal to $dec
 	 */
-	public static function decimal2String($dec, $req_bytes = 0)
+	public static function dec2Str($dec, $req_bytes = 0)
 	{
-		$hex = self::decimal2Hex($dec, $req_bytes);
-		return self::hex2String($hex);
+		$hex = self::dec2Hex($dec, $req_bytes);
+		return self::hex2Str($hex);
 	}
 
 
@@ -297,7 +302,7 @@ class Base
 	 * @param string $a binary string
 	 * @param string $b binary string
 	 */
-	public static function binaryXOR($a, $b)
+	public static function binXOR($a, $b)
 	{
 		$len_a = strlen($a);
 		$len_b = strlen($b);
@@ -324,8 +329,8 @@ class Base
 		$max = count($a);
 		for($i = 0; $i < $max; ++$i)
 		{
-			$bin = self::binary2String($a[$i]) ^ self::binary2String($b[$i]);
-			$res .= self::string2Binary($bin);
+			$bin = self::bin2Str($a[$i]) ^ self::bin2Str($b[$i]);
+			$res .= self::str2Bin($bin);
 		}
 
 		return $res;
@@ -385,8 +390,8 @@ class Base
 				$max = count($h1);
 				for($j = 0; $j < $max; ++$j)
 				{
-					$dec = self::hex2Decimal($h1[$j]) ^ self::hex2Decimal($h2[$j]);
-					$h3 .= self::decimal2Hex($dec);
+					$dec = self::hex2Dec($h1[$j]) ^ self::hex2Dec($h2[$j]);
+					$h3 .= self::dec2Hex($dec);
 				}
 
 				$res = $h3;
@@ -492,7 +497,7 @@ class Base
 	 * @param integer The number of shifts left to make
 	 * @return integer The resulting value from the rotation
 	 */
-	public static function rotateBitsLeft($int, $shifts)
+	public static function rotBitsLeft($int, $shifts)
 	{
 		return ($int << $shifts) | ($int >> (32 - $shifts));
 	}
@@ -505,7 +510,7 @@ class Base
 	 * @param integer The number of shifts right to make
 	 * @return integer The resulting value from the rotation
 	 */
-	public static function rotateBitsRight($int, $shifts)
+	public static function rotBitsRight($int, $shifts)
 	{
 		return ($int >> $shifts) | ($int << (32 - $shifts));
 	}

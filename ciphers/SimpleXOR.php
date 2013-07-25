@@ -120,7 +120,7 @@ class Cipher_Simple_XOR extends Cipher
 		{
 			// if the current position in the key reaches the end of the key,
 			// start over at position 0 of the key
-			if($pos >= $this->key_len)
+			if($pos >= $this->keySize())
 				$pos = 0;
 
 			$text[$i] = $text[$i] ^ $this->key[$pos];

@@ -114,7 +114,7 @@ class Cipher_3DES extends Cipher_DES
 	 */
 	public function decrypt(&$text)
 	{
-		$bitsz = $this->blockSize();
+		$blocksz = $this->blockSize();
 
 		for($i = 2; $i >= 0; --$i)
 		{
@@ -157,7 +157,7 @@ class Cipher_3DES extends Cipher_DES
 		$d = array();
 
 		// convert the key to binary
-		$binkey = $this->string2Binary($key);
+		$binkey = parent::str2Bin($key);
 
 		// reduce the key down to 56bits based on table $_pc1
 		for($i = 0; $i < 56; ++$i)

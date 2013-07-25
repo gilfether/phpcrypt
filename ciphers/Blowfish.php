@@ -143,8 +143,8 @@ class Cipher_Blowfish extends Cipher
 	private function blowfish(&$data)
 	{
 		// divide the data into into two 32 bit halves
-		$xl = parent::string2Decimal(substr($data, 0, 4));
-		$xr = parent::string2Decimal(substr($data, 4, 4));
+		$xl = parent::str2Dec(substr($data, 0, 4));
+		$xr = parent::str2Dec(substr($data, 4, 4));
 
 		for($i = 0; $i < 16; ++$i)
 		{
@@ -180,7 +180,7 @@ class Cipher_Blowfish extends Cipher
 		}
 
 		// recombine the two halves, force them to be 4 bytes each
-		$data = parent::decimal2String($xl, 4).parent::decimal2String($xr, 4);
+		$data = parent::dec2Str($xl, 4).parent::dec2Str($xr, 4);
 
 		return true;
 	}
@@ -220,7 +220,7 @@ class Cipher_Blowfish extends Cipher
 		for($i = 0; $i < 18; ++$i)
 		{
 			$c = $this->keyChunk(4);
-			self::$_p[$i] ^= parent::string2Decimal($c);
+			self::$_p[$i] ^= parent::str2Dec($c);
 		}
 
 		// start with an 8 byte null string
@@ -234,8 +234,8 @@ class Cipher_Blowfish extends Cipher
 			$this->encrypt($zero);
 
 			// split the encrypted null string into two 32 bit parts
-			$z0 = parent::string2Decimal(substr($zero, 0, 4));
-			$z1 = parent::string2Decimal(substr($zero, 4, 4));
+			$z0 = parent::str2Dec(substr($zero, 0, 4));
+			$z1 = parent::str2Dec(substr($zero, 4, 4));
 
 			// now fill the $_p, $_sbox1, $_sbox2, $_sbox3, $_sbox4
 			// with 4 bytes from the repeatedly encrypted 8 byte null string

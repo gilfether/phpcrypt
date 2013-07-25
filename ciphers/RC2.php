@@ -256,7 +256,7 @@ class Cipher_RC2 extends Cipher
 	{
 		$arr = str_split($str, 2);
 		$arr = array_map(create_function('$b', 'return $b[1].$b[0];'), $arr);
-		$arr = array_map("parent::string2Decimal", $arr);
+		$arr = array_map("parent::str2Dec", $arr);
 
 		return $arr;
 	}
