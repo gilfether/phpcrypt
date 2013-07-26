@@ -24,7 +24,7 @@
 namespace PHP_Crypt;
 
 require_once(dirname(__FILE__)."/Padding.php");
-include_once(dirname(__FILE__)."/phpCrypt.php");
+require_once(dirname(__FILE__)."/phpCrypt.php");
 
 /**
  * A base class that should not be used directly. Instead, all mode classes should
