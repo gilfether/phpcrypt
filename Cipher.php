@@ -63,9 +63,6 @@ abstract class Cipher extends Base
 	 */
 	protected $operation = self::ENCRYPT; // can be either Cipher::ENCRYPT | Cipher::DECRYPT;
 
-	/** @type integer $req_key_sz The required key size for a cipher, in bytes */
-	private $req_key_sz = 0;
-
 	/** @type integer $key_len Keep track of the key length, so we don't
 	have to make repeated calls to strlen() to find the length */
 	private $key_len = 0;
@@ -205,11 +202,6 @@ abstract class Cipher extends Base
 	}
 
 
-	/**********************************************************************
-	 * PRIVATE METHODS
-	 *
-	 **********************************************************************/
-
 	/**
 	 * Set the cipher key used for encryption/decryption. This function
 	 * may lengthen or shorten the key to meet the size requirements of
@@ -222,22 +214,23 @@ abstract class Cipher extends Base
 	 */
 	public function setKey($key, $req_sz = 0)
 	{
-		$this->req_key_sz = $req_sz;
+		//$this->req_key_sz = $req_sz;
+		$this->key_len = strlen($key);
 
-		if($this->req_key_sz > 0)
+		if($req_sz > 0)
 		{
-			$keylen = strlen($key);
-
-			if($keylen > $this->req_key_sz)
-				$key = substr($key, 0, $this->req_key_sz);
-			else if($keylen < $this->req_key_sz)
+			if($this->key_len > $req_sz)
 			{
-				$msg = strtoupper($this->name())." requires a {$this->req_key_sz} byte key, $keylen bytes received.";
-				trigger_error($msg, E_USER_WARNING);
+				$key = substr($key, 0, $req_sz);
+				$this->key_len = $req_sz;
+			}
+			else if($this->key_len < $req_sz)
+			{
+				$msg = strtoupper($this->name())." requires a $req_sz byte key, {$this->key_len} bytes received.";
+				trigger_error($msg, E_USER_NOTICE);
 			}
 		}
 
-		$this->key_len = strlen($key);
 		$this->key = $key;
 		return $this->key;
 	}
