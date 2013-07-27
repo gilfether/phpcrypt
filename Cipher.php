@@ -48,9 +48,6 @@ abstract class Cipher extends Base
 	/** @type integer STREAM Indicates that a cipher is a stream cipher */
 	const STREAM = 2;
 
-	/** @type string $key Stores the key for the Cipher */
-	protected $key = "";
-
 	/** @type string $cipher_name Stores the name of the cipher */
 	protected $cipher_name = "";
 
@@ -62,6 +59,9 @@ abstract class Cipher extends Base
 	 * this can be set to either Cipher::ENCRYPT or Cipher::DECRYPT
 	 */
 	protected $operation = self::ENCRYPT; // can be either Cipher::ENCRYPT | Cipher::DECRYPT;
+
+	/** @type string $key Stores the key for the Cipher */
+	private $key = "";
 
 	/** @type integer $key_len Keep track of the key length, so we don't
 	have to make repeated calls to strlen() to find the length */
@@ -79,7 +79,7 @@ abstract class Cipher extends Base
 	protected function __construct($name, $key = "", $required_key_sz = 0)
 	{
 		$this->name($name);
-		$this->setKey($key, $required_key_sz);
+		$this->key($key, $required_key_sz);
 	}
 
 
@@ -207,31 +207,37 @@ abstract class Cipher extends Base
 	 * may lengthen or shorten the key to meet the size requirements of
 	 * the cipher.
 	 *
-	 * @param string $key A key for the cipher
+	 * If the $key parameter is not given, this function simply returns the
+	 * current key being used.
+	 *
+	 * @param string $key Optional, A key for the cipher
 	 * @param integer $req_sz The byte size required for the key
-	 * @return string They key, which made have been modified to fit size
+	 * @return string They key, which may have been modified to fit size
 	 *	requirements
 	 */
-	public function setKey($key, $req_sz = 0)
+	public function key($key = "", $req_sz = 0)
 	{
-		//$this->req_key_sz = $req_sz;
-		$this->key_len = strlen($key);
-
-		if($req_sz > 0)
+		if($key != "" && $key != null)
 		{
-			if($this->key_len > $req_sz)
+			$this->key_len = strlen($key);
+
+			if($req_sz > 0)
 			{
-				$key = substr($key, 0, $req_sz);
-				$this->key_len = $req_sz;
+				if($this->key_len > $req_sz)
+				{
+					$key = substr($key, 0, $req_sz);
+					$this->key_len = $req_sz;
+				}
+				else if($this->key_len < $req_sz)
+				{
+					$msg = strtoupper($this->name())." requires a $req_sz byte key, {$this->key_len} bytes received.";
+					trigger_error($msg, E_USER_NOTICE);
+				}
 			}
-			else if($this->key_len < $req_sz)
-			{
-				$msg = strtoupper($this->name())." requires a $req_sz byte key, {$this->key_len} bytes received.";
-				trigger_error($msg, E_USER_NOTICE);
-			}
+
+			$this->key = $key;
 		}
 
-		$this->key = $key;
 		return $this->key;
 	}
 }
