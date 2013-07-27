@@ -357,7 +357,7 @@ class PHP_Crypt
 	 */
 	public function cipherSetKey($key)
 	{
-		$this->cipher->setKey($key);
+		$this->cipher->key($key);
 	}
 
 
