@@ -136,7 +136,7 @@ class Cipher_3Way extends Cipher
 		$data = array_map("parent::str2Dec", $data);
 
 		// split the key into three 32 bit parts
-		$key = str_split($this->key, 4);
+		$key = str_split($this->key(), 4);
 		$key = array_map("parent::str2Dec", $key);
 
 		// determine which round constant to use

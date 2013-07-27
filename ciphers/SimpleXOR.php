@@ -115,6 +115,7 @@ class Cipher_Simple_XOR extends Cipher
 	{
 		$pos = 0;
 		$max = strlen($text);
+		$key = $this->key();
 
 		for($i = 0; $i < $max; ++$i)
 		{
@@ -123,7 +124,7 @@ class Cipher_Simple_XOR extends Cipher
 			if($pos >= $this->keySize())
 				$pos = 0;
 
-			$text[$i] = $text[$i] ^ $this->key[$pos];
+			$text[$i] = $text[$i] ^ $key[$pos];
 			++$pos;
 		}
 

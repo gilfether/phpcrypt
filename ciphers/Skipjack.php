@@ -336,6 +336,7 @@ class Cipher_Skipjack extends Cipher
 	{
 		$this->expanded_key = "";
 		$key_bytes = $this->keySize();
+		$key = $this->key();
 		$pos = 0;
 
 		for($i = 0; $i < 128; ++$i)
@@ -343,7 +344,7 @@ class Cipher_Skipjack extends Cipher
 			if($pos == $key_bytes)
 				$pos = 0;
 
-			$this->expanded_key .= $this->key[$pos];
+			$this->expanded_key .= $key[$pos];
 			++$pos;
 		}
 	}

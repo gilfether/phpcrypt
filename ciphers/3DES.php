@@ -88,7 +88,7 @@ class Cipher_3DES extends Cipher_DES
 
 		for($i = 0; $i < 3; ++$i)
 		{
-			$key = substr($this->key, ($i * 8), $blocksz);
+			$key = substr($this->key(), ($i * 8), $blocksz);
 			$this->keyPermutation($key);
 
 			if($i % 2) // round 1
@@ -118,7 +118,7 @@ class Cipher_3DES extends Cipher_DES
 
 		for($i = 2; $i >= 0; --$i)
 		{
-			$key = substr($this->key, ($i * 8), $blocksz);
+			$key = substr($this->key(), ($i * 8), $blocksz);
 			$this->keyPermutation($key);
 
 			if($i % 2) // round 1

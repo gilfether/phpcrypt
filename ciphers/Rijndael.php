@@ -598,7 +598,7 @@ abstract class Cipher_Rijndael extends Cipher
 	 */
 	private function k($offset)
 	{
-		return substr($this->key, $offset, 4);
+		return substr($this->key(), $offset, 4);
 	}
 
 

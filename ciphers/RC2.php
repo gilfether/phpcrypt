@@ -272,8 +272,8 @@ class Cipher_RC2 extends Cipher
 	private function expandKey()
 	{
 		// start by copying the key to the xkey variable
-		$this->xkey = $this->key;
-		$len = strlen($this->xkey);
+		$this->xkey = $this->key();
+		$len = $this->keySize();
 
 		// the max length of the key is 128 bytes
 		if($len > 128)

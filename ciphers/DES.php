@@ -239,7 +239,7 @@ class Cipher_DES extends Cipher
 		$d = array();
 
 		// convert the key to binary
-		$binkey = parent::str2Bin($this->key);
+		$binkey = parent::str2Bin($this->key());
 
 		// reduce the key down to 56bits based on table $_pc1
 		for($i = 0; $i < 56; ++$i)

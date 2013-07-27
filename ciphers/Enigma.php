@@ -185,8 +185,8 @@ class Cipher_Enigma extends Cipher
 		$this->t1 = array();
 		$this->t2 = array_fill(0, self::ROTORSZ, 0);
 		$this->t3 = $this->t2;
-		$this->xkey = $this->key;
-		$klen = strlen($this->xkey);
+		$this->xkey = $this->key();
+		$klen = $this->keySize();
 
 		// get the key to exactly 13 bytes if it's less than 13
 		if($klen < 13)

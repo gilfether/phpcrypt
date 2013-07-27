@@ -284,14 +284,14 @@ class Cipher_Blowfish extends Cipher
 	 */
 	private function keyChunk($size = 1, $reset = false)
 	{
-		if($reset || $this->key_pos >= strlen($this->key))
+		if($reset || $this->key_pos >= $this->keySize())
 			$this->key_pos = 0;
 
-		$bytes = substr($this->key, $this->key_pos, $size);
+		$bytes = substr($this->key(), $this->key_pos, $size);
 		$len = strlen($bytes);
 		if($len < $size)
 		{
-			$bytes .= substr($this->key, 0, $size - $len);
+			$bytes .= substr($this->key(), 0, $size - $len);
 			$this->key_pos = $size - $len;
 		}
 		else

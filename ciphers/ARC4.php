@@ -124,7 +124,8 @@ class Cipher_ARC4 extends Cipher
 	{
 		$j = 0;
 		$this->_s = array();
-		$keylen = strlen($this->key);
+		$keylen = $this->keySize();
+		$key = $this->key();
 
 		// fill $this->_s with all the values from 0-255
 		for($i = 0; $i < 256; ++$i)
@@ -133,7 +134,7 @@ class Cipher_ARC4 extends Cipher
 		// the changing S List
 		for($i = 0; $i < 256; ++$i)
 		{
-			$k = $this->key[$i % $keylen];
+			$k = $key[$i % $keylen];
 			$j = ($j + $this->_s[$i] + ord($k)) % 256;
 
 			// swap bytes
