@@ -347,17 +347,20 @@ class PHP_Crypt
 
 
 	/**
-	 * Allow for setting a new key without having to create a new
-	 * instance of phpCrypt. This is useful in the case where
-	 * each round of encryption requires a new key, such as a
-	 * One Time Pad
+	 * Sets and/or returns the key to be used. Normally you set
+	 * the key in the phpCrypt constructor. This can be usefully
+	 * if you need to change the key on the fly and don't want
+	 * to create a new instance of phpCrypt.
 	 *
-	 * @param string $key The key
-	 * @return void
+	 * If the $key parameter is not given, this function will simply
+	 * return the key currently in use.
+	 *
+	 * @param string $key Optional, The key to set
+	 * @return string The key being used
 	 */
-	public function cipherSetKey($key)
+	public function cipherKey($key = "")
 	{
-		$this->cipher->key($key);
+		return $this->cipher->key($key);
 	}
 
 
