@@ -209,7 +209,7 @@ class Cipher_DES extends Cipher
 				$f = $this->F($r[$n-1], $this->sub_keys[$n-1]);
 
 			// XOR F with Ln
-			$r[$n] = $this->binXOR($l[$n-1], $f);
+			$r[$n] = $this->xorBin($l[$n-1], $f);
 		}
 
 		// now we combine L[16] and R[16] back into a 64-bit string, but we reverse
@@ -324,7 +324,7 @@ class Cipher_DES extends Cipher
 	 */
 	private function f($r, $k)
 	{
-		$bin = parent::binXOR($k, $this->E($r));
+		$bin = parent::xorBin($k, $this->E($r));
 
 		// create a 32-bit string from $bits by passing it through the S-Boxes
 		$bin = $this->s($bin);
