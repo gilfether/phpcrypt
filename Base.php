@@ -302,55 +302,46 @@ class Base
 	 * @param string $a binary string
 	 * @param string $b binary string
 	 */
-	public static function binXOR($a, $b)
+	public static function xorBin($a, $b)
 	{
 		$len_a = strlen($a);
 		$len_b = strlen($b);
+		$width = $len_a;
 
 		// first determine if the two binary strings are the same length,
 		// and if not get them to the same length
 		if($len_a > $len_b)
 		{
-			$xor_width = $len_a;
-			$b = str_pad($b, $xor_width, "0", STR_PAD_LEFT);
+			$width = $len_a;
+			$b = str_pad($b, $width, "0", STR_PAD_LEFT);
 		}
 		else if($len_a < $len_b)
 		{
-			$xor_width = $len_b;
-			$a = str_pad($a, $xor_width, "0", STR_PAD_LEFT);
-		}
-		else
-			$xor_width = $len_a;
-
-		$a = str_split($a, $xor_width);
-		$b = str_split($b, $xor_width);
-
-		$res = "";
-		$max = count($a);
-		for($i = 0; $i < $max; ++$i)
-		{
-			$bin = self::bin2Str($a[$i]) ^ self::bin2Str($b[$i]);
-			$res .= self::str2Bin($bin);
+			$width = $len_b;
+			$a = str_pad($a, $width, "0", STR_PAD_LEFT);
 		}
 
-		return $res;
+		// fortunately PHP knows how to XOR each byte in a string
+		// so we don't have to loop to do it
+		$bin = self::bin2Str($a) ^ self::bin2Str($b);
+		return self::str2Bin($bin);
 	}
 
 
 	/**
 	 * ExclusiveOR hex values. Supports an unlimited number of parameters.
-	 * The values are string representations of hex values, and not actual hex
-	 * values. IE: "0a1b2c3d" not 0x0a1b2c3d
+	 * The values are string representations of hex values
+	 * IE: "0a1b2c3d" not 0x0a1b2c3d
 	 *
 	 * @param string Unlimited number parameters, each a string representation of hex
 	 * @return string A string representation of the xor result
 	 */
 	public static function xorHex()
 	{
-		$hex = func_get_args();
+		$hex   = func_get_args();
 		$count = func_num_args();
 
-		// we need a minium of 2 values
+		// we need a minimum of 2 values
 		if($count < 2)
 			return false;
 
@@ -363,6 +354,8 @@ class Base
 		$res = 0;
 		for($i = 0; $i < $count; ++$i)
 		{
+			// if this is the first loop, set the 'result' to the first
+			// hex value
 			if($i == 0)
 				$res = $hex[0];
 			else
@@ -382,19 +375,10 @@ class Base
 				else if($len1 < $len2)
 					$h1 = str_pad($h1, $len2, "0", STR_PAD_LEFT);
 
-				// break the hex up into bytes, 1 byte per array element
-				$h1 = str_split($h1, 2);
-				$h2 = str_split($h2, 2);
-				$h3 = "";
-
-				$max = count($h1);
-				for($j = 0; $j < $max; ++$j)
-				{
-					$dec = self::hex2Dec($h1[$j]) ^ self::hex2Dec($h2[$j]);
-					$h3 .= self::dec2Hex($dec);
-				}
-
-				$res = $h3;
+				// PHP knows how to XOR each byte in a string, so convert the
+				// hex to a string, XOR, and convert back
+				$res = self::hex2Str($h1) ^ self::hex2Str($h2);
+				$res = self::str2Hex($res);
 			}
 		}
 
