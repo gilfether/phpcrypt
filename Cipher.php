@@ -239,7 +239,7 @@ abstract class Cipher extends Core
 				else if($this->key_len < $req_sz)
 				{
 					$msg = strtoupper($this->name())." requires a $req_sz byte key, {$this->key_len} bytes received.";
-					trigger_error($msg, E_USER_NOTICE);
+					trigger_error($msg, E_USER_WARNING);
 				}
 			}
 
