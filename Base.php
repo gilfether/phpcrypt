@@ -61,16 +61,18 @@ class Base
 	 */
 	public static function hex2Bin($hex)
 	{
+		// if we do not have an even number of hex characters
+		// append a 0 to the beginning to make it even
+		if(strlen($hex) % 2)
+			$hex = "0$hex";
+
 		$parts = str_split($hex, 2);
+		$parts = array_map(function($v) {
+				$v = base_convert($v, 16, 2);
+				return str_pad($v, 8, "0", STR_PAD_LEFT);
+		}, $parts);
 
-		$res = "";
-		foreach($parts as $k=>$v)
-		{
-			$bin = base_convert($v, 16, 2);
-			$res .= str_pad($bin, 8, "0", STR_PAD_LEFT);
-		}
-
-		return $res;
+		return implode("", $parts);
 	}
 
 
@@ -78,18 +80,21 @@ class Base
 	 * Convert hex to a string
 	 *
 	 * @param string $hex A string representation of Hex (IE: "1a2b3c" not 0x1a2b3c)
-	 * @param integer $bytes Force the string to be a minimum of $bytes long
 	 * @return string a string
 	 */
 	public static function hex2Str($hex)
 	{
+		// php version >= 5.4 have a hex2bin function, use it
+		// if it exists
+		if(function_exists("hex2bin"))
+			return hex2bin($hex);
+
 		$parts = str_split($hex, 2);
+		$parts = array_map(function($v) {
+				return chr(Base::hex2Dec($v));
+		}, $parts);
 
-		$res = "";
-		foreach($parts as $k => $v)
-			$res .= chr(self::hex2Dec($v));
-
-		return $res;
+		return implode("", $parts);
 	}
 
 
@@ -118,17 +123,14 @@ class Base
 	public static function bin2Hex($bin)
 	{
 		$parts = str_split($bin, 8);
-		$hex = "";
 
-		$max = count($parts);
-		for($i = 0; $i < $max; ++$i)
-		{
-			$parts[$i] = str_pad($parts[$i], 8, "0", STR_PAD_LEFT);
-			$tmphex = dechex(bindec($parts[$i]));
-			$hex .= str_pad($tmphex, 2, "0", STR_PAD_LEFT);
-		}
+		$parts = array_map(function($v) {
+			$v = str_pad($v, 8, "0", STR_PAD_LEFT);
+			$v = dechex(bindec($v));
+			return str_pad($v, 2, "0", STR_PAD_LEFT);
+		}, $parts);
 
-		return $hex;
+		return implode("", $parts);
 	}
 
 
@@ -168,22 +170,6 @@ class Base
 	public static function str2Hex($str)
 	{
 		return bin2hex($str);
-		/*
-		$res = "";
-
-		if(is_string($str) && $str != "")
-		{
-			$parts = str_split($str);
-
-			foreach($parts as $k=>$v)
-			{
-				$hex = dechex(ord($v));
-				$res .= str_pad($hex, 2, "0", STR_PAD_LEFT);
-			}
-		}
-
-		return $res;
-		*/
 	}
 
 
@@ -211,11 +197,11 @@ class Base
 		$hex = self::str2Hex($str);
 		$parts = str_split($hex, 2);
 
-		$res = "";
-		foreach($parts as $k=>$v)
-			$res .= self::hex2Bin($v);
+		$parts = array_map(function($v) {
+			return Base::hex2Bin($v);
+		}, $parts);
 
-		return $res;
+		return implode("", $parts);
 	}
 
 
