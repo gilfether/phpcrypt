@@ -23,7 +23,7 @@
 
 
 namespace PHP_Crypt;
-require_once(dirname(__FILE__)."/Base.php");
+require_once(dirname(__FILE__)."/Core.php");
 
 
 /**
@@ -34,7 +34,7 @@ require_once(dirname(__FILE__)."/Base.php");
  * @link http://www.gilfether.com/phpcrypt
  * @copyright 2005 Ryan Gilfether
  */
-abstract class Cipher extends Base
+abstract class Cipher extends Core
 {
 	/** @type integer ENCRYPT Indicates when we are in encryption mode */
 	const ENCRYPT = 1;
