@@ -299,8 +299,9 @@ class Base
 	 * XORs two binary strings (representation of binary, ie 01101011),
 	 * assumed to be equal length
 	 *
-	 * @param string $a binary string
-	 * @param string $b binary string
+	 * @param string $a A string that represents binary
+	 * @param string $b A string that represents binary
+	 * @return string A representation of binary
 	 */
 	public static function xorBin($a, $b)
 	{
@@ -334,7 +335,7 @@ class Base
 	 * IE: "0a1b2c3d" not 0x0a1b2c3d
 	 *
 	 * @param string Unlimited number parameters, each a string representation of hex
-	 * @return string A string representation of the xor result
+	 * @return string A string representation of the result in Hex
 	 */
 	public static function xorHex()
 	{
