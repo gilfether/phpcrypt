@@ -219,7 +219,15 @@ abstract class Cipher extends Core
 	{
 		if($key != "" && $key != null)
 		{
-			$this->key_len = strlen($key);
+			// in the case where the key is changed changed after
+			// creating a new Cipher object and the $req_sz was not
+			// given, we need to make sure the new key meets the size
+			// requirements. This can be determined from the $this->key_len
+			// member set from the previous key
+			if($this->key_len > 0 && $req_sz == 0)
+				$req_sz = $this->key_len;
+			else
+				$this->key_len = strlen($key);
 
 			if($req_sz > 0)
 			{
