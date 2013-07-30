@@ -28,6 +28,11 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
 
 /**
  * Implements Triple DES Encryption (3DES)
+ * Extends the Cipher_DES class. Triple DES does 3 DES rounds for
+ * both encryption and decryption. It requires an 8, 16, or 24 byte
+ * key. If the key is 8 or 16 bytes, it is expanded to 24 bytes
+ * before it is used
+ *
  * Resources used to implement this algorithm(in addition to those
  * listed in DES.php):
  * http://en.wikipedia.org/wiki/Triple_DES
@@ -41,8 +46,9 @@ class Cipher_3DES extends Cipher_DES
 	/** @type integer BYTES_BLOCK The size of the block, in bytes */
 	const BYTES_BLOCK = 8; // 64 bits
 
-	/** @type integer BYTES_KEY The size of the key, in bytes */
-	const BYTES_KEY = 24; // 192  bits
+	/** @type integer BYTES_KEY The size of the key. The key can be
+	8, 16, or 24 bytes but gets expanded to 24 bytes before used */
+	const BYTES_KEY = 24;
 
 
 	/**
@@ -53,8 +59,21 @@ class Cipher_3DES extends Cipher_DES
 	 */
 	public function __construct($key)
 	{
+		$key_len = strlen($key);
+
+		if($key_len == 8 || $key_len == 16)
+			$key = self::expandKey($key, $key_len);
+		else if($key_len < self::BYTES_KEY)
+		{
+			$msg  = PHP_Crypt::CIPHER_3DES." requires an 8, 16, or 24 byte key. ";
+			$msg .= "$key_len bytes received.";
+			trigger_error($msg, E_USER_WARNING);
+		}
+		// else if the key is longer than 24 bytes, phpCrypt will shorten it
+
 		// set the 3DES key, note that we call __construct1() not __construct()
-		// this is a second contructor we created for classes that extend the DES class
+		// this is a second contructor we created for classes that extend the
+		// DES class
 		parent::__construct1(PHP_Crypt::CIPHER_3DES, $key, self::BYTES_KEY);
 
 		// 3DES requires that data is 64 bits
@@ -198,6 +217,35 @@ class Cipher_3DES extends Cipher_DES
 		}
 
 		// the sub_keys are created, we are done with the key permutation
+	}
+
+
+	/**
+	 * Triple DES accepts an 8, 16, or 24 bytes key. If the key is
+	 * 8 or 16 bytes, it is expanded to 24 bytes
+	 * An 8 byte key is expanded by repeating it 3 times to make a 24
+	 * byte key
+	 * A 16 byte key add the first 8 bytes to the end of the string
+	 * to make a 24 byte key
+	 *
+	 * @param string $key The 8 or 16 byte key to expand
+	 * @return string If the key given is 8 or 16 bytes it returns the
+	 *	expanded 24 byte key, else it returns the original key unexpanded
+	 */
+	private static function expandKey($key, $len)
+	{
+		// if we were given an 8 byte key, repeat it
+		// 3 times to produce a 24 byte key
+		if($len == 8)
+			$key = str_repeat($key, 3);
+
+		// if we were given a 16 byte key, add the first
+		// 8 bytes to the end of the key to produce 24 bytes
+		if($len == 16)
+			$key .= substr($key, 0, 8);
+
+		// return the key
+		return $key;
 	}
 }
 ?>
