@@ -33,8 +33,9 @@ namespace PHP_Crypt;
  */
 class Core
 {
+	/** @type integer HASH_LEN The length of md5() hash string */
 	const HASH_LEN = 16;
-	const DEFAULT_RAND_LEN = 32;
+
 
 	/**
 	 * Constructor
