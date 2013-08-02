@@ -33,6 +33,9 @@ namespace PHP_Crypt;
  */
 class Core
 {
+	const HASH_LEN = 16;
+	const DEFAULT_RAND_LEN = 32;
+
 	/**
 	 * Constructor
 	 *
@@ -484,6 +487,99 @@ class Core
 	public static function rotBitsRight($int, $shifts)
 	{
 		return ($int >> $shifts) | ($int << (32 - $shifts));
+	}
+
+
+	/**
+	 * Create a string of random bytes, used for creating an IV
+	 * and a random key. See PHP_Crypt::createKey() and PHP_Crypt::createIV()
+	 * There are 4 ways to auto generate random bytes by setting $src parameter
+	 * PHP_Crypt::RAND - Default, uses mt_rand()
+	 * PHP_Crypt::RAND_DEV_RAND - Unix only, uses /dev/random
+	 * PHP_Crypt::RAND_DEV_URAND - Unix only, uses /dev/urandom
+	 * PHP_Crypt::RAND_WIN_COM - Windows only, uses Microsoft's CAPICOM SDK
+	 *
+	 * @param string $src Optional, Use the $src to create the random bytes
+	 * 	by default PHP_Crypt::RAND is used when $src is not specified
+	 * @param integer $byte_len The length of the byte string to create
+	 * @return string A random string of bytes
+	 */
+	public static function randBytes($src = PHP_Crypt::RAND, $byte_len = PHP_Crypt::RAND_DEFAULT_LEN)
+	{
+		$bytes = "";
+		$err_msg = "";
+
+		if($src == PHP_Crypt::RAND_DEV_RAND)
+		{
+			if(file_exists(PHP_Crypt::RAND_DEV_RAND))
+				$bytes = file_get_contents(PHP_CRYPT::RAND_DEV_RAND, false, null, 0, $byte_len);
+			else
+				$err_msg = PHP_Crypt::RAND_DEV_RAND." not found";
+		}
+		else if($src == PHP_Crypt::RAND_DEV_URAND)
+		{
+			if(file_exists(PHP_Crypt::RAND_DEV_URAND))
+				$bytes = file_get_contents(PHP_CRYPT::RAND_DEV_URAND, false, null, 0, $byte_len);
+			else
+				$err_msg = PHP_Crypt::RAND_DEV_URAND." not found";
+		}
+		else if($src == PHP_Crypt::RAND_WIN_COM)
+		{
+			if(extension_loaded('com_dotnet'))
+			{
+				// http://msdn.microsoft.com/en-us/library/aa388176(VS.85).aspx
+				try
+				{
+					// request a random number in $byte_len bytes, returned
+					// as base_64 encoded string. This is because PHP munges the
+					// binary data on Windows
+					$com = @new \COM("CAPICOM.Utilities.1");
+					$bytes = $com->GetRandom($byte_len, 0);
+				}
+				catch(Exception $e)
+				{
+					$err_msg  = "Windows COM exception: ".$e->getMessage();
+				}
+
+				if(!$bytes)
+					$err_msg  = "Windows COM failed to create random string of bytes";
+			}
+			else
+				$err_msg = "The COM_DOTNET extension is not loaded";
+		}
+
+		// trigger a warning if something went wrong
+		if($err_msg != "")
+			trigger_error("$err_msg. Defaulting to PHP_Crypt::RAND", E_USER_WARNING);
+
+		// if the random bytes where not created properly or PHP_Crypt::RAND was
+		// passed as the $src param, create the bytes using mt_rand(). It's not
+		// the most secure option but we have no other choice
+		if(strlen($bytes) < $byte_len)
+		{
+			$bytes = "";
+
+			// md5() hash a random number to get a 16 byte string, keep looping
+			// until we have a string as long or longer than the ciphers block size
+			for($i = 0; ($i * self::HASH_LEN) < $byte_len; ++$i)
+				$bytes .= md5(mt_rand(), true);
+		}
+
+		// because $bytes may have come from mt_rand() or /dev/urandom which are not
+		// cryptographically secure, lets add another layer of 'randomness' before
+		// the final md5() below
+		$bytes = str_shuffle($bytes);
+
+		// md5() the $bytes to add extra randomness. Since md5() only returns
+		// 16 bytes, we may need to loop to generate a string of $bytes big enough for
+		// some ciphers which have a block size larger than 16 bytes
+		$tmp = "";
+		$loop = ceil(strlen($bytes) / self::HASH_LEN);
+		for($i = 0; $i < $loop; ++$i)
+			$tmp .= md5(substr($bytes, ($i * self::HASH_LEN), self::HASH_LEN), true);
+
+		// grab the number of bytes equal to the requested $byte_len
+		return substr($tmp, 0, $byte_len);
 	}
 }
 ?>
