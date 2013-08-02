@@ -22,7 +22,9 @@
  */
 
 namespace php_crypt;
-include_once(dirname(__FILE__)."/Includes.inc.php");
+
+require_once(dirname(__FILE__)."/Core.php");
+require_once(dirname(__FILE__)."/Includes.inc.php");
 
 /**
  * The phpCrypt class, a front end to all the Ciphers and Modes phpCrypt supports
@@ -57,18 +59,20 @@ class PHP_Crypt
 	const MODE_CFB	= "CFB";  // 8 bit cfb mode
 	const MODE_CTR	= "CTR";
 	const MODE_ECB	= "ECB";
-	const MODE_NCFB	= "NCFB"; // n-bit cfb mode
-	const MODE_NOFB	= "NOFB"; // n-bit ofb mode
+	const MODE_NCFB	= "NCFB"; // blocksize cfb mode
+	const MODE_NOFB	= "NOFB"; // blocksize ofb mode
 	const MODE_OFB	= "OFB";  // 8 bit ofb mode
 	const MODE_PCBC	= "PCBC";
 	const MODE_RAW	= "Raw";  // raw encryption, with no mode
 	const MODE_STREAM = "Stream"; // used only for stream ciphers
 
-	// IV sources for Modes
-	const IV_RAND		= "rand"; // uses mt_rand(), windows & unix
-	const IV_DEV_RAND	= "/dev/random"; // unix only
-	const IV_DEV_URAND	= "/dev/urandom";// unix only
-	const IV_WIN_COM	= "wincom";		 // windows only, COM extension
+	// The source of random data used to create keys and IV's
+	// Used for PHP_Crypt::createKey(), PHP_Crypt::createIV()
+	const RAND			= "rand"; // uses mt_rand(), windows & unix
+	const RAND_DEV_RAND	= "/dev/random"; // unix only
+	const RAND_DEV_URAND= "/dev/urandom";// unix only
+	const RAND_WIN_COM	= "wincom";		 // windows only, COM extension
+	const RAND_DEFAULT_SZ = 32;			 // the default number of bytes returned
 
 	// Padding types
 	const PAD_ZERO			= 0;
@@ -365,6 +369,27 @@ class PHP_Crypt
 
 
 	/**
+	 * A helper function which will create a random key. Calls
+	 * Core::randBytes(). By default it will use PHP_Crypt::RAND for
+	 * the random source of bytes, and return a PHP_Crypt::RAND_DEFAULT_SZ
+	 * byte string. There are 4 ways to create a random byte string by
+	 * setting the $src parameter:
+	 * PHP_Crypt::RAND - Default, uses mt_rand()
+	 * PHP_Crypt::RAND_DEV_RAND - Unix only, uses /dev/random
+	 * PHP_Crypt::RAND_DEV_URAND - Unix only, uses /dev/urandom
+	 * PHP_Crypt::RAND_WIN_COM - Windows only, uses Microsoft's CAPICOM SDK
+	 *
+	 * @param string $src Optional, The source to use to create random bytes
+	 * @param integer $len Optional, The number of random bytes to return
+	 * @return string A random string of bytes
+	 */
+	public static function createKey($src = self::RAND, $len = self::RAND_DEFAULT_SZ)
+	{
+		return Core::randBytes($src, $len);
+	}
+
+
+	/**
 	 * Sets the IV to use. Note that you do not need to call
 	 * this function if creating an IV using createIV(). This
 	 * function is used when an IV has already been created
@@ -393,15 +418,15 @@ class PHP_Crypt
 	 * as it is automatically set in this function
 	 *
 	 * $src values are:
-	 * PHP_CRYPT::IV_RAND (default) - uses mt_rand
-	 * PHP_CRYPT::IV_DEV_RAND - uses /dev/random
-	 * PHP_CRYPT::IV_DEV_URAND - uses /dev/urandom
+	 * PHP_Crypt::RAND - Default, uses mt_rand()
+	 * PHP_Crypt::RAND_DEV_RAND - Unix only, uses /dev/random
+	 * PHP_Crypt::RAND_DEV_URAND - Unix only, uses /dev/urandom
+	 * PHP_Crypt::RAND_WIN_COM - Windows only, uses Microsoft's CAPICOM SDK
 	 *
-	 * @param string $src Optional, how the IV is generated, can be one of
-	 *		PHP_CRYPT::IV_RAND, PHP_CRYPT::IV_DEV_RAND, PHP_CRYPT::IV_DEV_URAND
-	 * @return string The IV that is being used by the mode
+	 * @param string $src Optional, how the IV is generated
+	 * @return string The IV that was created, and set for the mode
 	 */
-	public function createIV($src = self::IV_RAND)
+	public function createIV($src = self::RAND)
 	{
 		return $this->mode->createIV($src);
 	}
