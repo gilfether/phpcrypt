@@ -93,9 +93,9 @@ On Unix based systems, phpCrypt supports reading from /dev/random and
 /dev/urandom. This can be done by passing one of the following constants
 to phpCrypt::createIV():
 
-	$iv = $crypt->createIV(PHP_Crypt::IV_DEV_RAND);
+	$iv = $crypt->createIV(PHP_Crypt::RAND_DEV_RAND);
 	or
-	$iv = $crypt->createIV(PHP_Crypt::IV_DEV_URAND);
+	$iv = $crypt->createIV(PHP_Crypt::RAND_DEV_URAND);
 
 MICROSOFT WINDOWS
 
@@ -120,7 +120,7 @@ extension:
 To use the Windows random number generator in CAPICOM you would call createIV()
 like so:
 
-	$iv = $crypt->createIV(PHP_Crypt::IV_WIN_COM);
+	$iv = $crypt->createIV(PHP_Crypt::RAND_WIN_COM);
 
 SUPPLYING YOUR OWN IV
 
