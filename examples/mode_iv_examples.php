@@ -3,16 +3,16 @@
  * Demonstrates how IV's are created using modes that require them. Not
  * all modes require an IV. IV's can be created several ways:
  *
- * PHP_Crypt::IV_RAND - uses PHP's mt_rand() to generate an IV.
+ * PHP_Crypt::RAND - uses PHP's mt_rand() to generate an IV.
  * This is the default setting when no IV method is specified.
  *
- * PHP_Crypt::IV_DEV_RAND - uses the Unix /dev/random random number generator.
+ * PHP_Crypt::RAND_DEV_RAND - uses the Unix /dev/random random number generator.
  * More secure than PHP_Crypt::IV_RAND. Not available in Windows.
  *
- * PHP_Crypt::IV_DEV_URAND - uses the Unix /dev/urandom random number generator.
+ * PHP_Crypt::RAND_DEV_URAND - uses the Unix /dev/urandom random number generator.
  * More secure than PHP_Crypt::IV_RAND. Not Available for Windows.
  *
- * PHP_Crypt::IV_WIN_COM - uses the PHP com_dotnet extension and is available only
+ * PHP_Crypt::RAND_WIN_COM - uses the PHP com_dotnet extension and is available only
  * on Windows. Requires the Microsoft CAPICOM SDK to be installed. View the README
  * file included with phpCrypt for more information
  *
@@ -31,21 +31,20 @@ $text = "This is my secret message.";
 $key = "^mY@TEst";
 $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_DES, PHP_Crypt::MODE_CFB);
 
-// by default createIV() uses PHP_Crypt::IV_RAND which uses PHP's mt_rand()
-$iv = $crypt->createIV();
-
 /*
- * WE COULD ALSO USE THE FOLLOWING METHODS OF CREATING AN IV:
- * $iv = $crypt->createIV(PHP_Crypt::IV_RAND); // The default, uses PHP's mt_rand()
- * $iv = $crypt->createIV(PHP_Crypt::IV_DEV_RAND); // unix only, uses /dev/random
- * $iv = $crypt->createIV(PHP_Crypt::IV_DEV_URAND);// unix only, uses /dev/urandom
- * $iv = $crypt->createIV(PHP_Crypt::IV_WIN_COM);  // Windows only, uses the com_dotnet extension
+ * WE CAN USE THE FOLLOWING METHODS OF CREATING AN IV:
+ * $iv = $crypt->createIV(PHP_Crypt::RAND); // The default, uses PHP's mt_rand()
+ * $iv = $crypt->createIV(PHP_Crypt::RAND_DEV_RAND); // unix only, uses /dev/random
+ * $iv = $crypt->createIV(PHP_Crypt::RAND_DEV_URAND);// unix only, uses /dev/urandom
+ * $iv = $crypt->createIV(PHP_Crypt::RAND_WIN_COM);  // Windows only, uses the com_dotnet extension
  *
  * In the case where you are given an encrypted string, along with the key and IV
  * to decrypt the string, you don't need to call createIV() since the IV has already
  * been created for you. Set the IV by calling $crypt->IV($iv) as shown below.
  */
 
+// by default createIV() uses PHP_Crypt::RAND which uses PHP's mt_rand()
+$iv = $crypt->createIV();
 $encrypt = $crypt->encrypt($text);
 
 // we need to use the same IV for decryption as used during encryption
