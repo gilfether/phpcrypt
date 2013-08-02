@@ -36,9 +36,6 @@ require_once(dirname(__FILE__)."/phpCrypt.php");
  */
 abstract class Mode
 {
-	/** @type integer HASH_LEN The length of md5() hash string */
-	const HASH_LEN = 16;
-
 	/**
 	 * @type object $cipher The cipher object used within the mode
 	 */
@@ -153,93 +150,23 @@ abstract class Mode
 	 * The IV should be saved and used for Encryption/Decryption
 	 * of the same blocks of data.
 	 * There are 3 ways to auto generate an IV by setting $src parameter
-	 * PHP_Crypt::IV_RAND - Default, uses mt_rand()
-	 * PHP_Crypt::IV_DEV_RAND - Unix only, uses /dev/random
-	 * PHP_Crypt::IV_DEV_URAND - Unix only, uses /dev/urandom
-	 * PHP_Crypt::IV_WIN_COM - Windows only, uses Microsoft's CAPICOM SDK
+	 * PHP_Crypt::RAND - Default, uses mt_rand()
+	 * PHP_Crypt::RAND_DEV_RAND - Unix only, uses /dev/random
+	 * PHP_Crypt::RAND_DEV_URAND - Unix only, uses /dev/urandom
+	 * PHP_Crypt::RAND_WIN_COM - Windows only, uses Microsoft's CAPICOM SDK
 	 *
 	 * @param string $src Optional, Sets how the IV is generated, must be
-	 *	one of the predefined PHP_Crypt IV constants. Defaults to
-	 *	PHP_Crypt::IV_RAND if none is given.
+	 *	one of the predefined PHP_Crypt RAND constants. Defaults to
+	 *	PHP_Crypt::RAND if none is given.
 	 * @return string The IV that is being used by the mode
 	 */
-	public function createIV($src = null)
+	public function createIV($src = PHP_Crypt::RAND)
 	{
 		// if the mode does not use an IV, lets not waste time
 		if(!$this->requiresIV())
 			return false;
 
-		$iv = "";
-		$err_msg = "";
-
-		if($src == PHP_Crypt::IV_DEV_RAND)
-		{
-			if(file_exists(PHP_Crypt::IV_DEV_RAND))
-				$iv = file_get_contents(PHP_CRYPT::IV_DEV_RAND, false, null, 0, $this->block_size);
-			else
-				$err_msg = PHP_Crypt::IV_DEV_RAND." not found";
-		}
-		else if($src == PHP_Crypt::IV_DEV_URAND)
-		{
-			if(file_exists(PHP_Crypt::IV_DEV_URAND))
-				$iv = file_get_contents(PHP_CRYPT::IV_DEV_URAND, false, null, 0, $this->block_size);
-			else
-				$err_msg = PHP_Crypt::IV_DEV_URAND." not found";
-		}
-		else if($src == PHP_Crypt::IV_WIN_COM)
-		{
-			if(extension_loaded('com_dotnet'))
-			{
-				// http://msdn.microsoft.com/en-us/library/aa388176(VS.85).aspx
-				try
-				{
-					// request a random number in $this->block_size bytes, returned
-					// as base_64 encoded string. This is because PHP munges the
-					// binary data on Windows
-					$com = @new \COM("CAPICOM.Utilities.1");
-					$iv = $com->GetRandom($this->block_size, 0);
-				}
-				catch(Exception $e)
-				{
-					$err_msg  = "Windows COM exception: ".$e->getMessage();
-				}
-
-				if(!$iv)
-					$err_msg  = "Windows COM failed to create an IV";
-			}
-			else
-				$err_msg = "The COM_DOTNET extension is not loaded";
-		}
-
-		// trigger a warning if something went wrong
-		if($err_msg != "")
-			trigger_error("$err_msg. Defaulting to PHP_CRYPT::IV_RAND", E_USER_WARNING);
-
-		// if the iv was not created properly or PHP_Crypt::IV_RAND was passed
-		// as the $src param, create the IV using mt_rand(). It's not the most
-		// secure option but we have no other choice
-		if(strlen($iv) < $this->block_size)
-		{
-			$iv = "";
-
-			// md5() hash a random number to get a 16 byte string, keep looping
-			// until we have a string as long or longer than the ciphers block size
-			for($i = 0; ($i * self::HASH_LEN) < $this->block_size; ++$i)
-				$iv .= md5(mt_rand(), true);
-		}
-
-		// md5() the $iv to add extra randomness. Since md5() only returns
-		// 16 bytes, we may need to loop to generate a an $iv big enough for
-		// some ciphers which have a block size larger than 16 bytes
-		$tmp = "";
-		$loop = ceil(strlen($iv) / self::HASH_LEN);
-		for($i = 0; $i < $loop; ++$i)
-			$tmp .= md5(substr($iv, ($i * self::HASH_LEN), self::HASH_LEN), true);
-
-		// grab the number of bytes equal to the blocksize of the cipher
-		$iv = substr($tmp, 0, $this->block_size);
-
-		// now store the IV we created
+		$iv = Core::randBytes($src, $this->block_size);
 		return $this->IV($iv);
 	}
 
