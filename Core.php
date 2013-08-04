@@ -472,9 +472,11 @@ class Core
 	 * @param integer The number of shifts left to make
 	 * @return integer The resulting value from the rotation
 	 */
-	public static function rotBitsLeft($int, $shifts)
+	public static function rotBitsLeft32($int, $shifts)
 	{
+		$int = self::uInt32($int);
 		return ($int << $shifts) | ($int >> (32 - $shifts));
+
 	}
 
 
@@ -485,8 +487,9 @@ class Core
 	 * @param integer The number of shifts right to make
 	 * @return integer The resulting value from the rotation
 	 */
-	public static function rotBitsRight($int, $shifts)
+	public static function rotBitsRight32($int, $shifts)
 	{
+		$int = self::uInt32($int);
 		return ($int >> $shifts) | ($int << (32 - $shifts));
 	}
 
