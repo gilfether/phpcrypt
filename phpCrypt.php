@@ -44,6 +44,7 @@ class PHP_Crypt
 	const CIPHER_ARC4			= "ARC4"; // Alternative RC4
 	const CIPHER_BLOWFISH		= "Blowfish";
 	const CIPHER_CAST_128		= "CAST-128";
+	const CIPHER_CAST_256		= "CAST-256";
 	const CIPHER_DES			= "DES";
 	const CIPHER_ENIGMA			= "Enigma";
 	const CIPHER_RC2			= "RC2";
@@ -134,6 +135,10 @@ class PHP_Crypt
 
 		case self::CIPHER_CAST_128:
 			$this->cipher = new Cipher_CAST_128($key);
+			break;
+
+		case self::CIPHER_CAST_256:
+			$this->cipher = new Cipher_CAST_256($key);
 			break;
 
 		case self::CIPHER_DES:
