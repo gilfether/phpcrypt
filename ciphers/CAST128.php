@@ -95,7 +95,8 @@ class Cipher_CAST_128 extends Cipher
 		}
 		else if($keylen < self::BYTES_KEY_MIN)
 		{
-			$msg  = PHP_Crypt::CIPHER_CAST_128." requires a key between 5 - 16 bytes.";
+			$msg  = PHP_Crypt::CIPHER_CAST_128." requires a key size between ";
+			$msg .= "5 - 16 bytes.";
 			trigger_error($msg, E_USER_WARNING);
 		}
 
