@@ -11,6 +11,7 @@ include_once(dirname(__FILE__)."/ciphers/AES256.php");
 include_once(dirname(__FILE__)."/ciphers/ARC4.php");
 include_once(dirname(__FILE__)."/ciphers/Blowfish.php");
 include_once(dirname(__FILE__)."/ciphers/CAST128.php");
+include_once(dirname(__FILE__)."/ciphers/CAST256.php");
 include_once(dirname(__FILE__)."/ciphers/DES.php");
 include_once(dirname(__FILE__)."/ciphers/Enigma.php");
 include_once(dirname(__FILE__)."/ciphers/RC2.php");
