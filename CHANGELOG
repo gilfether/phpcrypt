@@ -1,3 +1,47 @@
+2013-xx-xx  phpCrypt-0.5  Ryan Gilfether
+
+	* Added CAST-128 cipher
+
+	* Added support for 8 and 16 byte keys in addition
+	to 24 byte keys for Triple DES (3DES)
+
+	* Removed the OneTimePad cipher. This was redundant since
+	the SimpleXOR cipher is the same as a one time pad when
+	the key length is the same as the length of data length,
+	and the key is unique for each block of data.
+
+	* Added PHP_Crypt::createKey(), a helper function to generate
+	a random string of bytes that can be used as a key for a
+	cipher. See the examples directory to see how it is used.
+
+	* Added PHP_Crypt::setKey() so that it is possible to set
+	the key to a new value without having to create an new
+	instance of phpCrypt
+
+	* Renamed PHP_Crypt::cipherSetKey() to PHP_Crypt::cipherKey()
+
+	* Updated the constants used for PHP_Crypt::createKey() and
+	PHP_Crypt::createIV(). Both now use the PHP_Crypt::RAND
+	constants. The PHP_Crypt::IV constants have been removed.
+
+	* Changed SimpleXOR from a block cipher to a stream cipher
+	since this is what it really is.
+
+	* In Cipher.php made the $key member private, renamed
+	setKey() to key(), and key() is now used to retrieve the
+	current key in use by all extending classes
+
+	* Minor changes to how RC2::splitBytes() works using
+	array_map()
+
+	* Renamed Base.php to Core.php
+
+	* Replaced for() loops with array_map() in Core.php where
+	possible for minor speed improvements
+
+	* Shortened the name of functions in Core.php, and updated
+	all files that use those functions.
+
 2013-07-21  phpCrypt-0.4  Ryan Gilfether
 
 	* Added the 3-Way cipher. phpCrypt's implementation is
@@ -36,15 +80,15 @@
 
 	* Fixes in the examples code
 
-	* Removed the phpCrypt::setIV() function and renamed to
-	phpCrypt::IV()
+	* Removed the PHP_Crypt::setIV() function and renamed to
+	PHP_Crypt::IV()
 
 2013-07-18  phpCrypt-0.3.1  Ryan Gilfether
 
 	* Found a major bug in the way IV's are used in Encryption
 	and Decryption. The $iv parameter has been removed from
-	phpCrypt::Encrypt() and phpCrypt::Decrypt() function, and
-	instead the IV should be set with phpCrypt::setIV()
+	PHP_Crypt::Encrypt() and PHP_Crypt::Decrypt() function, and
+	instead the IV should be set with PHP_Crypt::setIV()
 
 	* Updated the code in the 'examples' directory to reflect
 	the changes made to correct the IV bug
@@ -61,10 +105,10 @@
 
 	* Updated RC2.php to use the uInt() function
 
-	* Added phpCrypt::SetIV() function
+	* Added PHP_Crypt::SetIV() function
 
-	* Removed the $iv parameter from phpCrypt::CreateIV(),
-	now to set the IV use the phpCrypt::SetIV() function,
+	* Removed the $iv parameter from PHP_Crypt::CreateIV(),
+	now to set the IV use the PHP_Crypt::SetIV() function,
 	or pass the IV in the encrypt() or decrypt() function
 
 	* Renamed CryptBase.php to Base.php. Removed it as a parent
