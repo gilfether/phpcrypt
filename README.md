@@ -12,7 +12,7 @@ extentions, or PEAR libraries.
 It currently support many popular encryption ciphers. In addition it
 supports many popular modes of encryption. There are also tools to implement
 the different padding schemes, as well as multiple methods of creating an
-Initialization Vecotor (IV) for modes that require one.
+Initialization Vector (IV) for modes that require one.
 
 phpCrypt is developed by Ryan Gilfether <http://www.gilfether.com/phpcrypt>
 
