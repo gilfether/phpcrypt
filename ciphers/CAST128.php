@@ -645,7 +645,7 @@ class Cipher_CAST_128 extends Cipher
 
 
 	/**
-	 * Initialize the tables used in 3Way Encryption.
+	 * Initialize the tables.
 	 *
 	 * @return void
 	 */
