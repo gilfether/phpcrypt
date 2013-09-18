@@ -399,7 +399,17 @@ class Core
 	public static function uInt($int)
 	{
 		$arr = unpack("I", pack("I", $int));
-		return $arr[1];
+		$ret = $arr[1];
+
+		// On 32 bit platforms unpack() and pack() do not convert
+		// from signed to unsigned properly all the time, it will return
+		// the same negative number given to it, the work around is
+		// to use sprintf().
+		// Tested with php 5.3.x on Windows XP & Linux 32bit
+		if($ret < 0)
+			$ret = sprintf("%u", $ret) + 0; // convert from string to int
+
+		return $ret;
 	}
 
 
@@ -468,14 +478,25 @@ class Core
 	/**
 	 * Rotates bits Left, appending the bits pushed off the left onto the right
 	 *
-	 * @param integer The integer to rotate bits to the left
-	 * @param integer The number of shifts left to make
+	 * @param integer $n The integer to rotate bits to the left
+	 * @param integer $shifts The number of shifts left to make
 	 * @return integer The resulting value from the rotation
 	 */
-	public static function rotBitsLeft32($int, $shifts)
+	public static function rotBitsLeft32($i, $shifts)
 	{
-		$int = self::uInt32($int);
-		return ($int << $shifts) | ($int >> (32 - $shifts));
+		if($shifts <= 0)
+			return $i;
+
+		$shifts &= 0x1f; /* higher rotates would not bring anything */
+
+		// this is causing problems on 32 bit platform
+		//return self::uInt32(($i << $shifts) | ($i >> (32 - $shifts)));
+
+		// so lets cheat: convert to binary string, rototate left, and
+		// convert back to decimal
+		$i = self::dec2Bin(self::uInt32($i), 4);
+		$i = substr($i, $shifts).substr($i, 0, $shifts);
+		return self::bin2Dec($i);
 
 	}
 
@@ -483,14 +504,26 @@ class Core
 	/**
 	 * Rotates bits right, appending the bits pushed off the right onto the left
 	 *
-	 * @param integer The integer to rotate bits to the right
-	 * @param integer The number of shifts right to make
+	 * @param integer $n The integer to rotate bits to the right
+	 * @param integer $shifts The number of shifts right to make
 	 * @return integer The resulting value from the rotation
 	 */
-	public static function rotBitsRight32($int, $shifts)
+	public static function rotBitsRight32($i, $shifts)
 	{
-		$int = self::uInt32($int);
-		return ($int >> $shifts) | ($int << (32 - $shifts));
+		if($shifts <= 0)
+			return $i;
+
+		$shifts &= 0x1f; /* higher rotates would not bring anything */
+
+		// this might cause problems on 32 bit platforms since rotBitsLeft32 was
+		// having a problem with some bit shifts on 32 bits
+		// return self::uInt32(($i >> $shifts) | ($i << (32 - $shifts)));
+
+		// so lets cheat: convert to binary string, rototate right,
+		// and convert back to decimal
+		$i = self::dec2Bin($i, 4);
+		$i = substr($i, (-1 * $shifts)).substr($i, 0, (-1 * $shifts));
+		return self::bin2Dec($i);
 	}
 
 
@@ -508,7 +541,7 @@ class Core
 	 * @param integer $byte_len The length of the byte string to create
 	 * @return string A random string of bytes
 	 */
-	public static function randBytes($src = PHP_Crypt::RAND, $byte_len = PHP_Crypt::RAND_DEFAULT_LEN)
+	public static function randBytes($src = PHP_Crypt::RAND, $byte_len = PHP_Crypt::RAND_DEFAULT_SZ)
 	{
 		$bytes = "";
 		$err_msg = "";
