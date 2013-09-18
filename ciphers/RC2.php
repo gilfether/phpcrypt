@@ -255,9 +255,9 @@ class Cipher_RC2 extends Cipher
 	private static function splitBytes($str)
 	{
 		$arr = str_split($str, 2);
-		
+
 		return array_map(function($b){
-			return parent::str2Dec($b[1].$b[0]);
+			return Core::str2Dec($b[1].$b[0]);
 		}, $arr);
 	}
 
