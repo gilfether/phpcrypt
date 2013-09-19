@@ -155,16 +155,16 @@ class Cipher_3Way extends Cipher
 		// 3Way uses 11 rounds
 		for($i = 0; $i < self::ROUNDS; ++$i)
 		{
-			$data[0] = parent::uint32($data[0] ^ $key[0] ^ ($rcon[$i] << 16));
-			$data[1] = parent::uint32($data[1] ^ $key[1]);
-			$data[2] = parent::uint32($data[2] ^ $key[2] ^ $rcon[$i]);
+			$data[0] = parent::uInt32($data[0] ^ $key[0] ^ ($rcon[$i] << 16));
+			$data[1] = parent::uInt32($data[1] ^ $key[1]);
+			$data[2] = parent::uInt32($data[2] ^ $key[2] ^ $rcon[$i]);
 
 			$this->rho($data);
 		}
 
-		$data[0] = parent::uint32($data[0] ^ $key[0] ^ ($rcon[self::ROUNDS] << 16));
-		$data[1] = parent::uint32($data[1] ^ $key[1]);
-		$data[2] = parent::uint32($data[2] ^ $key[2] ^ $rcon[self::ROUNDS]);
+		$data[0] = parent::uInt32($data[0] ^ $key[0] ^ ($rcon[self::ROUNDS] << 16));
+		$data[1] = parent::uInt32($data[1] ^ $key[1]);
+		$data[2] = parent::uInt32($data[2] ^ $key[2] ^ $rcon[self::ROUNDS]);
 
 		$this->theta($data);
 
@@ -190,19 +190,19 @@ class Cipher_3Way extends Cipher
 	{
 		$tmp = array();
 
-		$tmp[0] = parent::uint32(
+		$tmp[0] = parent::uInt32(
 					$d[0] ^ ($d[0] >> 16) ^ ($d[1] << 16) ^ ($d[1] >> 16) ^ ($d[2] << 16) ^
 					($d[1] >> 24) ^ ($d[2] << 8) ^ ($d[2] >> 8) ^ ($d[0] << 24) ^ ($d[2] >> 16) ^
 					($d[0] << 16) ^ ($d[2] >> 24) ^ ($d[0] << 8)
 				);
 
-		$tmp[1] = parent::uint32(
+		$tmp[1] = parent::uInt32(
 					$d[1] ^ ($d[1] >> 16) ^ ($d[2] << 16) ^ ($d[2] >> 16) ^ ($d[0] << 16) ^
 					($d[2] >> 24) ^ ($d[0] << 8) ^ ($d[0] >> 8) ^ ($d[1] << 24) ^ ($d[0] >> 16) ^
 					($d[1] << 16) ^ ($d[0] >> 24) ^ ($d[1] << 8)
 				);
 
-		$tmp[2] = parent::uint32(
+		$tmp[2] = parent::uInt32(
 					$d[2] ^ ($d[2] >> 16) ^ ($d[0] << 16) ^ ($d[0] >> 16) ^ ($d[1] << 16) ^
 					($d[0] >> 24) ^ ($d[1] << 8) ^ ($d[1] >> 8) ^ ($d[2] << 24) ^ ($d[1] >> 16) ^
 					($d[2] << 16) ^ ($d[1] >> 24) ^ ($d[2] << 8)
@@ -233,9 +233,9 @@ class Cipher_3Way extends Cipher
 		/*
 		$tmp = array();
 
-		$tmp[0] = parent::uint32($d[0] ^ ($d[1] | (~$d[2])));
-		$tmp[1] = parent::uint32($d[1] ^ ($d[2] | (~$d[0])));
-		$tmp[2] = parent::uint32($d[2] ^ ($d[0] | (~$d[1])));
+		$tmp[0] = parent::uInt32($d[0] ^ ($d[1] | (~$d[2])));
+		$tmp[1] = parent::uInt32($d[1] ^ ($d[2] | (~$d[0])));
+		$tmp[2] = parent::uInt32($d[2] ^ ($d[0] | (~$d[1])));
 
 		$d = $tmp;
 		*/
@@ -268,8 +268,8 @@ class Cipher_3Way extends Cipher
 	 */
 	private function pi1(&$d)
 	{
-		$d[0] = parent::uint32(($d[0] >> 10) ^ ($d[0] << 22));
-		$d[2] = parent::uint32(($d[2] << 1) ^ ($d[2] >> 31));
+		$d[0] = parent::uInt32(($d[0] >> 10) ^ ($d[0] << 22));
+		$d[2] = parent::uInt32(($d[2] << 1) ^ ($d[2] >> 31));
 	}
 
 
@@ -282,8 +282,8 @@ class Cipher_3Way extends Cipher
 	 */
 	private function pi2(&$d)
 	{
-		$d[0] = parent::uint32(($d[0] << 1) ^ ($d[0] >> 31));
-		$d[2] = parent::uint32(($d[2] >> 10) ^ ($d[2] << 22));
+		$d[0] = parent::uInt32(($d[0] << 1) ^ ($d[0] >> 31));
+		$d[2] = parent::uInt32(($d[2] >> 10) ^ ($d[2] << 22));
 	}
 
 
