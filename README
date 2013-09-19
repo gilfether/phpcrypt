@@ -3,7 +3,7 @@ Ryan Gilfether
 http://www.gilfether.com/phpcrypt
 
 
-About
+ABOUT
 =============
 phpCrypt is an encryption library written in PHP from scratch. It aims to
 implement all major encryption ciphers, modes, and other tools used for
@@ -17,8 +17,12 @@ Initialization Vector (IV) for modes that require one.
 
 phpCrypt is developed by Ryan Gilfether <http://www.gilfether.com/phpcrypt>
 
+phpCrypt is always in development. If you have any questions, found a bug,
+or have a feature request, you can contact Ryan at
+<http://www.gilfether.com/contact-ryan>
 
-Documentation
+
+DOCUMENTATION
 =============
 The phpCrypt website at http://www.gilfether.com/phpcrypt lists much of the
 information you need to begin. The phpCrypt website lists all the constants
@@ -133,6 +137,22 @@ set the IV using phpCrypt::IV() method:
 Not all modes require an IV. In the event the IV is set for a mode that does not
 require an IV, the IV is ignored. You can get a full list of IV constants and a
 list of modes that require an IV at http://www.gilfether.com/phpcrypt
+
+
+CREATING A KEY
+==============
+phpCrypt includes a helper function to create a string of random bytes to use as
+a key. This can be used in place of setting your own key as shown in the examples
+above. The PHP_Crypt::RAND constants are the same as the ones used for the createIV()
+function. The second parameter indicates the number of random bytes to create.
+
+	<?php
+	$key = PHP_Crypt::createKey(PHP_Crypt::RAND, 16);
+	$text = "This is my secret message."
+	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
+	?>
+
+See the examples directory for example code demonstring the createKey() function.
 
 
 FULL LIST OF CONSTANTS
