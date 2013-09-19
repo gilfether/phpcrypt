@@ -165,7 +165,7 @@ function. The second parameter indicates the number of random bytes to create.
 	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
 	?>
 
-See the examples directory for example code demonstring the createKey() function.
+See the examples directory for example code demonstrating the createKey() function.
 
 
 FULL LIST OF CONSTANTS
