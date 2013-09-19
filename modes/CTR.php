@@ -36,8 +36,6 @@ require_once(dirname(__FILE__)."/../phpCrypt.php");
  */
 class Mode_CTR extends Mode
 {
-	private $counter_pos = 0;
-
 	/**
 	 * Constructor
 	 * Sets the cipher object that will be used for encryption
@@ -166,86 +164,39 @@ class Mode_CTR extends Mode
 
 
 	/**
-	 * Override Mode::createIV(). Each time an IV is created the counter
-	 * needs to initialized. This function calls Mode::createIV() and
-	 * then initializes the counter.
-	 *
-	 * @param string $src The source to create the IV from,
-	 * 		see Mode::createIV() for options
-	 * @return string The new IV
-	 */
-	public function createIV($src = null)
-	{
-		$iv = parent::createIV($src);
-
-		// initialize the counter position to the right most byte
-		$this->counter_pos = strlen($this->register) - 1;
-
-		return $iv;
-	}
-
-
-	/**
-	 * Override Mode::IV(). Initializes the counter's position every time
-	 * the the IV is set. Calls Mode::IV() before initializing the counter.
-	 * If the $iv parameter is not given, this function mimics Mode::IV()
-	 * behavoir by just returning the current IV being used.
-	 *
-	 * @param string $iv Optional, An IV to use for the mode and cipher selected
-	 * @return string The current IV being used
-	 */
-	public function IV($iv = null)
-	{
-		if($iv != null)
-		{
-			parent::IV($iv);
-
-			// initialize the counter position to the right most byte
-			$this->counter_pos = strlen($this->register) - 1;
-		}
-
-		return $this->iv;
-	}
-
-
-	/**
-	 * Increments the counter ($this->register), starting at the right most byte, and
-	 * incrementing the byte by one. If the byte reaches 0xff, then we move the counter
-	 * left one byte, incrementing it until it reaches 0xff, so on and so forth until we
-	 * are either done encrypting/decrypting, or all bytes reach 0xff. If the latter happens
-	 * the register will remain the same until encryption/decryption is completed
+	 * Increments the counter (which is initially the IV) by one byte starting at the
+	 * last byte. Once that byte has reached 0xff, it is then set to 0x00, and the
+	 * next byte is then incremented. On the following incrementation, the last byte
+	 * is incremented again. An example:
+	 * PASS 1:   2037e9ae63f73dfe
+	 * PASS 2:   2037e9ae63f73dff
+	 * PASS 3:   2037e9ae63f73e00
+	 * PASS 4:   2037e9ae63f73e01
+	 * ...
+	 * PASS X:   2100000000000001
+	 * PASS X+1: 2100000000000002
 	 *
 	 * @return void
 	 */
 	private function counter()
 	{
-		// if the counter has reached the beginning of the register, and all bytes are 0xff,
-		// at this point we can either keep the register as a string with all
-		// bytes 0xff, or we can move $this->counter_pos to the end of the string and start
-		// start incrementing bytes again. I'll choose to do the latter, as at least it
-		// provides a little more security than just reusing a string of all 0xff
-		if($this->counter_pos == 0 && ord($this->register[$this->counter_pos]) == 0xff)
-			$this->counter_pos = strlen($this->register) - 1;
+		$pos = $this->cipher->blockSize() - 1;
 
-		// increment the character by one
-		$c = chr(ord($this->register[$this->counter_pos]) + 1);
-
-		// if the character is equal to 0xff (255), we need to move one position
-		// in the register
-		if(ord($c) == 0xff)
+		// starting at the last byte, loop through each byte until
+		// we find one that can be incremented
+		for($i = $pos; $i >= 0; --$i)
 		{
-			// set the position to 0xff
-			$this->register[$this->counter_pos] = $c;
-
-			// move left one byte
-			--$this->counter_pos;
-
-			// increment the byte
-			$c = chr(ord($this->register[$this->counter_pos]) + 1);
+			// if we reached the last byte, set it to 0x00, then
+			// loop one more time to increment the next byte
+			if(ord($this->register[$i]) == 0xff)
+				$this->register[$i] = chr(0x00);
+			else
+			{
+				// now increment the byte by 1
+				$this->register[$i] = chr(ord($this->register[$i]) + 1);
+				break;
+			}
 		}
-
-		// set the byte in the register
-		$this->register[$this->counter_pos] = $c;
 	}
 }
 ?>
