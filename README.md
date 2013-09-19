@@ -36,7 +36,7 @@ of supported ciphers and modes are listed below:
 Ciphers:
 
 	3Way, AES, ARC4 (an RC4 alternative), Blowfish, CAST-128, CAST-256, DES,
-	Triple DES, Enigma, RC2, Rijndael, SimpleXOR, Skipjack, Vignere
+	Triple DES, Enigma, RC2, Rijndael, SimpleXOR, Skipjack, Vigenere
 
 Modes:
 
