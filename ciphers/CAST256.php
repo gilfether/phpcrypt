@@ -43,9 +43,8 @@ class Cipher_CAST_256 extends Cipher
 
 	//const BYTES_KEY = 0; // between 128, 160, 192, 224, 256 bits
 
-	//const BYTES_KEY_SMALL = 10;
-	const BYTES_KEY_MAX   = 32;
-	//const BYTES_KEY_MIN   =  5;
+	/** @type integer BYTES_KEY_MAX The max key size, in bytes */
+	const BYTES_KEY_MAX = 32;
 
 	/** @type array $_s1 An array of 256 unsigned integers */
 	private static $_s1 = array();
@@ -139,18 +138,7 @@ class Cipher_CAST_256 extends Cipher
 			$data[1] ^= $this->f2($data[2], $this->_mkey[$i][1], $this->_rkey[$i][1]);
 			$data[0] ^= $this->f3($data[1], $this->_mkey[$i][2], $this->_rkey[$i][2]);
 			$data[3] ^= $this->f1($data[0], $this->_mkey[$i][3], $this->_rkey[$i][3]);
-
-			/*
-			$data[2] = parent::uInt32($data[2] ^ $this->f1($data[3], $this->_mkey[$i][0], $this->_rkey[$i][0]));
-			$data[1] = parent::uInt32($data[1] ^ $this->f2($data[2], $this->_mkey[$i][1], $this->_rkey[$i][1]));
-			$data[0] = parent::uInt32($data[0] ^ $this->f3($data[1], $this->_mkey[$i][2], $this->_rkey[$i][2]));
-			$data[3] = parent::uInt32($data[3] ^ $this->f1($data[0], $this->_mkey[$i][3], $this->_rkey[$i][3]));
-			*/
-
 		}
-
-		//print_r($data);
-		//exit;
 
 		// the second 6 loops are done in a different order
 		for($i = 6; $i < 12; ++$i)
@@ -160,14 +148,6 @@ class Cipher_CAST_256 extends Cipher
 			$data[0] ^= $this->f3($data[1], $this->_mkey[$i][2], $this->_rkey[$i][2]);
 			$data[1] ^= $this->f2($data[2], $this->_mkey[$i][1], $this->_rkey[$i][1]);
 			$data[2] ^= $this->f1($data[3], $this->_mkey[$i][0], $this->_rkey[$i][0]);
-
-			/*
-			$data[3] = parent::uInt32($data[3] ^ $this->f1($data[0], $this->_mkey[$i][3], $this->_rkey[$i][3]));
-			$data[0] = parent::uInt32($data[0] ^ $this->f3($data[1], $this->_mkey[$i][2], $this->_rkey[$i][2]));
-			$data[1] = parent::uInt32($data[1] ^ $this->f2($data[2], $this->_mkey[$i][1], $this->_rkey[$i][1]));
-			$data[2] = parent::uInt32($data[2] ^ $this->f1($data[3], $this->_mkey[$i][0], $this->_rkey[$i][0]));
-			*/
-
 		}
 
 		// convert the decimals back to a string, reverse the string so it's
