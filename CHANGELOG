@@ -1,6 +1,8 @@
-2013-xx-xx  phpCrypt-0.5  Ryan Gilfether
+2013-09-13  phpCrypt-0.5  Ryan Gilfether
 
 	* Added CAST-128 cipher
+
+	* Added CAST-256 cipher
 
 	* Added support for 8 and 16 byte keys in addition
 	to 24 byte keys for Triple DES (3DES)
@@ -34,6 +36,8 @@
 	* Minor changes to how RC2::splitBytes() works using
 	array_map()
 
+	* Fixed an error message that occurs in php 5.3 in RC2.php
+
 	* Renamed Base.php to Core.php
 
 	* Replaced for() loops with array_map() in Core.php where
@@ -41,6 +45,16 @@
 
 	* Shortened the name of functions in Core.php, and updated
 	all files that use those functions.
+
+	* Create a workaround in Core::rotateBitsLeft32() and
+	Core::rotateBitsRight32() which caused them to not always
+	work correctly on 32 bit platforms
+
+	* Fixed Core::uInt() and Core::uInt32() which caused them to
+	not always work correctly on 32 bit platforms
+
+	* Major bug fix in how CTR mode works. Previously it was not
+	fully compatible with mCrypt's CTR mode.
 
 2013-07-21  phpCrypt-0.4  Ryan Gilfether
 
