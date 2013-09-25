@@ -21,7 +21,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace php_crypt;
+namespace PHP_Crypt;
 
 require_once(dirname(__FILE__)."/Core.php");
 require_once(dirname(__FILE__)."/Includes.inc.php");
@@ -47,6 +47,7 @@ class PHP_Crypt
 	const CIPHER_CAST_256		= "CAST-256";
 	const CIPHER_DES			= "DES";
 	const CIPHER_ENIGMA			= "Enigma";
+	const CIPHER_GOST			= "GOST";
 	const CIPHER_RC2			= "RC2";
 	const CIPHER_RIJNDAEL_128	= "Rijndael-128";
 	const CIPHER_RIJNDAEL_192	= "Rijndael-192";
@@ -96,6 +97,7 @@ class PHP_Crypt
 	 * @param string $key The key to use for the selected Cipher
 	 * @param string $cipher The type of cipher to use
 	 * @param string $mode The encrypt mode to use with the cipher
+	 * @param string $padding The padding type to use. Defaults to PAD_ZERO
 	 * @return void
 	 */
 	public function __construct($key, $cipher = self::CIPHER_AES_128, $mode = self::MODE_ECB, $padding = self::PAD_ZERO)
@@ -147,6 +149,10 @@ class PHP_Crypt
 
 		case self::CIPHER_ENIGMA:
 			$this->cipher = new Cipher_Enigma($key);
+			break;
+
+		case self::CIPHER_GOST:
+			$this->cipher = new Cipher_GOST($key);
 			break;
 
 		case self::CIPHER_RC2:
