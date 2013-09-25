@@ -90,7 +90,7 @@ class Mode_CTR extends Mode
 			$this->enc_register = $this->register;
 			$this->cipher->encrypt($this->enc_register);
 
-			// grab a block of plain text and a block of encrypted register
+			// grab a block of plain text
 			$block = substr($text, $pos, $byte_len);
 
 			// xor the block
@@ -100,7 +100,7 @@ class Mode_CTR extends Mode
 			// replace the plain text block with the encrypted block
 			$text = substr_replace($text, $block, $pos, $byte_len);
 
-			// increment the counter and append it to register
+			// increment the counter
 			$this->counter();
 		}
 
@@ -144,7 +144,7 @@ class Mode_CTR extends Mode
 			// replace the encrypted block with the plain text
 			$text = substr_replace($text, $block, $pos, $byte_len);
 
-			// increment the counter and append it to register
+			// increment the counter
 			$this->counter();
 		}
 
@@ -173,8 +173,8 @@ class Mode_CTR extends Mode
 	 * PASS 3:   2037e9ae63f73e00
 	 * PASS 4:   2037e9ae63f73e01
 	 * ...
-	 * PASS X:   2100000000000001
-	 * PASS X+1: 2100000000000002
+	 * PASS N:   2100000000000001
+	 * PASS N+1: 2100000000000002
 	 *
 	 * @return void
 	 */
