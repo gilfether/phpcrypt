@@ -67,7 +67,7 @@ class Mode_CTR extends Mode
 	/**
 	 * Encrypts an encrypted string
 	 *
-	 * @param string $text the string to be encrypted in CBC mode
+	 * @param string $text the string to be encrypted
 	 * @return boolean Returns true
 	 */
 	public function encrypt(&$text)
@@ -111,7 +111,7 @@ class Mode_CTR extends Mode
 	/**
 	 * Decrypt an encrypted string
 	 *
-	 * @param string $text The string to be decrypted in ECB mode
+	 * @param string $text The string to be decrypted
 	 * @return boolean Returns true
 	 */
 	public function decrypt(&$text)

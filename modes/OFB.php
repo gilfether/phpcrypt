@@ -67,7 +67,7 @@ class Mode_OFB extends Mode
 	/**
 	 * Encrypts an the entire string $plain_text using the cipher passed
 	 *
-	 * @param string $text the string to be encrypted in CBC mode
+	 * @param string $text the string to be encrypted
 	 * @return boolean Returns true
 	 */
 	public function encrypt(&$text)
@@ -91,7 +91,7 @@ class Mode_OFB extends Mode
 	/**
 	 * Decrypts an the entire string $plain_text using the cipher passed
 	 *
-	 * @param string $text the string to be decrypted in ECB mode
+	 * @param string $text the string to be decrypted
 	 * @return boolean Returns true
 	 */
 	public function decrypt(&$text)
