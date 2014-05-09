@@ -131,6 +131,7 @@ abstract class Cipher_Rijndael extends Cipher
 	 *
 	 * @param string The cipher name as set in a constant in the child class
 	 * @param string $key string containing the user supplied encryption key
+	 * @param integer $len Optional, the key size in bytes - used only by the AES child classes
 	 * @return void
 	 */
 	public function __construct($cipher_name, $key, $len = 0)
@@ -145,7 +146,7 @@ abstract class Cipher_Rijndael extends Cipher
 			if(!in_array($len, self::$_key_sizes))
 			{
 				$msg  = "Incorrect key length for ".strtoupper($cipher_name).". ";
-				$msg .= "Received $len bits.";
+				$msg .= "Received $len bytes.";
 				trigger_error($msg, E_USER_WARNING);
 			}
 		}
@@ -155,9 +156,6 @@ abstract class Cipher_Rijndael extends Cipher
 
 		// initialize the tables used for rijndael/aes
 		$this->initTables();
-
-		// this is done in the child class
-		//$this->expandKey();
 	}
 
 
