@@ -1,3 +1,11 @@
+2014-05-09  phpCrypt-0.5.1  Ryan Gilfether
+
+	* Fixed error message in Rijndael.php which inaccurately
+	reported an incorrect key size in bits instead of bytes
+
+	* Fixed a typo in the blockSize() call in the Rijdael.php
+	contructor
+
 2013-09-18  phpCrypt-0.5  Ryan Gilfether
 
 	* Added CAST-128 cipher
