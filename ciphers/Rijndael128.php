@@ -59,7 +59,7 @@ class Cipher_Rijndael_128 extends Cipher_Rijndael
 		parent::__construct(PHP_Crypt::CIPHER_RIJNDAEL_128, $key);
 
 		// required block size in bits
-		$this->blockSizeSize(self::BYTES_BLOCK);
+		$this->blockSize(self::BYTES_BLOCK);
 
 		// expand the key
 		$this->expandKey();
