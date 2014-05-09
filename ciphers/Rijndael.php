@@ -145,7 +145,7 @@ abstract class Cipher_Rijndael extends Cipher
 			if(!in_array($len, self::$_key_sizes))
 			{
 				$msg  = "Incorrect key length for ".strtoupper($cipher_name).". ";
-				$msg .= "Received $len bits.";
+				$msg .= "Received $len bytes.";
 				trigger_error($msg, E_USER_WARNING);
 			}
 		}
