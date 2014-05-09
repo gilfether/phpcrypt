@@ -143,11 +143,26 @@ abstract class Cipher_Rijndael extends Cipher
 		{
 			// the key must be one of the following lengths: 16, 24, 32 bytes
 			$len = strlen($key);
-			if(!in_array($len, self::$_key_sizes))
+			if($len == 0 || $len > 32)
 			{
 				$msg  = "Incorrect key length for ".strtoupper($cipher_name).". ";
 				$msg .= "Received $len bytes.";
 				trigger_error($msg, E_USER_WARNING);
+			}
+			if(!in_array($len, self::$_key_sizes))
+			{
+				// Find next higher length to match MCRYPT behavior.
+				foreach(self::$_key_sizes as $ksz)
+				{
+					if($len <= $ksz)
+					{
+						$len = $ksz;
+						break;
+					}
+				}
+				
+				// Pad with zero bytes to match MCRYPT behavior.
+				$key = str_pad($key, $len, "\0", STR_PAD_RIGHT);
 			}
 		}
 
