@@ -24,7 +24,7 @@
 
 namespace PHP_Crypt;
 require_once(dirname(__FILE__)."/Core.php");
-
+require_once(dirname(__FILE__)."/phpCrypt.php");
 
 /**
  * Generic parent class for ciphers. Should not be used directly,
@@ -233,13 +233,22 @@ abstract class Cipher extends Core
 			{
 				if($this->key_len > $req_sz)
 				{
+					// shorten the key length
 					$key = substr($key, 0, $req_sz);
 					$this->key_len = $req_sz;
 				}
 				else if($this->key_len < $req_sz)
 				{
-					$msg = strtoupper($this->name())." requires a $req_sz byte key, {$this->key_len} bytes received.";
-					trigger_error($msg, E_USER_WARNING);
+					// send a notice that the key was too small and that we are padding it
+					$msg = strtoupper($this->name())." requires a $req_sz byte key, {$this->key_len} bytes received. Padding key with null bytes.";
+					trigger_error($msg, E_USER_NOTICE);
+
+					// determine the number of bytes to pad
+					$pad_len = $req_sz - $this->key_len;
+
+					// lengthen the key to the required size by null byte padding
+					Padding::pad($key, $pad_len, PHP_Crypt::PAD_ZERO);
+					$this->key_len = $req_sz;
 				}
 			}
 
