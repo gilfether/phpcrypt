@@ -14,6 +14,7 @@ include_once(dirname(__FILE__)."/ciphers/CAST128.php");
 include_once(dirname(__FILE__)."/ciphers/CAST256.php");
 include_once(dirname(__FILE__)."/ciphers/DES.php");
 include_once(dirname(__FILE__)."/ciphers/Enigma.php");
+include_once(dirname(__FILE__)."/ciphers/GOST.php");
 include_once(dirname(__FILE__)."/ciphers/RC2.php");
 include_once(dirname(__FILE__)."/ciphers/Rijndael128.php");
 include_once(dirname(__FILE__)."/ciphers/Rijndael192.php");
