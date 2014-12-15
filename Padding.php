@@ -135,7 +135,7 @@ class Padding
 	 * Pads a string with null bytes
 	 *
 	 * @param string $text The string to be padded
-	 * @param integer The number of bytes to pad
+	 * @param integer $bytes The number of bytes to pad
 	 * @return boolean Returns true
 	 */
 	private static function zeroPad(&$text, $bytes)
