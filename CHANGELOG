@@ -1,3 +1,13 @@
+2014-12-15  phpCrypt-0.6  Ryan Gilfether
+
+	* Added GOST encryption cipher
+
+	* The key is now automatically padded with null bytes if
+	it is shorter than required by the cipher.
+
+	* Removed README. Since there was already a README.md,
+	the README file was redundant and not needed.
+
 2014-05-09  phpCrypt-0.5.1  Ryan Gilfether
 
 	* Fixed error message in Rijndael.php which inaccurately
