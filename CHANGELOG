@@ -1,6 +1,4 @@
-2014-12-15  phpCrypt-0.6  Ryan Gilfether
-
-	* Added GOST encryption cipher
+2014-12-15  phpCrypt-0.5.2  Ryan Gilfether
 
 	* The key is now automatically padded with null bytes if
 	it is shorter than required by the cipher.
