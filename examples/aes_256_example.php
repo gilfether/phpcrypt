@@ -13,7 +13,6 @@ use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 $text = "This is my secret message.";
 $key = "^mY@TEst~Key_0123456789abcefghij"; // the key will be truncated if it's too long
 
-
 /**
  * Cipher: AES 256
  * Mode: CTR (Counter)
