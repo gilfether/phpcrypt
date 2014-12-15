@@ -492,7 +492,7 @@ class Core
 		// this is causing problems on 32 bit platform
 		//return self::uInt32(($i << $shifts) | ($i >> (32 - $shifts)));
 
-		// so lets cheat: convert to binary string, rototate left, and
+		// so lets cheat: convert to binary string, rotate left, and
 		// convert back to decimal
 		$i = self::dec2Bin(self::uInt32($i), 4);
 		$i = substr($i, $shifts).substr($i, 0, $shifts);
@@ -519,7 +519,7 @@ class Core
 		// having a problem with some bit shifts on 32 bits
 		// return self::uInt32(($i >> $shifts) | ($i << (32 - $shifts)));
 
-		// so lets cheat: convert to binary string, rototate right,
+		// so lets cheat: convert to binary string, rotate right,
 		// and convert back to decimal
 		$i = self::dec2Bin($i, 4);
 		$i = substr($i, (-1 * $shifts)).substr($i, 0, (-1 * $shifts));
