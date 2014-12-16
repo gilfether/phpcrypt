@@ -35,12 +35,12 @@ of supported ciphers and modes are listed below:
 
 Ciphers:
 
-	3Way, AES, ARC4 (an RC4 alternative), Blowfish, CAST-128, CAST-256, DES,
-	Triple DES, Enigma, RC2, Rijndael, SimpleXOR, Skipjack, Vigenere
+	3Way, AES, ARC4 (RC4), Blowfish, CAST-128, CAST-256, DES, Triple DES,
+	Enigma, RC2, Rijndael, SimpleXOR, Skipjack, Vigenere
 
 Modes:
 
-	CBC, CFB, CTR, ECB, NCFB, NOFB, OFB, PCBC, Stream (used for Stream Ciphers)
+	CBC, CFB, CTR, ECB, NCFB, NOFB, OFB, PCBC
 
 DOCUMENTATION
 -------------
