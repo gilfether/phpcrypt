@@ -45,7 +45,7 @@ Modes:
 DOCUMENTATION
 -------------
 
-This READ me file serves as the documentation. The phpCrypt website also
+This README file serves as the documentation. The phpCrypt website also
 lists all the constants you need to select ciphers,	modes, padding, and
 IV methods, which is availabe at http://www.gilfether.com/phpcrypt. In addition,
 phpCrypt comes with an `examples` directory which has sample code to help get
