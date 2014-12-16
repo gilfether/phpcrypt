@@ -1,4 +1,4 @@
-phpCrypt - A PHP Encryption API Library
+phpCrypt - A PHP Encryption Library API
 =====================================================
 
 WHAT IS PHPCRYPT?
