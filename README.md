@@ -26,8 +26,8 @@ WHAT DOES IT WORK ON?
 phpCrypt version 0.x works with PHP 5.3 or later. It will run on any
 32 or 64 bit operating system that has PHP available for it.
 
-SUPPORTED ENCRYPTION CIPHERS & MODES
-------------------------------------
+SUPPORTED ENCRYPTION CIPHERS, MODES, PADDING
+--------------------------------------------
 
 The list of supported encryption ciphers and modes is continually growing,
 each new version of phpCrypt will add new ciphers or modes. The current list
@@ -41,6 +41,10 @@ Ciphers:
 Modes:
 
 	CBC, CFB, CTR, ECB, NCFB, NOFB, OFB, PCBC
+
+Padding:
+
+	ANSI X.923, ISO 10126, PKCS7, ISO/IEC 7816-4, Zero (NULL Byte)
 
 DOCUMENTATION
 -------------
