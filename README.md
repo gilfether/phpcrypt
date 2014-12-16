@@ -1,16 +1,16 @@
-phpCrypt - A PHP Encryption Library
+phpCrypt - A PHP Encryption API Library
 =====================================================
 
 WHAT IS PHPCRYPT?
 -----------------
 
-phpCrypt is an encryption library written in PHP from scratch. It aims to
-implement all major encryption ciphers, modes, and other tools used for
-encryption and decryption. phpCrypt does not rely on mCrypt, other PHP
-extentions, or PEAR libraries.
+phpCrypt is an encryption library written in PHP. It aims to implement
+all major encryption ciphers, modes, padding methods, and other tools
+used for encryption and decryption. phpCrypt does not rely on mCrypt,
+PHP extentions, or PEAR libraries.
 
-It currently support many popular encryption ciphers. In addition it
-supports many popular modes of encryption. There are also tools to implement
+It currently support many widely used ciphers. In addition it
+supports many popular encryption modes. There are also tools to implement
 the different padding schemes, as well as multiple methods of creating an
 Initialization Vector (IV) for modes that require one.
 
@@ -45,14 +45,16 @@ Modes:
 DOCUMENTATION
 -------------
 
-The phpCrypt website at http://www.gilfether.com/phpcrypt lists much of the
-information you need to begin. The phpCrypt website lists all the constants
-you need to select ciphers,	modes, padding, and IV methods. In addition,
+This READ me file serves as the documentation. The phpCrypt website also
+lists all the constants you need to select ciphers,	modes, padding, and
+IV methods, which is availabe at http://www.gilfether.com/phpcrypt. In addition,
 phpCrypt comes with an `examples` directory which has sample code to help get
 you started.
 
 phpCrypt is easy to use. An example of encrypting a string using AES-128
-with CTR mode is demonstrated below:
+with CBC mode is demonstrated below. Also note that if you are new to encryption
+using the AES-128 cipher with CBC mode is a simple yet secure way of getting
+started.
 
 	<?php
 	include_once("/path/to/phpcrypt/phpCrypt.php");
@@ -60,7 +62,7 @@ with CTR mode is demonstrated below:
 
 	$data = "This is my secret message.";
 	$key  = "MySecretKey01234";
-	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
+	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CBC);
 
 	$iv = $crypt->createIV();
 	$encrypt = $crypt->encrypt($data);
@@ -85,11 +87,11 @@ phpCrypt has other padding methods available as well. You can specify
 the padding you wish to use in two ways. The easiest method is to declare it
 in the constructor like so:
 
-	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR, PHP_Crypt::PAD_PKCS7);
+	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CBC, PHP_Crypt::PAD_PKCS7);
 
 Optionally, you can also call the phpCrypt::padding() method to set the padding:
 
-	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
+	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CBC);
 	$crypt->padding(PHP_Crypt::PAD_PKCS7);
 
 In the event the padding is set for a mode that does not require padding, the
@@ -129,11 +131,11 @@ found in the Microsoft CAPICOM SDK which is more secure. Before this will
 work you must install the Microsoft CAPICOM SDK and enable the PHP `com_dotnet`
 extension:
 
-* Download CAPICOM from Microsoft at http://www.microsoft.com/en-us/download/details.aspx?id=25281
-* Double click the MSI file you downloaded and follow the install directions
-* Open a command prompt and register the DLL: `regsvr32 C:\Program Files\PATH TO\CAPICOM SDK\Lib\X86\capicom.dll`
-* Now edit php.ini to enable the com_dotnet extension: `extension=php_com_dotnet.dll`
-* If you are running PHP as an Apache module, restart Apache.
+- Download CAPICOM from Microsoft at http://www.microsoft.com/en-us/download/details.aspx?id=25281
+- Double click the MSI file you downloaded and follow the install directions
+- Open a command prompt and register the DLL: `regsvr32 C:\Program Files\PATH TO\CAPICOM SDK\Lib\X86\capicom.dll`
+- Now edit php.ini to enable the com_dotnet extension: `extension=php_com_dotnet.dll`
+- If you are running PHP as an Apache module, restart Apache.
 
 To use the Windows random number generator in CAPICOM you would call createIV() like so:
 
@@ -162,7 +164,7 @@ function. The second parameter indicates the number of random bytes to create.
 	<?php
 	$key = PHP_Crypt::createKey(PHP_Crypt::RAND, 16);
 	$text = "This is my secret message."
-	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CTR);
+	$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_128, PHP_Crypt::MODE_CBC);
 	?>
 
 See the examples directory for example code demonstrating the createKey() function.
@@ -173,6 +175,7 @@ FULL LIST OF CONSTANTS
 
 For the full list of constants available for Ciphers, Modes, Padding, and IV creation,
 visit the phpCrypt website: http://www.gilfether.com/phpcrypt
+
 
 GPL STUFF
 ---------
