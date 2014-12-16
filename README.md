@@ -173,7 +173,7 @@ function. The second parameter indicates the number of random bytes to create.
 See the examples directory for example code demonstrating the createKey() function.
 
 The key length must be the size (in bytes) required by the cipher. phpCrypt does not
-pad the keys if they are too small. phpCrypt will fail if the key size is too small.
+pad the key, it will issue a PHP warning and fail if the key size is too small.
 Cipher key lengths are listed at http://www.gilfether.com/phpcrypt
 
 
