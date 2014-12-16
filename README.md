@@ -149,6 +149,9 @@ set the IV using phpCrypt::IV() method:
 
 	$crypt->IV($your_custom_iv);
 
+The IV length must be equal to the block size used by the cipher. If the IV is not
+the correct length phpCrypt will issue a PHP Warning and fail.
+
 Not all modes require an IV. In the event the IV is set for a mode that does not
 require an IV, the IV is ignored. You can get a full list of IV constants and a
 list of modes that require an IV at http://www.gilfether.com/phpcrypt
@@ -168,6 +171,10 @@ function. The second parameter indicates the number of random bytes to create.
 	?>
 
 See the examples directory for example code demonstrating the createKey() function.
+
+The key length must be the size (in bytes) required by the cipher. phpCrypt does not
+pad the keys if they are too small. phpCrypt will fail if the key size is too small.
+Cipher key lengths are listed at http://www.gilfether.com/phpcrypt
 
 
 FULL LIST OF CONSTANTS
