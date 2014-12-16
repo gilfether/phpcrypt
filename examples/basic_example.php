@@ -1,7 +1,11 @@
 <?php
 /*
  * This example show the simplest way to use PHPCrypt. By default
- * PHPCrypt uses AES-128, ECB mode, and Null byte padding
+ * PHPCrypt uses AES-128, ECB mode, and Null byte padding.
+ * Using ECB mode is not the most secure mode, and should only be
+ * used if simplicity is preferred over security. If security is
+ * of importance, please choose one of the more secure modes such
+ * as CBC or CTR
  */
 
 error_reporting (E_ALL | E_STRICT);
