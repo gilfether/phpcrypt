@@ -1,0 +1,33 @@
+{
+    "name": "gilfether/phpcrypt",
+    "description": "A PHP Encryption Library API which does not use 3rd party libraries.",
+    "keywords": ["Encryption", "Cryption", "Decryption", "IV", "Key"],
+    "homepage": "http://www.gilfether.com/phpcrypt",
+    "type": "library",
+    "license": "GPL",
+    "authors": [
+		{
+            "name": "Gilfether",
+            "email": "info@gilfether.com",
+            "homepage": "http://www.gilfether.com",
+			"role": "Developer"
+        },
+        {
+            "name": "Milad Rahimi",
+            "email": "info@miladrahimi.com",
+            "homepage": "http://miladrahimi.com",
+			"role": "Developer"
+        }
+    ],
+	"support": {
+        "email": "info@miladrahimi.com",
+        "source": "https://github.com/gilfether/phpcrypt/issues"
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "psr/log": "1.0.*@dev"
+    },
+    "autoload": {
+        "psr-4": {"Gilfether\\": "src/Gilfether/"}
+    }
+}
